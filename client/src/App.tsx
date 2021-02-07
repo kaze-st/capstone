@@ -2,7 +2,7 @@ import './App.scss';
 
 import React from 'react';
 import logo from './logo.svg';
-import LandingPage from './LandingPage/LandingPage'
+import LandingPage from './landingPage/LandingPage'
 
 function App() {
   return (
