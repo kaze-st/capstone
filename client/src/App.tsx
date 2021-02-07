@@ -1,13 +1,21 @@
 import './App.scss';
+import './components/login/Login.tsx';
 
 import React from 'react';
-import logo from './logo.svg';
+import Routes from './routes';
+import { BrowserRouter  } from 'react-router-dom'; 
+
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
-    <div className="App">
-      This is 
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+          <div className="App">
+            <Routes/>
+          </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
