@@ -9,9 +9,11 @@ function Header() {
         console.log("Log In");
     }
 
-    return <header>
-        <img src="./favicon.ico" alt="Code Collab Logo"></img>
-        <p>CodeCollab</p>
+    return <header className="flex-container">
+        <div className="logo-and-title">
+            <img className="logo" src="./favicon.ico" alt="Code Collab Logo"></img>
+            <p className="title">CodeCollab</p>
+        </div>
         <nav>
             <ul>
                 <li>HOME</li>
@@ -31,7 +33,7 @@ function Main() {
     }
 
     return <main>
-        <section className="flex-container">
+        <section className="flex-container landing-section">
             <div className="row1">
                 <h1>Code Your Scripts Together</h1>
                 <p>Create programming scripts that you can share with others and work together on.</p>
@@ -41,7 +43,7 @@ function Main() {
                 <img src="" aria-hidden="true"></img>
             </div>
         </section>
-        <section className="flex-container">
+        <section className="flex-container landing-section">
             <div className="row1">
                 <img src="" aria-hidden="true"></img>
             </div>
@@ -56,7 +58,7 @@ function Main() {
                 </p>
             </div>
         </section>
-        <section className="flex-container">
+        <section className="flex-container landing-section">
             <div className="row1">
                 <h1>Working Remotely Has Never Been Easier</h1>
                 <p>
