@@ -11,8 +11,7 @@ function Header() {
 
     return <header className="flex-container">
         <div className="logo-and-title">
-            <img className="logo" src="./favicon.ico" alt="Code Collab Logo"></img>
-            <p className="title">CodeCollab</p>
+            <img className="logo" src="./img/logo.png" alt="Code Collab Logo"></img>
         </div>
         <nav>
             <ul>
@@ -40,12 +39,12 @@ function Main() {
                 <button onClick={handleOnClick}>CREATE ACCOUNT</button>
             </div>
             <div className="row2">
-                <img src="" aria-hidden="true"></img>
+                <img src="./img/landingComputerImg.jpg" aria-hidden="true"></img>
             </div>
         </section>
         <section className="flex-container landing-section">
             <div className="row1">
-                <img src="" aria-hidden="true"></img>
+                <img src="./img/landingImg1.png" aria-hidden="true"></img>
             </div>
             <div className="row2">
                 <h1>Collaborate &#38; Share with your Teammates Across the Web</h1>
@@ -73,7 +72,7 @@ function Main() {
                 </ul>
             </div>
             <div className="row2">
-                <img src="" aria-hidden="true"></img>
+                <img src="./img/landingImg2.png" aria-hidden="true"></img>
             </div>
         </section>
     </main>
