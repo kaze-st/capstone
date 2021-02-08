@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import firebase from 'firebase/app'
 
 // const app = firebase.initializeApp({
 //     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -20,7 +20,7 @@ const firebaseConfig = {
     messagingSenderId: "310143851203",
     appId: "1:310143851203:web:7844e47087572c220de076",
     measurementId: "G-6KJWE41TDG"
-};
+  };;
 
 const app = firebase.initializeApp({
     apiKey: firebaseConfig.apiKey,
