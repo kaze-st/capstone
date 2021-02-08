@@ -1,7 +1,5 @@
 import React, {MouseEvent} from 'react';
 
-const LOGO_PATH = "../../public/favicon.ico"
-
 
 function Header() {
     const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
