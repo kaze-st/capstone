@@ -1,9 +1,7 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-
-
-
 
 export function Login() {
     const [ user, setUser ] = useState({ email: '', password: ''});
@@ -20,9 +18,10 @@ export function Login() {
         setUser({...user, password: event.target.value});
     }
 
-    let handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
-        event.preventDefault();        
-        if (user.email === '' && user.password === '') {
+    let handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log('wsup')
+        if (user.email === '' || user.password === '') {
             setError('You cannot have empty email and password');
             return;
         }
@@ -39,8 +38,10 @@ export function Login() {
         setLoading(false);
     }
 
+    console.log('user', user);
+    
     return (
-        <form className="login">
+        <form className="login" onSubmit={handleSubmit}>
             <h1>Log into your Account</h1>
 
             {error && <div>Error: {error}</div>}
@@ -59,10 +60,8 @@ export function Login() {
             <div>
                 <input type="checkbox" name="remember-me"></input>
                 <label htmlFor="remember-me">Keep me signed in</label>
-
-                
             </div>
-            <button type ="submit" disabled={loading} onSubmit={handleSubmit}>Submit</button>
+            <button type="submit" disabled={loading} >Submit</button>
             <div>
                 <span>
                     Need an account?
