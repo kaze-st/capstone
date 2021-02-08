@@ -1,5 +1,6 @@
+import React, { useState } from 'react';
+
 import { Link } from 'react-router-dom';
-import React, { useState} from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function Register(){
@@ -27,7 +28,7 @@ export function Register(){
         setNewUser({...newUser, confirmPassword: event.target.value});
     }
 
-    let handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
+    let handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();       
 
         if (newUser.password !== newUser.confirmPassword) {
@@ -48,7 +49,7 @@ export function Register(){
     }
 
     return(
-        <form className="register">
+        <form className="register"  onSubmit={handleSubmit}>
             <h1>Create Your Account</h1>
 
             {error && <div>Error: {error}</div>}
@@ -71,7 +72,7 @@ export function Register(){
                 />
             </div>
 
-            <button disabled={loading} type ="submit" onSubmit={handleSubmit}>Create Account</button>
+            <button disabled={loading} type ="submit">Create Account</button>
 
             <span>Already have an account?</span>
             <Link to="/login">Log in</Link>
