@@ -1,7 +1,7 @@
 import './index.css';
 
-import React from 'react';
 import LandingPage from './LandingPage/LandingPage'
+import React from 'react';
 
 function App() {
   return (

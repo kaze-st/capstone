@@ -1,6 +1,5 @@
 import React, {MouseEvent} from 'react';
 
-
 function Header() {
     const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -47,11 +46,10 @@ function Main() {
             <div className="row2">
                 <h1>Collaborate &#38; Share with your Teammates Across the Web</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                    tempor incididunt ut labore et dolore magna aliqua. Neque convallis a cras 
-                    semper auctor neque vitae. Libero volutpat sed cras ornare arcu dui. Vitae 
-                    tempus quam pellentesque nec nam aliquam. Odio aenean sed adipiscing diam donec 
-                    adipiscing tristique. 
+                    CodeCollab is an online code editor that uses cloud storage to store your programming 
+                    scripts online and allow you to share it with others so that you can work together on 
+                    the same script. Its secure connection allows you to work with others with low latency 
+                    and you can continue working even while you’re disconnected from the internet. 
                 </p>
             </div>
         </section>
@@ -59,14 +57,13 @@ function Main() {
             <div className="row1">
                 <h1>Working Remotely Has Never Been Easier</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua.
+                    CodeCollab provides support for many different programming languages including:
                 </p>
                 <ul>
-                    <li>Item 1</li>
-                    <li>item 2</li>
-                    <li>item 3</li>
-                    <li>item 4</li>
+                    <li>Python</li>
+                    <li>C#</li>
+                    <li>Java</li>
+                    <li>JavaScript</li>
                 </ul>
             </div>
             <div className="row2">
