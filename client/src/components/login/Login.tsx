@@ -41,7 +41,6 @@ export function Login() {
     }
 
     return (
-
         <form className="login-form" onSubmit={handleSubmit}>
             <div className="header">Log Into Your Account</div>
 
@@ -73,8 +72,6 @@ export function Login() {
                 </span>
             </div>
         </form>
-
-
     );
 }
 

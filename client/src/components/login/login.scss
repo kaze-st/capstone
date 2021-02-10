@@ -3,18 +3,6 @@ html {
     background-color: #007ACC;
 }
 
-.login-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-.logo-and-title {
-    cursor: pointer;
-    position: absolute;
-}
-
 .login-form {
     display: flex;
     flex-direction: column;
