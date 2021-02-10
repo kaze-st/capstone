@@ -51,7 +51,7 @@ export function Register(){
     }
 
     return(
-        <form className="Login"  onSubmit={handleSubmit}>
+        <form className="login-form"  onSubmit={handleSubmit}>
             <div className="header">Create your account</div>
 
             {error && <div>Error: {error}</div>}

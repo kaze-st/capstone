@@ -41,8 +41,9 @@ export function Login() {
     }
 
     return (
-        <form className="Login" onSubmit={handleSubmit}>
-            <div className="header">Log into your Account</div>
+
+        <form className="login-form" onSubmit={handleSubmit}>
+            <div className="header">Log Into Your Account</div>
 
             {error && <div>Error: {error}</div>}
             <div className="input-fields">
@@ -64,7 +65,7 @@ export function Login() {
                 </div>
                 <div>Forgot password?</div>
             </div>
-            <button type="submit" disabled={loading} >LOG IN</button>
+            <button type="submit" disabled={loading} >Log In</button>
             <div>
                 <span>
                     Need an account?
@@ -72,6 +73,8 @@ export function Login() {
                 </span>
             </div>
         </form>
+
+
     );
 }
 

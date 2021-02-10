@@ -1,43 +1,61 @@
 html {
-    font-family: SF Pro Display;
+    font-family: "SF Pro Display";
     background-color: #007ACC;
 }
 
-.Login {
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.logo-and-title {
+    cursor: pointer;
+    position: absolute;
+}
+
+.login-form {
     display: flex;
     flex-direction: column;
 
-    // to make this sit centered
+    // to make this shit centered
     position: fixed;
     top: 30%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 
-    padding: 0.2em;
+    padding: 1em;
+    border-radius: 3%;
 
     background-color: white;
 }
 
-.Login .header {
+.login-form .header {
     color: #007ACC;
-    font-size: 2em;
+    
     text-align: center;
+    font-weight: lighter;
+    font-size: 1.75em;
 }
 
 .input-fields {
     display: flex;
     flex-direction: column;   
+
+    padding-top: 1em;
 }
 
 .input-fields input {
     margin: 0.2em;
     background-color: #E6E6E6;
     border: 0.1em solid #828282;
-    border-radius: 2%;
+    border-radius: 5%;
 
-    margin-left: 1em;
-    margin-right: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-top: 0.3em;
 
     padding: 0.5em;
 }
