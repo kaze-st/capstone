@@ -1,6 +1,9 @@
+
 import './App.scss';
 import './components/login/Login.tsx';
+import './index.css';
 
+import LandingPage from './LandingPage/LandingPage'
 import React from 'react';
 import Routes from './routes';
 import { BrowserRouter  } from 'react-router-dom'; 
@@ -16,7 +19,5 @@ function App() {
           </div>
       </BrowserRouter>
     </AuthProvider>
-  );
-}
 
 export default App;

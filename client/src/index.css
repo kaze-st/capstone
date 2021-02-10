@@ -1,13 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  height: inherit;
+  font-family: 'Source Sans Pro', sans-serif;
+  display: flex;
+  flex-direction: column;
 }
+
+h1 {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.25rem;
+}
+
+#root {
+  flex: 1;
+}
+
+.page-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+header, .flex-container, footer {
+  display: flex;
+  align-items: center;
+  background-color:#007ACC;
+  color: #FFFFFF;
+}
+
+.logo-and-title {
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 45px;
+  margin: 1rem 0.5rem;
+}
+
+nav {
+  flex: 1;
+  height: 100%;
+}
+
+nav ul {
+  margin: 0;
+  height: inherit;
+  display: flex;
+  align-items: center;
+}
+
+nav li {
+  display: inline;
+  font-size: 18px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+}
+
+nav li:hover {
+  background-color: rgb(0 63 105);
+}
+
+li {
+  font-size: 1.25rem;
+}
+
+button {
+  margin: 1rem;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  color:#007ACC;
+  border-radius: 10px;
+  border: #FFFFFF;
+  cursor: pointer;
+}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.landing-section {
+  padding: 2rem 3rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landing-section:nth-child(odd) {
+  background-color: #3F4756;
+}
+
+.landing-section:last-child {
+  flex: 1;
+}
+
+.landing-section img {
+  width: 750px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+footer {
+  padding: 0 1rem;
+}
+
+footer p {
+  font-size: 0.75rem;
 }
