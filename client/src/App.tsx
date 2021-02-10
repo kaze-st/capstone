@@ -1,8 +1,7 @@
-import './App.scss';
+  import './App.scss';
 import './components/login/Login.tsx';
-import './index.css';
+import './index.scss';
 
-import LandingPage from './LandingPage/LandingPage'
 import React from 'react';
 import Routes from './routes';
 import { BrowserRouter  } from 'react-router-dom'; 

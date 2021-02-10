@@ -1,10 +1,8 @@
 import React, {MouseEvent} from 'react';
+import { Link } from 'react-router-dom';
+
 
 function Header() {
-    const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        console.log("Log In");
-    }
 
     return <header className="flex-container">
         <div className="logo-and-title">
@@ -18,22 +16,22 @@ function Header() {
                 <li>CONTACT US</li>
             </ul>
         </nav>
-        <button aria-label="log in button" onClick={handleOnClick}>LOG IN</button>
+        <Link to="/login">
+            <button aria-label="log in button">LOG IN</button>
+        </Link>
+        
     </header>
 }
 
 function Main() {
-    const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        console.log("Sign Up");
-    }
-
     return <main>
         <section className="flex-container landing-section">
             <div className="row1">
                 <h1>Code Your Scripts Together</h1>
                 <p>Create programming scripts that you can share with others and work together on.</p>
-                <button onClick={handleOnClick}>CREATE ACCOUNT</button>
+                <Link to="/register">
+                    <button>CREATE ACCOUNT</button>
+                </Link>
             </div>
             <div className="row2">
                 <img src="./img/landingComputerImg.jpg" aria-hidden="true"></img>
@@ -81,8 +79,10 @@ function Footer() {
 
 export default function LandingPage() {
     return <>
-        <Header/>
-        <Main />
-        <Footer />
+        <div className="page-wrapper">
+            <Header/>
+            <Main />
+            <Footer />
+        </div>
     </>
 }
