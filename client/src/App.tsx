@@ -1,4 +1,3 @@
-
 import './App.scss';
 import './components/login/Login.tsx';
 import './index.css';
@@ -19,5 +18,6 @@ function App() {
           </div>
       </BrowserRouter>
     </AuthProvider>
-
+  );
+}
 export default App;
