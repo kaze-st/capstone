@@ -30,7 +30,7 @@ function Main() {
 
     return <main>
         <section className="flex-container landing-section">
-            <div className="row1">
+            <div className="row1 block">
                 <h1>Code Your Scripts Together</h1>
                 <p>Create programming scripts that you can share with others and work together on.</p>
                 <button onClick={handleOnClick}>CREATE ACCOUNT</button>
@@ -43,7 +43,7 @@ function Main() {
             <div className="row1">
                 <img src="./img/landingImg1.png" aria-hidden="true"></img>
             </div>
-            <div className="row2">
+            <div className="row2 block">
                 <h1>Collaborate &#38; Share with your Teammates Across the Web</h1>
                 <p>
                     CodeCollab is an online code editor that uses cloud storage to store your programming 
@@ -54,7 +54,7 @@ function Main() {
             </div>
         </section>
         <section className="flex-container landing-section">
-            <div className="row1">
+            <div className="row1 block">
                 <h1>Working Remotely Has Never Been Easier</h1>
                 <p>
                     CodeCollab provides support for many different programming languages including:
