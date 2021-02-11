@@ -5,7 +5,6 @@ import React, {MouseEvent} from 'react';
 function Header() {
     const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log("Log In");
     }
 
     return <header className="flex-container">
@@ -32,7 +31,6 @@ function Header() {
 function Main() {
     const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log("Sign Up");
     }
 
     return <main>
