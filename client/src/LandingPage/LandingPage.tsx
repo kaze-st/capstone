@@ -1,3 +1,5 @@
+import './LandingPage.scss'
+
 import React, {MouseEvent} from 'react';
 
 function Header() {

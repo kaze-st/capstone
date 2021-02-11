@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
 .App {
   text-align: center;
 }
@@ -129,18 +131,12 @@ li {
 
 button {
   margin: 1rem;
-  padding: 0.75rem 2rem;
+  padding: 0.5rem 1rem;
   font-size: .75rem;
   color:#007ACC;
   border-radius: 10px;
   border: #FFFFFF;
   cursor: pointer;
-}
-
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 .landing-section {
@@ -174,28 +170,4 @@ footer {
 
 footer p {
   font-size: 0.75rem;
-}
-
-@media (min-width: 1110px) {
-  .landing-section img {
-    width: 650px;
-  }
-
-  .big-nav {
-    display: contents;
-  }
-}
-
-@media (min-width: 875px) {
-  button {
-    font-size: 1rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-  
-  p {
-    font-size: 1.25rem;
-  }
 }
