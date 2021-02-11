@@ -14,10 +14,10 @@ function Header() {
         <div className="big-nav">
             <nav>
                 <ul>
-                    <li>HOME</li>
-                    <li>FEATURES</li>
-                    <li>ABOUT US</li>
-                    <li>CONTACT US</li>
+                    <li aria-label="Home">HOME</li>
+                    <li aria-label="Features">FEATURES</li>
+                    <li aria-label="About Us"> ABOUT US</li>
+                    <li aria-label="Contact Us">CONTACT US</li>
                 </ul>
             </nav>
         </div>
