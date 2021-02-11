@@ -10,15 +10,20 @@ function Header() {
         <div className="logo-and-title">
             <img className="logo" src="./img/logo.png" alt="Code Collab Logo"></img>
         </div>
-        <nav>
-            <ul>
-                <li>HOME</li>
-                <li>FEATURES</li>
-                <li>ABOUT US</li>
-                <li>CONTACT US</li>
-            </ul>
-        </nav>
+        <div className="big-nav">
+            <nav>
+                <ul>
+                    <li>HOME</li>
+                    <li>FEATURES</li>
+                    <li>ABOUT US</li>
+                    <li>CONTACT US</li>
+                </ul>
+            </nav>
+        </div>
         <button aria-label="log in button" onClick={handleOnClick}>LOG IN</button>
+        <div className="hamburger-menu">
+            <img></img>
+        </div>
     </header>
 }
 
