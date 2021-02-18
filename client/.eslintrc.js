@@ -26,13 +26,14 @@ module.exports = {
 		},
 		ecmaVersion: 2018,
 		sourceType: 'module',
-		project: './tsconfig.json'
+		project: ['./tsconfig.json', './tsconfig.eslint.json'],
+		tsconfigRootDir: __dirname
 	},
 	rules: {
+		'import/order': 0,
 		'linebreak-style': 'off',
 		'no-console': 1,
 		indent: ['error', 'tab'],
-		'sort-imports': 'error',
 		'prettier/prettier': [
 			'error',
 			{
