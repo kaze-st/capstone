@@ -1,61 +1,98 @@
-import React, { useContext, useState, useEffect } from 'react';
-import {auth} from '../firebase';
+import React, { useContext, useEffect, useState } from 'react';
+
+import UserContext from '../types/UserContext';
+import { auth } from '../firebase-config';
 import firebase from 'firebase/app';
 
-
 interface IAuthContext {
-    currentUser: firebase.User | null | undefined,
-    login: ((email: string, password: string) => Promise<firebase.auth.UserCredential>) | null,
-    signUp: ((email: string, password: string) => Promise<firebase.auth.UserCredential>) | null,
+	userContext: UserContext | null;
+	login:
+		| ((
+				email: string,
+				password: string,
+				persistence?: firebase.auth.Auth.Persistence
+		  ) => Promise<firebase.auth.UserCredential>)
+		| null;
+	signUp:
+		| ((
+				email: string,
+				password: string
+		  ) => Promise<firebase.auth.UserCredential>)
+		| null;
+	logout: (() => Promise<void>) | null;
 }
+
+type Props = {
+	children: React.ReactNode;
+};
 
 // initializing these shit as null because idk how to initialize them
 const AuthContext = React.createContext<IAuthContext>({
-    currentUser: null,
-    login: null,
-    signUp: null
+	userContext: null,
+	login: null,
+	signUp: null,
+	logout: null
 });
 
-export function useAuth() {
-    return useContext(AuthContext);
+export function useAuth(): IAuthContext {
+	return useContext(AuthContext);
 }
 
-export function AuthProvider({children}: any) {
+export function AuthProvider({ children }: Props): JSX.Element {
+	// not sure how to decouple firebase from this useState
+	const [userContext, setUserContext] = useState<UserContext | null>(null);
+	const [loading, setLoading] = useState(true);
 
-    // not sure how to decouple firebase from this useState
-    const [currentUser, setCurrentUser] = useState<firebase.User | null>();
-    const [loading, setLoading] = useState(true);
+	const signUp = (
+		email: string,
+		password: string
+	): Promise<firebase.auth.UserCredential> => {
+		return auth.createUserWithEmailAndPassword(email, password);
+	};
 
-    function signUp(email: string, password: string): Promise<firebase.auth.UserCredential> {
-        return auth.createUserWithEmailAndPassword(email, password);
-    }
+	const login = async (
+		email: string,
+		password: string,
+		persistence: firebase.auth.Auth.Persistence = firebase.auth.Auth.Persistence
+			.LOCAL
+	): Promise<firebase.auth.UserCredential> => {
+		await firebase.auth().setPersistence(persistence);
+		return auth.signInWithEmailAndPassword(email, password);
+	};
 
-    function login(email: string, password: string): Promise<firebase.auth.UserCredential> {
-        return auth.signInWithEmailAndPassword(email, password);
-    }
+	const logout = (): Promise<void> => {
+		return auth.signOut();
+	};
 
-    function logout() {
-        return auth.signOut();
-    }
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			firebase
+				.auth()
+				.currentUser?.getIdToken(true)
+				.then((idToken) => {
+					const tempUserContext: UserContext = {
+						firebaseUser: user,
+						idToken
+					};
+					setUserContext(tempUserContext);
+				});
+			setLoading(false);
+		});
 
-    useEffect(() => {
-        // make sure to usub whenever we unmount
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setCurrentUser(user);
-            setLoading(false);
-        });
-        return unsubscribe;
-    }, []);
+		// make sure to unsub whenever we unmount
+		return unsubscribe;
+	}, []);
 
-    const contextValue = {
-        currentUser,
-        login,
-        signUp
-    }
+	const contextValue: IAuthContext = {
+		userContext,
+		login,
+		signUp,
+		logout
+	};
 
-    return(
-        <AuthContext.Provider value = {contextValue}>
-            {!loading && children}
-        </AuthContext.Provider>
-    );
+	return (
+		<AuthContext.Provider value={contextValue}>
+			{!loading && children}
+		</AuthContext.Provider>
+	);
 }

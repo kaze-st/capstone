@@ -1,0 +1,78 @@
+html {
+	font-family: 'SF Pro Display';
+	background-color: #007acc;
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+
+	// to make this shit centered
+	position: fixed;
+	top: 30%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+
+	padding: 1em;
+	border-radius: 3%;
+
+	background-color: white;
+}
+
+.login-form .header {
+	color: #007acc;
+
+	text-align: center;
+	font-weight: lighter;
+	font-size: 1.75em;
+}
+
+.input-fields {
+	display: flex;
+	flex-direction: column;
+
+	padding-top: 1em;
+}
+
+.input-fields input {
+	margin: 0.2em;
+	background-color: #e6e6e6;
+	border: 0.1em solid #828282;
+	border-radius: 5%;
+
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+
+	padding: 0.5em;
+}
+
+button {
+	margin: auto;
+	width: fit-content;
+
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+
+	padding: 0.8em;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+
+	border: #ffffff;
+	border-radius: 5%;
+	background-color: #007acc;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.remember-me-and-forgot-pw {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.remember-me-and-forgot-pw div {
+	font-size: small;
+	text-align: center;
+}

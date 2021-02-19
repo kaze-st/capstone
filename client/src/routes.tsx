@@ -1,22 +1,22 @@
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-import { Login } from './components/login/Login';
-import { Register } from './components/login/Register';
 import LandingPage from './components/LandingPage/LandingPage';
+import { Login } from './components/Login/Login';
+import React from 'react';
+import Register from './components/Login/Register';
 
-export default function Routes() {
-    return(
-        <Switch>
-            <Route exact path="/login">
-                <Login/>
-            </Route>
-            <Route exact path="/register">
-                <Register/>
-            </Route>
-            <Route exact path="/landing-page">
-                <LandingPage/>
-            </Route>
-        </Switch>
-    );
+export default function Routes(): JSX.Element {
+	return (
+		<Switch>
+			<Route exact path="/login">
+				<Login />
+			</Route>
+			<Route exact path="/register">
+				<Register />
+			</Route>
+			<Route exact path="/">
+				<LandingPage />
+			</Route>
+		</Switch>
+	);
 }
