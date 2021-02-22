@@ -18,11 +18,14 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"editor.renderWhitespace": "all",
-	"eslint.workingDirectories": ["client", "server"],
+	"eslint.workingDirectories": [
+		{ "directory": "client", "changeProcessCWD": true },
+		{ "directory": "server", "changeProcessCWD": true }
+	],
 	"[scss]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"prettier.useTabs": true,
 	"editor.insertSpaces": false,
-	"editor.detectIndentation": false,
+	"editor.detectIndentation": false
 }
