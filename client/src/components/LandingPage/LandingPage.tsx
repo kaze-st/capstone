@@ -1,62 +1,54 @@
 import './LandingPage.scss';
 
-import React, { MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
+import React from 'react';
 
 function Header() {
-	const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-	};
-
 	return (
 		<header className="flex-container">
 			<div className="logo-and-title">
-				<img className="logo" src="./img/logo.png" alt="Code Collab Logo"></img>
+				<img className="logo" src="./img/logo.png" alt="Code Collab Logo" />
 			</div>
-			<div className="big-nav">
-				<nav>
-					<ul>
-						<li aria-label="Home">HOME</li>
-						<li aria-label="Features">FEATURES</li>
-						<li aria-label="About Us"> ABOUT US</li>
-						<li aria-label="Contact Us">CONTACT US</li>
-					</ul>
-				</nav>
-			</div>
-			<button aria-label="log in button" onClick={handleOnClick}>
-				LOG IN
-			</button>
-			<div className="hamburger-menu">
-				<img></img>
-			</div>
+			<nav>
+				<ul>
+					<li>HOME</li>
+					<li>FEATURES</li>
+					<li>ABOUT US</li>
+					<li>CONTACT US</li>
+				</ul>
+			</nav>
+			<Link to="/login">
+				<button type="button" aria-label="log in button">
+					LOG IN
+				</button>
+			</Link>
 		</header>
 	);
 }
 
 function Main() {
-	const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-	};
-
 	return (
 		<main>
 			<section className="flex-container landing-section">
-				<div className="row1 block">
+				<div className="row1">
 					<h1>Code Your Scripts Together</h1>
 					<p>
 						Create programming scripts that you can share with others and work
 						together on.
 					</p>
-					<button onClick={handleOnClick}>CREATE ACCOUNT</button>
+					<Link to="/register">
+						<button type="button">CREATE ACCOUNT</button>
+					</Link>
 				</div>
 				<div className="row2">
-					<img src="./img/landingComputerImg.jpg" aria-hidden="true"></img>
+					<img alt="" src="./img/landingComputerImg.jpg" aria-hidden="true" />
 				</div>
 			</section>
 			<section className="flex-container landing-section">
 				<div className="row1">
-					<img src="./img/landingImg1.png" aria-hidden="true"></img>
+					<img alt="" src="./img/landingImg1.png" aria-hidden="true" />
 				</div>
-				<div className="row2 block">
+				<div className="row2">
 					<h1>Collaborate &#38; Share with your Teammates Across the Web</h1>
 					<p>
 						CodeCollab is an online code editor that uses cloud storage to store
@@ -69,7 +61,7 @@ function Main() {
 				</div>
 			</section>
 			<section className="flex-container landing-section">
-				<div className="row1 block">
+				<div className="row1">
 					<h1>Working Remotely Has Never Been Easier</h1>
 					<p>
 						CodeCollab provides support for many different programming languages
@@ -83,7 +75,7 @@ function Main() {
 					</ul>
 				</div>
 				<div className="row2">
-					<img src="./img/landingImg2.png" aria-hidden="true"></img>
+					<img alt="" src="./img/landingImg2.png" aria-hidden="true" />
 				</div>
 			</section>
 		</main>
@@ -101,12 +93,14 @@ function Footer() {
 	);
 }
 
-export default function LandingPage() {
+export default function LandingPage(): JSX.Element {
 	return (
 		<>
-			<Header />
-			<Main />
-			<Footer />
+			<div className="page-wrapper">
+				<Header />
+				<Main />
+				<Footer />
+			</div>
 		</>
 	);
 }
