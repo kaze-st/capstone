@@ -65,10 +65,12 @@
 	"lint-staged": {
 		"*.{ts,tsx}": [
 			"eslint --quiet --fix",
-			"prettier --write"
+			"prettier --write",
+			"git add"
 		],
 		"*.{json,md,html,scss}": [
-			"prettier --write"
+			"prettier --write",
+			"git add"
 		]
 	}
 }
