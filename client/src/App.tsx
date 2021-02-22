@@ -1,14 +1,23 @@
 import './App.scss';
+import './components/Login/Login';
+import './index.scss';
 
-import LandingPage from './components/LandingPage/LandingPage';
+import { AuthProvider } from './contexts/AuthContext';
+import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
+import Routes from './Routes';
 
-function App() {
+function App(): JSX.Element {
 	return (
 		<div className="page-wrapper">
-			<LandingPage />
+			<AuthProvider>
+				<BrowserRouter>
+					<div className="App">
+						<Routes />
+					</div>
+				</BrowserRouter>
+			</AuthProvider>
 		</div>
 	);
 }
-
 export default App;
