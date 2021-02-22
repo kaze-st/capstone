@@ -48,6 +48,7 @@
 		"tsconfig-paths": "^3.9.0"
 	},
 	"_moduleAliases": {
-		"@models": "build/models"
+		"@models": "build/models",
+		"@routes": "build/routes"
 	}
 }

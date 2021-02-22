@@ -13,3 +13,5 @@ const app: express.Application = express();
 app.listen(3000, async function () {
 	consola.info('Server is listening on port 3000');
 });
+
+app.use('/api');
