@@ -5,7 +5,7 @@ import './index.scss';
 import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
-import Routes from './routes';
+import Routes from './Routes';
 
 function App(): JSX.Element {
 	return (

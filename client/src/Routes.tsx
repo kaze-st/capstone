@@ -14,7 +14,7 @@ export default function Routes(): JSX.Element {
 			<Route exact path="/register">
 				<Register />
 			</Route>
-			<Route exact path="/">
+			<Route path="/">
 				<LandingPage />
 			</Route>
 		</Switch>

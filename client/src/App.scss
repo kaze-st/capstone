@@ -140,24 +140,6 @@ button {
 	cursor: pointer;
 }
 
-.landing-section {
-	padding: 2rem 3rem;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.landing-section:nth-child(odd) {
-	background-color: #3f4756;
-}
-
-.landing-section:last-child {
-	flex: 1;
-}
-
-.landing-section img {
-	width: 500px;
-}
-
 main {
 	flex: 1;
 	display: flex;
