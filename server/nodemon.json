@@ -4,5 +4,5 @@
 	],
 	"ext": ".ts,.js",
 	"ignore": [],
-	"exec": "ts-node -r  tsconfig-paths/register ./src/index.ts"
+	"exec": "npm run build && ts-node -r  tsconfig-paths/register ./src/index.ts"
 }
