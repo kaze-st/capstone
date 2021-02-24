@@ -1,13 +1,32 @@
 import { Router } from 'express';
+import UserController from '@controllers/UserController';
+import { body } from 'express-validator';
 
 export default (app: Router): void => {
 	const router = Router();
-	router.post('/create-user', (req, res) => {
-		// Do something
-		res.json({
-			message: 'Tu madre'
-		});
-	});
+
+	router.post(
+		'/create-user',
+		[
+			body('uid')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('uid must be a non empty string'),
+			body('name')
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('name must be a non empty string'),
+			body('lastName')
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('lastName must be a non empty string')
+		],
+		UserController.createUser
+	);
 
 	app.use('/user', router);
 };

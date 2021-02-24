@@ -44,6 +44,7 @@
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
+		"express-validator": "^6.9.2",
 		"module-alias": "^2.2.2",
 		"mongodb": "^3.6.4",
 		"mongoose": "^5.11.17",
@@ -51,6 +52,7 @@
 	},
 	"_moduleAliases": {
 		"@models": "build/models",
-		"@routes": "build/routes"
+		"@routes": "build/routes",
+		"@controllers": "build/controllers"
 	}
 }
