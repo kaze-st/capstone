@@ -11,7 +11,7 @@ export interface IUser extends Document {
 	sharedFiles: Array<any>; // eslint-disable-line
 }
 
-export class UserModel extends BaseModel<IUser> {
+class UserModel extends BaseModel<IUser> {
 	getName(): string {
 		return 'users';
 	}
@@ -22,10 +22,12 @@ export class UserModel extends BaseModel<IUser> {
 				uid: { type: String, required: true },
 				name: { type: String, required: true },
 				lastName: { type: String, required: true },
-				ownedFiles: { type: Array, required: true },
-				sharedFiles: { type: Array, required: true }
+				ownedFiles: { type: [String], required: true },
+				sharedFiles: { type: [String], required: true }
 			},
 			{ collection: 'users' }
 		);
 	}
 }
+
+export default new UserModel().getInstance();
