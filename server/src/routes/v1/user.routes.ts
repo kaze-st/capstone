@@ -1,6 +1,6 @@
+import { body, query } from 'express-validator';
 import { Router } from 'express';
 import UserController from '@controllers/UserController';
-import { body } from 'express-validator';
 
 export default (app: Router): void => {
 	const router = Router();
@@ -26,6 +26,19 @@ export default (app: Router): void => {
 				.withMessage('lastName must be a non empty string')
 		],
 		UserController.createUser
+	);
+
+	router.get(
+		'/get-user',
+		[
+			query('uid')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('uid must be a non empty string')
+		],
+		UserController.getUser
 	);
 
 	app.use('/user', router);
