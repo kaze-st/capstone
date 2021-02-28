@@ -10,6 +10,8 @@ import registerAPIRoutes from '@routes/api.routes';
 
 dotenv.config();
 
+const PORT = 8080;
+
 // Create a new express app instance
 const app: express.Application = express();
 
@@ -21,8 +23,8 @@ app.use(bodyParser.raw());
 // Enable CORS protocol
 app.use(cors());
 
-app.listen(3000, async function () {
-	consola.info('Server is listening on port 3000');
+app.listen(PORT, async function () {
+	consola.info('Server is listening on port: ' + PORT);
 });
 
 registerAPIRoutes(app);
