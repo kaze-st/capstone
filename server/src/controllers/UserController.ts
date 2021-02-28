@@ -48,8 +48,6 @@ export default class UserController {
 			return;
 		}
 
-		// not sure how to do this more elegantly since query can be string[] or undefined
-		// but this part should be handled by the validator
 		const uid = String(req.query.uid);
 		const user = await UserModel.findOne({ uid: uid });
 
