@@ -3,6 +3,7 @@ import './Login.scss';
 import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import firebase from 'firebase/app';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -49,11 +50,20 @@ export function Login(): JSX.Element {
 				? firebase.auth.Auth.Persistence.LOCAL
 				: firebase.auth.Auth.Persistence.SESSION;
 			if (login) {
-				await login(
+				const credentials = await login(
 					userLoginDetails.email,
 					userLoginDetails.password,
 					googleAuthPersistenceState
 				);
+				let url : string = 'localhost:8080/api/v1/user/get-user?uid=' + credentials.user?.uid
+				axios.get(url)
+					.then(response => {
+						console.log(response);
+					}).catch(err => {
+						setError(err);
+					}).then (() => {
+						setIsLoading(false);
+					})
 			}
 		} catch {
 			setError('Failed to log in to your account');
