@@ -3,6 +3,7 @@ import './Login.scss';
 import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function Register(): JSX.Element {
@@ -43,7 +44,12 @@ export default function Register(): JSX.Element {
 			setError('');
 			setLoading(true);
 			if (signUp) {
-				await signUp(newUser.email, newUser.password);
+				const credentials = await signUp(newUser.email, newUser.password);
+				const {userContext} = useAuth()
+				axios.post('localhost:8080/api/v1/user/create-user', {
+					uid: credentials.user?.uid,
+					name: credentials.user?.displayName
+				})
 			}
 		} catch {
 			setError('Failed to create an account');
