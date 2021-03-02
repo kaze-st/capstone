@@ -16,14 +16,12 @@ export default class FileController {
 		const ownerUID: string = reqBody.owner;
 		const owner = await UserModel.findOne({ uid: ownerUID });
 		if (owner === null) {
-			res.status(400).send('User not found');
+			res.status(400).jsonp({ message: 'User not found' });
 			return;
 		}
 
 		const newFile = new FileModel({
 			name: reqBody.name,
-			// workaround because content is empty is not allowed by our
-			// schema because required = true
 			content: '',
 			createdOn: new Date(),
 			owner: ownerUID,
