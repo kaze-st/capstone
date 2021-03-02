@@ -45,17 +45,15 @@ export default function Register(): JSX.Element {
 			setLoading(true);
 			if (signUp) {
 				const credentials = await signUp(newUser.email, newUser.password);
-				axios.post('localhost:8080/api/v1/user/create-user', {
-					uid: credentials.user?.uid,
-					name: "firstName",
-					lastName: "lastName"
-				}).then(response => {
-					console.log(response);
-				}).catch(err => {
-					setError(err);
-				}).then(() => {
-					setLoading(false);
-				});
+				const response = await axios.post(
+					'http://localhost:8080/api/v1/user/create-user',
+					{
+						uid: credentials.user?.uid,
+						name: 'firstName',
+						lastName: 'lastName'
+					}
+				);
+				console.log(response);
 			}
 		} catch {
 			setError('Failed to create an account');

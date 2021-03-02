@@ -55,15 +55,9 @@ export function Login(): JSX.Element {
 					userLoginDetails.password,
 					googleAuthPersistenceState
 				);
-				let url : string = 'localhost:8080/api/v1/user/get-user?uid=' + credentials.user?.uid
-				axios.get(url)
-					.then(response => {
-						console.log(response);
-					}).catch(err => {
-						setError(err);
-					}).then (() => {
-						setIsLoading(false);
-					})
+				const url = `http://localhost:8080/api/v1/user/get-user?uid=${credentials.user?.uid}`;
+				const response = await axios.get(url);
+				console.log(response);
 			}
 		} catch {
 			setError('Failed to log in to your account');
