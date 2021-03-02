@@ -16,6 +16,7 @@ class FileModel extends BaseModel<IFile> {
 	}
 
 	getSchema(): Schema<IFile> {
+		mongoose.Schema.Types.String.checkRequired((v) => typeof v === 'string');
 		return new mongoose.Schema(
 			{
 				name: { type: String, required: true },

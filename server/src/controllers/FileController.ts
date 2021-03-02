@@ -24,37 +24,31 @@ export default class FileController {
 			name: reqBody.name,
 			// workaround because content is empty is not allowed by our
 			// schema because required = true
-			content: '\n',
+			content: '',
 			createdOn: new Date(),
 			owner: ownerUID,
 			sharedTo: new Array<string>(),
 			extension: reqBody.extension
 		});
 
-		owner.ownedFiles.push(newFile);
+		owner.ownedFiles.push(newFile._id);
 
-		// not sure how to roll back these saves
-		// if 1 of them fail
 		const session = await startSession();
-		session.startTransaction();
 
 		// eslint-disable-next-line -- callbackErr is never
 		let callbackErr: any = null;
 
-		await newFile.save((err) => {
-			if (err !== null) {
-				callbackErr = err;
-			}
-		});
-
-		await owner.save((err) => {
-			if (err != null) {
-				callbackErr = err;
-			}
-		});
-
-		await session.commitTransaction();
-		session.endSession();
+		try {
+			session.startTransaction();
+			await newFile.save();
+			await owner.save();
+			session.commitTransaction();
+		} catch (err) {
+			session.abortTransaction();
+			callbackErr = err;
+		} finally {
+			session.endSession();
+		}
 
 		if (callbackErr !== null) {
 			res.status(422).jsonp({ message: callbackErr?.message });

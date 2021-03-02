@@ -2,8 +2,14 @@ import FileController from '@controllers/FileController';
 import { Router } from 'express';
 import { body } from 'express-validator';
 
+enum Extensions {
+	PYTHON = 'py',
+	JAVA = 'java'
+}
+
 export default (app: Router): void => {
 	const router = Router();
+	const extensions = Object.values(Extensions) as string[];
 
 	router.post(
 		'/create-file',
@@ -19,7 +25,7 @@ export default (app: Router): void => {
 				.isString()
 				.withMessage('owner must be a non empty string'),
 			body('extension')
-				.isIn(['py', 'java'])
+				.isIn(extensions)
 				.not()
 				.isEmpty()
 				.isString()
