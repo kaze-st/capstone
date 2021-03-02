@@ -1,17 +1,23 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
-function FilesPage(): JSX.Element {
-	return <></>
-}
+export default function FilesPage(): JSX.Element {
+	const { logout } = useAuth();
+	const { userContext } = useAuth();
 
-function SideNav(): JSX.Element {
-	return <nav>
-		
-	</nav>
-}
+	const handleOnClick = async () => {
+		if (logout) {
+			await logout();
+		}
+	};
 
-function FileList(): JSX.Element {
-	return <>
-	
-	</>
+	if (userContext !== null) {
+		return (
+			<button type="submit" onClick={handleOnClick}>
+				Log out
+			</button>
+		);
+	}
+	return <Redirect to="/" />;
 }

@@ -1,8 +1,8 @@
 import './Login.scss';
 
+import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -17,6 +17,7 @@ export default function Register(): JSX.Element {
 	const [loading, setLoading] = useState(false);
 
 	const { signUp } = useAuth();
+	const { userContext } = useAuth();
 
 	const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setNewUser({ ...newUser, email: event.target.value });
@@ -53,13 +54,16 @@ export default function Register(): JSX.Element {
 						lastName: 'lastName'
 					}
 				);
-				console.log(response);
 			}
 		} catch {
 			setError('Failed to create an account');
 		}
 		setLoading(false);
 	};
+
+	if (userContext !== null) {
+		return <Redirect to="/files" />;
+	}
 
 	return (
 		<form className="login-form" onSubmit={handleSubmit}>
