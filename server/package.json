@@ -53,6 +53,7 @@
 	"_moduleAliases": {
 		"@models": "build/models",
 		"@routes": "build/routes",
-		"@controllers": "build/controllers"
+		"@controllers": "build/controllers",
+		"@extensions": "build/extensions"
 	}
 }
