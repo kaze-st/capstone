@@ -3,7 +3,7 @@ import { BaseModel } from '@models/BaseModel';
 
 export interface IFile extends Document {
 	name: string;
-	content?: string;
+	content: string;
 	createdOn: Date;
 	owner: string;
 	// not sure if we will need this information in the future

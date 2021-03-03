@@ -74,23 +74,18 @@ export default class UserController {
 			return;
 		}
 
-		let ownedFiles = await FileModel.find({
+		const ownedFiles = await FileModel.find({
 			_id: { $in: user.ownedFiles }
-		});
-		ownedFiles = ownedFiles.map((file) => {
-			file.content = undefined;
-			return file;
-		});
+		}).select('-content');
 
-		let sharedFiles = await FileModel.find({
+		const sharedFiles = await FileModel.find({
 			_id: { $in: user.sharedFiles }
-		});
-		sharedFiles = sharedFiles.map((file) => {
-			file.content = undefined;
-			return file;
-		});
+		}).select('-content');
 
 		res.set('Content-Type', 'application/json');
-		res.status(200).json({ ownedFiles: ownedFiles, sharedFiles: sharedFiles });
+		res.status(200).json({
+			ownedFiles: ownedFiles,
+			sharedFiles: sharedFiles
+		});
 	}
 }
