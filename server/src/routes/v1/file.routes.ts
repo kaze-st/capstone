@@ -1,11 +1,7 @@
 import { body, query } from 'express-validator';
+import Extensions from '@extensions/FileExtension';
 import FileController from '@controllers/FileController';
 import { Router } from 'express';
-
-enum Extensions {
-	PYTHON = 'py',
-	JAVA = 'java'
-}
 
 export default (app: Router): void => {
 	const router = Router();

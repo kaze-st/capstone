@@ -54,6 +54,6 @@
 		"@models": "build/models",
 		"@routes": "build/routes",
 		"@controllers": "build/controllers",
-		"@types": "build/types"
+		"@extensions": "build/extensions"
 	}
 }
