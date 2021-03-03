@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import UserContext from '../types/UserContext';
 import { auth } from '../firebase-config';
+import axios from 'axios';
 import firebase from 'firebase/app';
 
 interface IAuthContext {
@@ -78,6 +79,10 @@ export function AuthProvider({ children }: Props): JSX.Element {
 						idToken
 					};
 					setUserContext(tempUserContext);
+					axios.interceptors.request.use((config) => {
+						config.headers.Authorization = idToken;
+						return config;
+					});
 				});
 			setLoading(false);
 		});

@@ -60,7 +60,7 @@ export function Login(): JSX.Element {
 					googleAuthPersistenceState
 				);
 				const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-				await axios.get(`${url}/user/get-user`, {
+				await axios.get(`${url}/api/v1/user/get-user`, {
 					params: {
 						uid: credentials.user?.uid
 					}

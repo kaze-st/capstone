@@ -30,6 +30,7 @@ module.exports = {
 		tsconfigRootDir: __dirname
 	},
 	rules: {
+		'no-param-reassign': ['error', { props: false }],
 		'import/order': 0,
 		'linebreak-style': 'off',
 		'no-console': 1,
