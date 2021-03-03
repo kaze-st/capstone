@@ -1,14 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
-
 import { BaseModel } from '@models/BaseModel';
+import { ObjectId } from 'mongodb';
 
 export interface IUser extends Document {
 	uid: string;
 	name: string;
 	lastName: string;
-	// TODO Add file type once implemented
-	ownedFiles: Array<any>; // eslint-disable-line
-	sharedFiles: Array<any>; // eslint-disable-line
+	ownedFiles: Array<ObjectId>;
+	sharedFiles: Array<ObjectId>;
 }
 
 class UserModel extends BaseModel<IUser> {
@@ -22,8 +21,8 @@ class UserModel extends BaseModel<IUser> {
 				uid: { type: String, required: true },
 				name: { type: String, required: true },
 				lastName: { type: String, required: true },
-				ownedFiles: { type: [String], required: true },
-				sharedFiles: { type: [String], required: true }
+				ownedFiles: { type: [ObjectId], required: true },
+				sharedFiles: { type: [ObjectId], required: true }
 			},
 			{ collection: 'users' }
 		);

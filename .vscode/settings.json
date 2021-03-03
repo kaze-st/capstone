@@ -27,5 +27,6 @@
 	},
 	"prettier.useTabs": true,
 	"editor.insertSpaces": false,
-	"editor.detectIndentation": false
+	"editor.detectIndentation": false,
+	"files.insertFinalNewline": true
 }
