@@ -108,7 +108,7 @@ export default class FileController {
 		}
 
 		res.status(200).json({
-			message: 'File document saved with success',
+			message: 'File saved with success',
 			owner: owner,
 			receiver: receiver
 		});
