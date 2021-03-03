@@ -1,31 +1,32 @@
 {
-	"files.autoSave": "afterDelay",
-	"[jsonc]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[json]": {
-		"editor.defaultFormatter": "vscode.json-language-features"
-	},
-	"editor.formatOnPaste": true,
-	"editor.formatOnSave": true,
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescriptreact]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"editor.renderWhitespace": "all",
-	"eslint.workingDirectories": [
-		{ "directory": "client", "changeProcessCWD": true },
-		{ "directory": "server", "changeProcessCWD": true }
-	],
-	"[scss]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"prettier.useTabs": true,
-	"editor.insertSpaces": false,
-	"editor.detectIndentation": false
+    "files.autoSave": "afterDelay",
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.renderWhitespace": "all",
+    "eslint.workingDirectories": [
+        { "directory": "client", "changeProcessCWD": true },
+        { "directory": "server", "changeProcessCWD": true }
+    ],
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.useTabs": true,
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": false,
+    "files.insertFinalNewline": true
 }
