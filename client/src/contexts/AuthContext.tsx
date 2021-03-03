@@ -66,6 +66,9 @@ export function AuthProvider({ children }: Props): JSX.Element {
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
+			if (user === null) {
+				setUserContext(null);
+			}
 			firebase
 				.auth()
 				.currentUser?.getIdToken(true)

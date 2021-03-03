@@ -10,7 +10,7 @@
 		"start": "npm run build && node build/index.js",
 		"lint": "eslint . --ext .ts",
 		"lint-and-fix": "eslint . --ext .ts --fix",
-		"prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write && git add -A .",
+		"prettier-format": "prettier --config .prettierrc src/**/*.ts --write && git add -A .",
 		"dev:debug": "nodemon --inspect src/index.ts"
 	},
 	"husky": {
