@@ -49,7 +49,7 @@ export default function Register(): JSX.Element {
 			setLoading(true);
 			if (signUp) {
 				const credentials = await signUp(newUser.email, newUser.password);
-				const url = process.env.CODE_COLLAB_API_BASE_URL;
+				const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 				await axios.post(`${url}/user/create-user`, {
 					uid: credentials.user?.uid,
 					name: 'firstName',
