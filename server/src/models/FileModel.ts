@@ -6,7 +6,7 @@ export interface IFile extends Document {
 	content: string;
 	createdOn: Date;
 	owner: string;
-	sharedTo: Array<string>;
+	// sharedTo: Array<string>;
 	extension: string;
 }
 
@@ -23,7 +23,7 @@ class FileModel extends BaseModel<IFile> {
 				content: { type: String, required: true },
 				createdOn: { type: Date, required: true },
 				owner: { type: String, required: true },
-				sharedTo: { type: [String], required: true },
+				// sharedTo: { type: [String], required: true },
 				extension: { type: String, required: true }
 			},
 			{ collection: 'files' }

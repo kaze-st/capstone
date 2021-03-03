@@ -25,7 +25,7 @@ export default class FileController {
 			content: '',
 			createdOn: new Date(),
 			owner: ownerUID,
-			sharedTo: new Array<string>(),
+			// sharedTo: new Array<string>(),
 			extension: reqBody.extension
 		});
 
@@ -56,6 +56,61 @@ export default class FileController {
 		res.status(201).json({
 			message: 'File document saved with success',
 			file: newFile
+		});
+	}
+
+	static async shareFile(req: Request, res: Response): Promise<void> {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			res.status(422).jsonp(errors.array());
+			return;
+		}
+
+		const reqBody = req.body;
+		const ownerUID: string = reqBody.owner;
+		const owner = await UserModel.findOne({ uid: ownerUID });
+		if (owner === null) {
+			res.status(400).jsonp({ message: 'Owner not found' });
+			return;
+		}
+
+		const receiverUID: string = reqBody.receiver;
+		const receiver = await UserModel.findOne({ uid: receiverUID });
+		if (receiver === null) {
+			res.status(400).jsonp({ message: 'Receiver not found' });
+			return;
+		}
+
+		const fid = String(req.query.fid);
+		const file = await FileModel.findById(fid);
+		if (file === null) {
+			res.status(400).jsonp({ message: 'File not found' });
+			return;
+		}
+
+		if (file.owner !== owner.uid) {
+			res.status(401).jsonp({ message: 'User not authorized to share file' });
+			return;
+		}
+
+		if (receiver.sharedFiles.includes(file._id)) {
+			res.status(400).jsonp({ message: 'File already shared with this user' });
+			return;
+		}
+
+		receiver.sharedFiles.push(file._id);
+
+		try {
+			await receiver.save();
+		} catch (err) {
+			res.status(422).jsonp({ message: err });
+			return;
+		}
+
+		res.status(200).json({
+			message: 'File document saved with success',
+			owner: owner,
+			receiver: receiver
 		});
 	}
 }
