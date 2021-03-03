@@ -1,9 +1,13 @@
 import './Login.scss';
 
+import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import dotenv from 'dotenv';
 import { useAuth } from '../../contexts/AuthContext';
+
+dotenv.config();
 
 export default function Register(): JSX.Element {
 	const [newUser, setNewUser] = useState({
@@ -16,6 +20,7 @@ export default function Register(): JSX.Element {
 	const [loading, setLoading] = useState(false);
 
 	const { signUp } = useAuth();
+	const { userContext } = useAuth();
 
 	const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setNewUser({ ...newUser, email: event.target.value });
@@ -43,13 +48,23 @@ export default function Register(): JSX.Element {
 			setError('');
 			setLoading(true);
 			if (signUp) {
-				await signUp(newUser.email, newUser.password);
+				const credentials = await signUp(newUser.email, newUser.password);
+				const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
+				await axios.post(`${url}/user/create-user`, {
+					uid: credentials.user?.uid,
+					name: 'firstName',
+					lastName: 'lastName'
+				});
 			}
 		} catch {
 			setError('Failed to create an account');
 		}
 		setLoading(false);
 	};
+
+	if (userContext !== null) {
+		return <Redirect to="/files" />;
+	}
 
 	return (
 		<form className="login-form" onSubmit={handleSubmit}>

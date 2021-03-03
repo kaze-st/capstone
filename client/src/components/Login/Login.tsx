@@ -1,10 +1,14 @@
 import './Login.scss';
 
+import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import dotenv from 'dotenv';
 import firebase from 'firebase/app';
 import { useAuth } from '../../contexts/AuthContext';
+
+dotenv.config();
 
 export function Login(): JSX.Element {
 	const [userLoginDetails, setUserLoginDetails] = useState({
@@ -16,6 +20,7 @@ export function Login(): JSX.Element {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { login } = useAuth();
+	const { userContext } = useAuth();
 
 	const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setUserLoginDetails({ ...userLoginDetails, email: event.target.value });
@@ -49,17 +54,27 @@ export function Login(): JSX.Element {
 				? firebase.auth.Auth.Persistence.LOCAL
 				: firebase.auth.Auth.Persistence.SESSION;
 			if (login) {
-				await login(
+				const credentials = await login(
 					userLoginDetails.email,
 					userLoginDetails.password,
 					googleAuthPersistenceState
 				);
+				const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
+				await axios.get(`${url}/user/get-user`, {
+					params: {
+						uid: credentials.user?.uid
+					}
+				});
 			}
 		} catch {
 			setError('Failed to log in to your account');
 		}
 		setIsLoading(false);
 	};
+
+	if (userContext !== null) {
+		return <Redirect to="/files" />;
+	}
 
 	return (
 		<form className="login-form" onSubmit={handleSubmit}>
