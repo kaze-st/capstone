@@ -103,7 +103,11 @@ export default class FileController {
 		try {
 			await receiver.save();
 		} catch (err) {
-			res.status(422).jsonp({ message: err });
+			let message = err?.message;
+			if (message === null || message === undefined) {
+				message = 'Error saving files';
+			}
+			res.status(422).jsonp({ message: message });
 			return;
 		}
 
