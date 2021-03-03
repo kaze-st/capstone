@@ -4,7 +4,10 @@ import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
 import axios from 'axios';
+import dotenv from 'dotenv';
 import { useAuth } from '../../contexts/AuthContext';
+
+dotenv.config();
 
 export default function Register(): JSX.Element {
 	const [newUser, setNewUser] = useState({
@@ -46,14 +49,12 @@ export default function Register(): JSX.Element {
 			setLoading(true);
 			if (signUp) {
 				const credentials = await signUp(newUser.email, newUser.password);
-				const response = await axios.post(
-					'http://localhost:8080/api/v1/user/create-user',
-					{
-						uid: credentials.user?.uid,
-						name: 'firstName',
-						lastName: 'lastName'
-					}
-				);
+				const url = process.env.CODE_COLLAB_API_BASE_URL;
+				await axios.post(`${url}/user/create-user`, {
+					uid: credentials.user?.uid,
+					name: 'firstName',
+					lastName: 'lastName'
+				});
 			}
 		} catch {
 			setError('Failed to create an account');

@@ -4,8 +4,11 @@ import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
 import axios from 'axios';
+import dotenv from 'dotenv';
 import firebase from 'firebase/app';
 import { useAuth } from '../../contexts/AuthContext';
+
+dotenv.config();
 
 export function Login(): JSX.Element {
 	const [userLoginDetails, setUserLoginDetails] = useState({
@@ -56,8 +59,12 @@ export function Login(): JSX.Element {
 					userLoginDetails.password,
 					googleAuthPersistenceState
 				);
-				const url = `http://localhost:8080/api/v1/user/get-user?uid=${credentials.user?.uid}`;
-				const response = await axios.get(url);
+				const url = process.env.CODE_COLLAB_API_BASE_URL;
+				await axios.get(`${url}/user/get-user`, {
+					params: {
+						uid: credentials.user?.uid
+					}
+				});
 			}
 		} catch {
 			setError('Failed to log in to your account');
