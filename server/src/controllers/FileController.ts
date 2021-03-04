@@ -20,10 +20,12 @@ export default class FileController {
 			return;
 		}
 
+		const currTime = new Date();
 		const newFile = new FileModel({
 			name: reqBody.name,
 			content: '',
-			createdOn: new Date(),
+			createdOn: currTime,
+			lastEditedOn: currTime,
 			owner: ownerUID,
 			// sharedTo: new Array<string>(),
 			extension: reqBody.extension
