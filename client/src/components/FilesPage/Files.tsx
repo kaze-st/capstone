@@ -1,4 +1,4 @@
-import File from './File';
+import FileCard from './FileCard';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
@@ -88,19 +88,18 @@ export default function Files(): JSX.Element {
 
 	const files = allFiles.ownedFiles.map((file) => {
 		return (
-			<File
+			<FileCard
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}
 			/>
 		);
 	});
-	console.log(allFiles);
 	return (
 		<div>
 			Files
 			<FileCreation uid={uid} />
-			{files}
+			<div className="file-container">{files}</div>
 		</div>
 	);
 }

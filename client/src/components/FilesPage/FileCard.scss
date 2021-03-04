@@ -1,0 +1,16 @@
+.file-container {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.file-card {
+	border: 0.1em solid #ffffff;
+	border-radius: 5%;
+	margin: 0.2em;
+	background-color: #ffffff;
+}
+
+.file-card-name {
+	color: #007acc;
+}

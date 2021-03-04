@@ -1,4 +1,5 @@
 import React from 'react';
+import './FileCard.scss';
 
 interface IFileProp {
 	imageSource: string;
@@ -6,13 +7,12 @@ interface IFileProp {
 	extension: string;
 }
 
-export default function File(props: IFileProp): JSX.Element {
+export default function FileCard(props: IFileProp): JSX.Element {
 	const { imageSource, name, extension } = props;
 	return (
 		<div className="file-card">
 			<img src={imageSource} alt={name} />
-			<div>{`${name}.${extension}`}</div>
-			<div>{imageSource}</div>
+			<div className="file-card-name">{`${name}.${extension}`}</div>
 		</div>
 	);
 }

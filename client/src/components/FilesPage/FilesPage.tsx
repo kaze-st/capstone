@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import File from './File';
+import FileCard from './FileCard';
 import Files from './Files';
 
 export default function FilesPage(): JSX.Element {
