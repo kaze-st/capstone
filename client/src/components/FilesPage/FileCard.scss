@@ -1,6 +1,6 @@
 .file-container {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	flex-wrap: wrap;
 }
 
@@ -9,6 +9,8 @@
 	border-radius: 5%;
 	margin: 0.2em;
 	background-color: #ffffff;
+	width: 10rem;
+	height: 10rem;
 }
 
 .file-card-name {
