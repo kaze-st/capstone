@@ -93,7 +93,7 @@ export default function Files(): JSX.Element {
 
 	const files = allFiles.ownedFiles.map((file) => {
 		return (
-			<File
+			<FileCard
 				key={file.name}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
