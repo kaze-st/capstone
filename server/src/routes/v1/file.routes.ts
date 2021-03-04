@@ -52,5 +52,18 @@ export default (app: Router): void => {
 		],
 		FileController.shareFile
 	);
+
+	router.get(
+		'/get-file',
+		[
+			query('fid')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('fid must be a non empty string')
+		],
+		FileController.getFile
+	);
 	app.use('/file', router);
 };
