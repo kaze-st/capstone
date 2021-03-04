@@ -55,6 +55,7 @@
 		"@models": "build/models",
 		"@routes": "build/routes",
 		"@controllers": "build/controllers",
-		"@middlewares": "build/middlewares"
+		"@middlewares": "build/middlewares",
+		"@extensions": "build/extensions"
 	}
 }
