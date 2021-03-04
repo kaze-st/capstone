@@ -1,8 +1,8 @@
+import File from './File';
+import Files from './Files';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import File from './File';
-import Files from './Files';
 
 export default function FilesPage(): JSX.Element {
 	const { logout } = useAuth();
@@ -18,7 +18,7 @@ export default function FilesPage(): JSX.Element {
 		return (
 			<div>
 				<Files />
-				<button type="submit" onClick={handleOnClick}>
+				<button type="button" onClick={handleOnClick}>
 					Log out
 				</button>
 			</div>

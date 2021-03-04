@@ -1,5 +1,7 @@
+import React, { useEffect, useState } from 'react';
+
 import File from './File';
-import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -71,6 +73,9 @@ export default function Files(): JSX.Element {
 		ownedFiles: Array<IFileViewFile>(),
 		sharedFiles: Array<IFileViewFile>()
 	});
+	const [fileSearchName, setFileSearchName] = useState('');
+
+	const { logout } = useAuth();
 	const { userContext } = useAuth();
 
 	const uid = userContext?.firebaseUser?.uid;
@@ -89,18 +94,54 @@ export default function Files(): JSX.Element {
 	const files = allFiles.ownedFiles.map((file) => {
 		return (
 			<File
+				key={file.name}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}
 			/>
 		);
 	});
-	console.log(allFiles);
+	const handleLogOut = async () => {
+		if (logout) {
+			await logout();
+		}
+	};
+	const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFileSearchName(event.target.value);
+	};
+	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const ownedFileVal = allFiles.ownedFiles.filter((file) => {
+			return file.name.includes(fileSearchName);
+		});
+		console.log(ownedFileVal);
+	};
+
+	if (userContext === null) {
+		return <Redirect to="/" />;
+	}
+
 	return (
-		<div>
-			Files
-			<FileCreation uid={uid} />
-			{files}
-		</div>
+		<>
+			<nav>
+				<form onSubmit={handleSearch}>
+					<input
+						type="text"
+						value={fileSearchName}
+						placeholder="file name"
+						onChange={handleSearchInput}
+					/>
+					<button type="submit">search</button>
+				</form>
+				<button type="button" onClick={handleLogOut}>
+					Log out
+				</button>
+			</nav>
+			<div>
+				Files
+				<FileCreation uid={uid} />
+				{files}
+			</div>
+		</>
 	);
 }
