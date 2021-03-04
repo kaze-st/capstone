@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import File from './File';
+import FileCard from './FileCard';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
@@ -140,7 +140,7 @@ export default function Files(): JSX.Element {
 			<div>
 				Files
 				<FileCreation uid={uid} />
-				{files}
+				<div className="file-container">{files}</div>
 			</div>
 		</>
 	);

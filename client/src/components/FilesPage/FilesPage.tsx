@@ -3,6 +3,10 @@ import Files from './Files';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+<<<<<<< HEAD
+=======
+import Files from './Files';
+>>>>>>> c8e0b89b22f2ffb4459c8920e676c6345339cab5
 
 export default function FilesPage(): JSX.Element {
 	const { logout } = useAuth();
