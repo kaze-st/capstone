@@ -14,7 +14,7 @@ export function FileExtensionIcon(props: IFileExtensionIcon): JSX.Element {
 	const logoSrc = `/logo/${extension}.png`;
 
 	return (
-		<div>
+		<div className="extension-icon-outer">
 			<div
 				id={extension}
 				className={`extension-icon ${extension}`}
@@ -56,7 +56,7 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 		setNewFile({ ...newFile, extension: event.target.value });
 	};
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		try {
 			await axios.post(`${url}/api/v1/file/create-file`, {
@@ -64,6 +64,7 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 				owner: uid,
 				extension: newFile.extension
 			});
+			handleModalClose(event);
 			refreshPage();
 		} catch {
 			setError('Failed to create file');
@@ -87,7 +88,7 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 		);
 	});
 	return (
-		<form onSubmit={handleSubmit}>
+		<form>
 			{error && <div>Error: {error}</div>}
 			<div className="card-creation-container">
 				<button type="button" onClick={handleModalClose}>
@@ -103,7 +104,9 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 				<div className="card-creation-label">File Type:</div>
 				<div className="extension-icons-container">{ExtensionsIcon}</div>
 
-				<button type="submit">Create File</button>
+				<button type="button" onClick={handleSubmit}>
+					Create File
+				</button>
 			</div>
 		</form>
 	);
