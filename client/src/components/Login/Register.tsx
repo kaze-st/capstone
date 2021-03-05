@@ -1,8 +1,8 @@
 import './Login.scss';
 
+import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { useAuth } from '../../contexts/AuthContext';
@@ -61,6 +61,10 @@ export default function Register(): JSX.Element {
 		}
 		setLoading(false);
 	};
+
+	if (userContext !== null) {
+		return <Redirect to="/files/ownedFiles" />;
+	}
 
 	return (
 		<form className="login-form" onSubmit={handleSubmit}>
