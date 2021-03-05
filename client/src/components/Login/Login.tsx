@@ -73,7 +73,7 @@ export function Login(): JSX.Element {
 	};
 
 	if (userContext !== null) {
-		return <Redirect to="/files" />;
+		return <Redirect to="/files/ownedFiles" />;
 	}
 
 	return (

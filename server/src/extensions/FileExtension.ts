@@ -3,7 +3,9 @@ enum Extensions {
 	JAVA = 'java',
 	RUBY = 'rb',
 	GO = 'go',
-	JAVASCRIPT = 'js'
+	JAVASCRIPT = 'js',
+	CPP = 'cpp',
+	TXT = 'txt'
 }
 
 export default Extensions;

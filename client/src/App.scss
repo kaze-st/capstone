@@ -103,29 +103,6 @@ footer {
 	display: none;
 }
 
-nav {
-	flex: 1;
-	height: 100%;
-}
-
-nav ul {
-	margin: 0;
-	height: inherit;
-	display: flex;
-	align-items: center;
-}
-
-nav li {
-	display: inline;
-	font-size: 18px;
-	padding: 1rem 2rem;
-	cursor: pointer;
-}
-
-nav li:hover {
-	background-color: rgb(0 63 105);
-}
-
 li {
 	font-size: 1.25rem;
 }

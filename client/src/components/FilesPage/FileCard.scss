@@ -1,0 +1,43 @@
+.file-container {
+	display: flex;
+	justify-content: left;
+	flex-wrap: wrap;
+	padding: 1.5rem;
+}
+
+.file-card {
+	border: 1.5px solid #ffffff;
+	border-radius: 0.4rem;
+	margin: 0.5em;
+	background-color: white;
+	width: 10rem;
+	height: 10rem;
+
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: space-around;
+	-moz-box-pack: justify;
+	overflow: hidden;
+}
+
+.file-card-img-container {
+	border: 1.5px solid #ffffff;
+	border-top-left-radius: 0.4rem;
+	border-top-right-radius: 0.4rem;
+	width: 100%;
+	height: 7.75rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.file-card-name {
+	color: #007acc;
+	width: 100%;
+	background-color: white;
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
