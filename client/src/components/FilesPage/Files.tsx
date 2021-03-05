@@ -1,3 +1,5 @@
+import './Files.scss';
+
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
@@ -6,8 +8,6 @@ import FileCreation from './FileCreation';
 import Modal from './Modal';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-
-import './Files.scss';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
@@ -120,6 +120,8 @@ export default function Files(): JSX.Element {
 					imageSource={`/logo/${file.extension}.png`}
 					name={file.name}
 					extension={file.extension}
+					// eslint-disable-next-line
+					fid={file._id}
 				/>
 			);
 		});
