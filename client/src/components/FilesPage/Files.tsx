@@ -185,7 +185,9 @@ export default function Files(): JSX.Element {
 				</button>
 			</header>
 			<main>
-				<div className="flex-container outer-file-container">
+				<div
+					className={`flex-container outer-file-container ${modalBackgroundState}`}
+				>
 					<nav className="files-nav">
 						<ul>
 							<Link to="/files/ownedFiles">
@@ -207,7 +209,7 @@ export default function Files(): JSX.Element {
 						</ul>
 					</nav>
 					<div className="inner-file-container">
-						<div className={modalBackgroundState}>
+						<div>
 							<h2>Recent Files</h2>
 							<div className="file-container">{recentFiles}</div>
 							<h2>Files</h2>
@@ -215,21 +217,17 @@ export default function Files(): JSX.Element {
 								Create File
 							</button>
 
-							{isLoading ? (
-								<p>Loading</p>
-							) : (
-								<div className="file-container">{files}</div>
-							)}
+							<div className="file-container">{files}</div>
 						</div>
-						<Modal show={modal}>
-							<FileCreation
-								uid={uid}
-								refreshPage={getAllFiles}
-								handleModalClose={handleModalClose}
-							/>
-						</Modal>
 					</div>
 				</div>
+				<Modal show={modal}>
+					<FileCreation
+						uid={uid}
+						refreshPage={getAllFiles}
+						handleModalClose={handleModalClose}
+					/>
+				</Modal>
 			</main>
 			<footer>
 				<p>
