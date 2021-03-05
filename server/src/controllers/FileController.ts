@@ -88,7 +88,7 @@ export default class FileController {
 			return;
 		}
 
-		const fid = String(req.query.fid);
+		const fid = String(reqBody.fid);
 		const file = await FileModel.findById(fid);
 		if (file === null) {
 			res.status(400).jsonp({ message: 'File not found' });
