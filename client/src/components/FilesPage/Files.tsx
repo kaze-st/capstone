@@ -2,72 +2,20 @@ import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import FileCard from './FileCard';
+import FileCreation from './FileCreation';
+import Modal from './Modal';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
+import './Files.scss';
+
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-
-export function FileCreation(props: {
-	uid: string | undefined;
-	refreshPage: () => void;
-}): JSX.Element {
-	const [newFile, setNewFile] = useState({
-		name: '',
-		extension: ''
-	});
-	const [error, setError] = useState('');
-
-	const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setNewFile({ ...newFile, name: event.target.value });
-	};
-
-	const handleExtensionChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		setNewFile({ ...newFile, extension: event.target.value });
-	};
-
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		try {
-			await axios.post(`${url}/api/v1/file/create-file`, {
-				name: newFile.name,
-				owner: props.uid,
-				extension: newFile.extension
-			});
-			props.refreshPage();
-		} catch {
-			setError('Failed to create file');
-		}
-	};
-
-	return (
-		<form onSubmit={handleSubmit}>
-			<div>Make a new file</div>
-			{error && <div>Error: {error}</div>}
-			<div>
-				<input
-					type="text"
-					value={newFile.name}
-					placeholder="File name"
-					onChange={handleFileNameChange}
-				/>
-				<input
-					type="text"
-					value={newFile.extension}
-					placeholder="File extension"
-					onChange={handleExtensionChange}
-				/>
-				<button type="submit">Create File</button>
-			</div>
-		</form>
-	);
-}
 
 interface IFileViewFile {
 	_id: string;
 	name: string;
 	createdOn: string;
+	editedOn: string;
 	owner: string;
 	extension: string;
 }
@@ -85,6 +33,10 @@ export default function Files(): JSX.Element {
 	const [fileSearchName, setFileSearchName] = useState('');
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [modal, setModal] = useState(false);
+	const [modalBackgroundState, setModalBackgroundState] = useState(
+		'not-dimmed'
+	);
 
 	const urlParams = useParams<RouteParams>();
 	const fileViewPath = urlParams.ownedOrShared;
@@ -114,6 +66,7 @@ export default function Files(): JSX.Element {
 		}
 		setIsLoading(false);
 	};
+
 	useEffect(() => {
 		const getFiles = async () => {
 			try {
@@ -149,14 +102,17 @@ export default function Files(): JSX.Element {
 			/>
 		);
 	});
+
 	const handleLogOut = async () => {
 		if (logout) {
 			await logout();
 		}
 	};
+
 	const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFileSearchName(event.target.value);
 	};
+
 	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		if (fileSearchName === '') {
@@ -171,6 +127,16 @@ export default function Files(): JSX.Element {
 			});
 			setDisplayFiles(ownedFileVal);
 		}
+	};
+
+	const handleModalOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setModal(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleModalClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setModal(false);
+		setModalBackgroundState('not-dimmed');
 	};
 
 	if (userContext === null) {
@@ -209,15 +175,24 @@ export default function Files(): JSX.Element {
 					</p>
 				</nav>
 			</header>
-			<div>
-				Files
-				<FileCreation uid={uid} refreshPage={getAllFiles} />
+			<div className={modalBackgroundState}>
+				<button type="submit" onClick={handleModalOpen}>
+					Create File
+				</button>
+
 				{isLoading ? (
 					<p>Loading</p>
 				) : (
 					<div className="file-container">{files}</div>
 				)}
 			</div>
+			<Modal show={modal}>
+				<FileCreation
+					uid={uid}
+					refreshPage={getAllFiles}
+					handleModalClose={handleModalClose}
+				/>
+			</Modal>
 		</>
 	);
 }

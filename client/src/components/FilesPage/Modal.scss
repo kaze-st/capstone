@@ -1,0 +1,23 @@
+.show-modal {
+	position: fixed; /* Stay in place */
+	z-index: 2; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+
+	// position: absolute;
+	// top: 0;
+	// bottom: 0;
+	// left: 0;
+	// right: 0;
+	// margin: auto;
+	// width: 50%;
+	// height: 50%;
+	// z-index: 2;
+}
+
+.hide {
+	display: none;
+}
