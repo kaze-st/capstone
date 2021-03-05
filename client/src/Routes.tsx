@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import CurrentDoc from './components/CurrentDoc/CurrentDoc';
 import Files from './components/FilesPage/Files';
@@ -22,6 +22,8 @@ export default function Routes(): JSX.Element {
 			</Route>
 			<PrivateRoute exact path="/files/:ownedOrShared" component={Files} />
 			<PrivateRoute exact path="/file/:fid" component={CurrentDoc} />
+
+			{/* <Redirect exact to="/" /> */}
 		</Switch>
 	);
 }
