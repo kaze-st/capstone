@@ -9,15 +9,11 @@ import Routes from './Routes';
 
 function App(): JSX.Element {
 	return (
-		<div className="page-wrapper">
-			<AuthProvider>
-				<BrowserRouter>
-					<div className="App">
-						<Routes />
-					</div>
-				</BrowserRouter>
-			</AuthProvider>
-		</div>
+		<AuthProvider>
+			<BrowserRouter>
+				<Routes />
+			</BrowserRouter>
+		</AuthProvider>
 	);
 }
 export default App;
