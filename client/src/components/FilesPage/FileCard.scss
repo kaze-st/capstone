@@ -1,16 +1,17 @@
 .file-container {
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 	flex-wrap: wrap;
+	padding: 1.5rem;
 }
 
 .file-card {
 	border: 0.1em solid #ffffff;
 	border-radius: 5%;
-	margin: 0.2em;
+	margin: 0.5em;
 	background-color: #ffffff;
-	width: 10rem;
-	height: 10rem;
+	width: 12.5rem;
+	height: 12.5rem;
 }
 
 .file-card-name {

@@ -48,7 +48,6 @@ export function FileCreation(props: { uid: string | undefined }): JSX.Element {
 					placeholder="File name"
 					onChange={handleFileNameChange}
 				/>
-				.
 				<input
 					type="text"
 					value={newFile.extension}
@@ -94,7 +93,8 @@ export default function Files(): JSX.Element {
 	const files = allFiles.ownedFiles.map((file) => {
 		return (
 			<FileCard
-				key={file.name}
+				// eslint-disable-next-line
+				key={file._id}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}
