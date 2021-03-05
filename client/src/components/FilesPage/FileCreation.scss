@@ -44,6 +44,13 @@
 	justify-content: space-between;
 }
 
+.extension-icon-outer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 .extension-icon {
 	border-radius: 50%;
 	height: 3rem;
