@@ -18,7 +18,7 @@ export default function Routes(): JSX.Element {
 			<Route exact path="/">
 				<LandingPage />
 			</Route>
-			<Route exact path="/files">
+			<Route exact path="/files/:ownedOrShared">
 				<Files />
 			</Route>
 		</Switch>

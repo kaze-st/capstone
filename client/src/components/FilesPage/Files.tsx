@@ -1,13 +1,16 @@
+import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import FileCard from './FileCard';
-import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
-export function FileCreation(props: { uid: string | undefined }): JSX.Element {
+export function FileCreation(props: {
+	uid: string | undefined;
+	refreshPage: () => void;
+}): JSX.Element {
 	const [newFile, setNewFile] = useState({
 		name: '',
 		extension: ''
@@ -32,6 +35,7 @@ export function FileCreation(props: { uid: string | undefined }): JSX.Element {
 				owner: props.uid,
 				extension: newFile.extension
 			});
+			props.refreshPage();
 		} catch {
 			setError('Failed to create file');
 		}
@@ -67,30 +71,53 @@ interface IFileViewFile {
 	owner: string;
 	extension: string;
 }
+
+interface RouteParams {
+	ownedOrShared: string;
+}
+
 export default function Files(): JSX.Element {
 	const [allFiles, setAllFiles] = useState({
 		ownedFiles: Array<IFileViewFile>(),
 		sharedFiles: Array<IFileViewFile>()
 	});
+	const [displayFiles, setDisplayFiles] = useState<Array<IFileViewFile>>([]);
 	const [fileSearchName, setFileSearchName] = useState('');
+
+	const urlParams = useParams<RouteParams>();
+	const fileViewPath = urlParams.ownedOrShared;
 
 	const { logout } = useAuth();
 	const { userContext } = useAuth();
 
 	const uid = userContext?.firebaseUser?.uid;
+
+	const getAllFiles = async () => {
+		const result = await axios.get(`${url}/api/v1/user/files?uid=${uid}`);
+		const resData = result.data;
+		setAllFiles({
+			ownedFiles: resData.ownedFiles,
+			sharedFiles: resData.sharedFiles
+		});
+	};
 	useEffect(() => {
-		const getAllFiles = async () => {
+		const getFiles = async () => {
 			const result = await axios.get(`${url}/api/v1/user/files?uid=${uid}`);
 			const resData = result.data;
 			setAllFiles({
 				ownedFiles: resData.ownedFiles,
 				sharedFiles: resData.sharedFiles
 			});
+			if (fileViewPath === 'sharedFiles') {
+				setDisplayFiles(resData.sharedFiles);
+			} else {
+				setDisplayFiles(resData.ownedFiles);
+			}
 		};
-		getAllFiles();
-	}, [uid]);
+		getFiles();
+	}, [uid, fileViewPath]);
 
-	const files = allFiles.ownedFiles.map((file) => {
+	const files = displayFiles.map((file) => {
 		return (
 			<FileCard
 				// eslint-disable-next-line
@@ -111,10 +138,18 @@ export default function Files(): JSX.Element {
 	};
 	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const ownedFileVal = allFiles.ownedFiles.filter((file) => {
-			return file.name.includes(fileSearchName);
-		});
-		console.log(ownedFileVal);
+		if (fileSearchName === '') {
+			if (fileViewPath === 'sharedFiles') {
+				setDisplayFiles(allFiles.sharedFiles);
+			} else {
+				setDisplayFiles(allFiles.ownedFiles);
+			}
+		} else {
+			const ownedFileVal = displayFiles.filter((file) => {
+				return file.name.includes(fileSearchName);
+			});
+			setDisplayFiles(ownedFileVal);
+		}
 	};
 
 	if (userContext === null) {
@@ -133,13 +168,18 @@ export default function Files(): JSX.Element {
 					/>
 					<button type="submit">search</button>
 				</form>
+
 				<button type="button" onClick={handleLogOut}>
 					Log out
 				</button>
+				<p>
+					<Link to="/files/ownedFiles">Owned Files</Link>
+					<Link to="/files/sharedFiles">Shared Files</Link>
+				</p>
 			</nav>
 			<div>
 				Files
-				<FileCreation uid={uid} />
+				<FileCreation uid={uid} refreshPage={getAllFiles} />
 				<div className="file-container">{files}</div>
 			</div>
 		</>

@@ -63,7 +63,7 @@ export default function Register(): JSX.Element {
 	};
 
 	if (userContext !== null) {
-		return <Redirect to="/files" />;
+		return <Redirect to="/files/ownedFiles" />;
 	}
 
 	return (
