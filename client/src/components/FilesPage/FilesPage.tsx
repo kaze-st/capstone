@@ -1,3 +1,4 @@
+import CurrentDoc from '../CurrentDoc/CurrentDoc';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -14,9 +15,12 @@ export default function FilesPage(): JSX.Element {
 
 	if (userContext !== null) {
 		return (
-			<button type="submit" onClick={handleOnClick}>
-				Log out
-			</button>
+			<>
+				<button type="submit" onClick={handleOnClick}>
+					Log out
+				</button>
+				<CurrentDoc />
+			</>
 		);
 	}
 	return <Redirect to="/" />;

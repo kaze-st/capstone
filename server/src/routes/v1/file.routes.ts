@@ -1,4 +1,5 @@
 import { body, query } from 'express-validator';
+
 import Extensions from '@extensions/FileExtension';
 import FileController from '@controllers/FileController';
 import { Router } from 'express';
@@ -43,7 +44,7 @@ export default (app: Router): void => {
 				.isEmpty()
 				.isString()
 				.withMessage('receiver must be a non empty string'),
-			query('fid')
+			body('fid')
 				.exists()
 				.not()
 				.isEmpty()

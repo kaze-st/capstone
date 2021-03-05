@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+
 import { BaseModel } from '@models/BaseModel';
 
 export interface IFile extends Document {
@@ -6,11 +7,9 @@ export interface IFile extends Document {
 	content: string;
 	createdOn: Date;
 	owner: string;
-	// not sure if we will need this information in the future
-	// but as for now the sharedTo array is redundant since
-	// the user also keeps track of which file they got shared to
-	// sharedTo: Array<string>;
+	sharedTo: Array<string>;
 	extension: string;
+	state: Buffer;
 }
 
 class FileModel extends BaseModel<IFile> {
@@ -25,8 +24,9 @@ class FileModel extends BaseModel<IFile> {
 				content: { type: String, required: true },
 				createdOn: { type: Date, required: true },
 				owner: { type: String, required: true },
-				// sharedTo: { type: [String], required: true },
-				extension: { type: String, required: true }
+				sharedTo: { type: [String], required: true },
+				extension: { type: String, required: true },
+				state: { type: Buffer, required: true }
 			},
 			{ collection: 'files' }
 		);

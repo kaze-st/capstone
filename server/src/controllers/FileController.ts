@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+
 import FileModel from '@models/FileModel';
 import UserModel from '@models/UserModel';
+import bson from 'bson';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
 
@@ -20,13 +22,16 @@ export default class FileController {
 			return;
 		}
 
+		const newState = new Uint8Array();
+		const buffer = Buffer.from(newState);
 		const newFile = new FileModel({
 			name: reqBody.name,
 			content: '',
 			createdOn: new Date(),
 			owner: ownerUID,
-			// sharedTo: new Array<string>(),
-			extension: reqBody.extension
+			sharedTo: new Array<string>(),
+			extension: reqBody.extension,
+			state: buffer
 		});
 
 		owner.ownedFiles.push(newFile._id);
@@ -93,16 +98,24 @@ export default class FileController {
 			return;
 		}
 
-		if (receiver.sharedFiles.includes(file._id)) {
+		if (
+			receiver.sharedFiles.includes(file._id) ||
+			file.sharedTo.includes(receiver.uid)
+		) {
 			res.status(400).jsonp({ message: 'File already shared with this user' });
 			return;
 		}
 
 		receiver.sharedFiles.push(file._id);
+		file.sharedTo.push(receiver.uid);
+		const session = await startSession();
 
 		try {
-			await receiver.save();
+			session.startTransaction();
+			await Promise.all([receiver.save(), file.save()]);
+			session.commitTransaction();
 		} catch (err) {
+			session.abortTransaction();
 			let message = err?.message;
 			if (message === null || message === undefined) {
 				message = 'Error saving files';

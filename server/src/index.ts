@@ -7,6 +7,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import registerAPIRoutes from '@routes/api.routes';
+import registerWS from './current-doc-ws/current-doc-ws';
 
 dotenv.config();
 
@@ -23,8 +24,9 @@ app.use(bodyParser.raw());
 // Enable CORS protocol
 app.use(cors());
 
-app.listen(PORT, async function () {
+const server = app.listen(PORT, async function () {
 	consola.info('Server is listening on port: ' + PORT);
 });
 
 registerAPIRoutes(app);
+registerWS(server);
