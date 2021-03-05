@@ -37,22 +37,21 @@
 	cursor: pointer;
 }
 
-nav li:hover {
+nav li:hover, .active-nav {
 	background-color: rgb(0 63 105);
 }
 
-li {
-	font-size: 1.25rem;
-}
-
 .landing-section {
-	padding: 2rem 3rem;
 	align-items: center;
 	justify-content: space-between;
 }
 
 .landing-section:nth-child(odd) {
 	background-color: #3f4756;
+}
+
+.landing-section:nth-child(odd) .row1, .landing-section:nth-child(even) .row2 {
+	padding: 3rem 2rem;
 }
 
 .landing-section:last-child {

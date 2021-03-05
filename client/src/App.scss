@@ -67,6 +67,10 @@ p {
 	flex: 1;
 }
 
+a {
+	text-decoration: none;
+}
+
 .page-wrapper {
 	height: 100%;
 	display: flex;
@@ -87,8 +91,12 @@ header {
 	padding-right: 1rem;
 }
 
+footer {
+	justify-content: space-between;
+}
+
 .files-header {
-	background-color: #3F4756;
+	background-color: #3f4756;
 }
 
 .logo-and-title {
@@ -109,6 +117,11 @@ header {
 
 .big-nav {
 	display: none;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
 }
 
 li {
@@ -143,8 +156,14 @@ main {
 
 footer {
 	padding: 0 1rem;
+	height: 3rem;
+	background-color: #3f4756;
 }
 
 footer p {
 	font-size: 0.75rem;
+}
+
+footer img {
+	height: 1.5rem;
 }
