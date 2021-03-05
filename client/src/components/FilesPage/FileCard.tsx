@@ -1,4 +1,5 @@
 import './FileCard.scss';
+import './ExtensionsColor.scss';
 
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 
@@ -14,12 +15,19 @@ interface IFileProp {
 export default function FileCard(props: IFileProp): JSX.Element {
 	const { imageSource, name, extension } = props;
 	return (
-		<div className="file-card">
+		<div>
 			<ContextMenuTrigger id="same_unique_identifier">
-				<img src={imageSource} alt={name} />
+				<div className="file-card">
+					<div className={`file-card-img-container ${extension}`}>
+						<img src={imageSource} alt={name} />
+					</div>
+
+					<div className="file-card-name">
+						<div>{`${name}.${extension}`}</div>
+					</div>
+				</div>
 			</ContextMenuTrigger>
 			<CustomContext />
-			<div className="file-card-name">{`${name}.${extension}`}</div>
 		</div>
 	);
 }
