@@ -10,7 +10,6 @@ export default (server: http.Server): void => {
 	// eslint-disable-next-line
 	const utils = require('y-websocket/bin/utils');
 
-	consola.log(utils);
 	const setupWSConnection = utils.setupWSConnection;
 
 	utils.setPersistence({
@@ -25,8 +24,8 @@ export default (server: http.Server): void => {
 				r();
 				// Y.applyUpdate(doc, update);
 			});
-			const fid = '60415ddd4f85ad44966578a8';
-			const file = await FileModel.findById(fid);
+
+			const file = await FileModel.findById(documentName);
 			const state = file?.state;
 			if (!state) {
 				return;
@@ -36,10 +35,9 @@ export default (server: http.Server): void => {
 			return Y.applyUpdate(doc, ecodedState);
 		},
 		writeState: async (string: string, doc: Y.Doc) => {
-			consola.log('closed', string);
+			consola.log('closed');
 			const encodedState = Y.encodeStateAsUpdate(doc);
-			const fid = '60415ddd4f85ad44966578a8';
-			const file = await FileModel.findById(fid);
+			const file = await FileModel.findById(string);
 
 			if (file) {
 				file.state = Buffer.from(encodedState);

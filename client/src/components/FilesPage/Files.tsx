@@ -127,6 +127,8 @@ export default function Files(): JSX.Element {
 			<FileCard
 				// eslint-disable-next-line
 				key={file._id}
+				// eslint-disable-next-line
+				fid={file._id}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}

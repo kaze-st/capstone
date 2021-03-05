@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 
 import Editor, { OnMount } from '@monaco-editor/react';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { MonacoBinding } from 'y-monaco';
 import { RouteComponentProps } from 'react-router-dom';
@@ -17,25 +17,35 @@ export default function CurrentDoc(
 	props: RouteComponentProps<MatchParams>
 ): JSX.Element {
 	const { match } = props;
-	console.log('props', match.params.fid);
+	console.log('props lolol ', match.params.fid);
 
 	const editorRef = useRef<any>(null);
+	const provider = useRef<any>(null);
 
+	useEffect(() => {
+		console.log('editor', editorRef);
+
+		return () => {
+			console.log('called');
+			console.log(provider);
+			provider.current.destroy();
+			console.log(provider);
+		};
+	});
 	const handleEditorDidMount: OnMount = (editor: any): void => {
 		editorRef.current = editor;
 		const ydoc = new Y.Doc();
 		const ytext = ydoc.getText('content');
-		const provider = new WebsocketProvider(
+		provider.current = new WebsocketProvider(
 			'ws://localhost:8080',
 			match.params.fid,
 			ydoc
 		);
-
 		const monacoBinding = new MonacoBinding(
 			ytext,
 			/** @type {monaco.editor.ITextModel} */ editor.getModel(),
 			new Set([editor]),
-			provider.awareness
+			provider.current.awareness
 		);
 	};
 

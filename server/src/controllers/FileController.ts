@@ -1,8 +1,9 @@
+import * as Y from 'yjs';
+
 import { Request, Response } from 'express';
 
 import FileModel from '@models/FileModel';
 import UserModel from '@models/UserModel';
-import bson from 'bson';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
 
@@ -22,7 +23,9 @@ export default class FileController {
 			return;
 		}
 
-		const newState = new Uint8Array();
+		const doc = new Y.Doc();
+		doc.getText('content');
+		const newState = Y.encodeStateAsUpdateV2(doc);
 		const buffer = Buffer.from(newState);
 		const currTime = new Date();
 		const newFile = new FileModel({
