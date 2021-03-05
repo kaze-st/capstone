@@ -207,10 +207,10 @@ export default function Files(): JSX.Element {
 						</ul>
 					</nav>
 					<div className="inner-file-container">
-						<h2>Recent Files</h2>
-						<div className="file-container">{recentFiles}</div>
-						<h2>Files</h2>
 						<div className={modalBackgroundState}>
+							<h2>Recent Files</h2>
+							<div className="file-container">{recentFiles}</div>
+							<h2>Files</h2>
 							<button type="submit" onClick={handleModalOpen}>
 								Create File
 							</button>
