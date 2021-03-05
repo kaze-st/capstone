@@ -99,6 +99,11 @@ export default function Files(): JSX.Element {
 			ownedFiles: resData.ownedFiles,
 			sharedFiles: resData.sharedFiles
 		});
+		if (fileViewPath === 'sharedFiles') {
+			setDisplayFiles(resData.sharedFiles);
+		} else {
+			setDisplayFiles(resData.ownedFiles);
+		}
 	};
 	useEffect(() => {
 		const getFiles = async () => {
