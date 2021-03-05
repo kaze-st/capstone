@@ -2,14 +2,19 @@ import './LandingPage.scss';
 
 import { Link } from 'react-router-dom';
 import React from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 function Header() {
+	const { userContext } = useAuth();
+
 	return (
 		<header className="flex-container">
 			<div className="logo-and-title">
-				<img className="logo" src="./img/logo.png" alt="Code Collab Logo" />
+				<Link to="/">
+					<img className="logo" src="./img/logo.png" alt="Code Collab Logo" />
+				</Link>
 			</div>
-			<nav>
+			<nav className="landing-nav">
 				<ul>
 					<li>HOME</li>
 					<li>FEATURES</li>
@@ -18,8 +23,8 @@ function Header() {
 				</ul>
 			</nav>
 			<Link to="/login">
-				<button type="button" aria-label="log in button">
-					LOG IN
+				<button className="white-button" type="button">
+					{userContext === null ? 'LOG IN' : 'GO TO YOUR FILES'}
 				</button>
 			</Link>
 		</header>
@@ -27,6 +32,8 @@ function Header() {
 }
 
 function Main() {
+	const { userContext } = useAuth();
+
 	return (
 		<main>
 			<section className="flex-container landing-section">
@@ -37,7 +44,9 @@ function Main() {
 						together on.
 					</p>
 					<Link to="/register">
-						<button type="button">CREATE ACCOUNT</button>
+						<button className="white-button" type="button">
+							CREATE ACCOUNT
+						</button>
 					</Link>
 				</div>
 				<div className="row2">

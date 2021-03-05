@@ -83,6 +83,8 @@ export default function Files(): JSX.Element {
 	});
 	const [displayFiles, setDisplayFiles] = useState<Array<IFileViewFile>>([]);
 	const [fileSearchName, setFileSearchName] = useState('');
+	const [error, setError] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
 	const urlParams = useParams<RouteParams>();
 	const fileViewPath = urlParams.ownedOrShared;
@@ -93,20 +95,9 @@ export default function Files(): JSX.Element {
 	const uid = userContext?.firebaseUser?.uid;
 
 	const getAllFiles = async () => {
-		const result = await axios.get(`${url}/api/v1/user/files?uid=${uid}`);
-		const resData = result.data;
-		setAllFiles({
-			ownedFiles: resData.ownedFiles,
-			sharedFiles: resData.sharedFiles
-		});
-		if (fileViewPath === 'sharedFiles') {
-			setDisplayFiles(resData.sharedFiles);
-		} else {
-			setDisplayFiles(resData.ownedFiles);
-		}
-	};
-	useEffect(() => {
-		const getFiles = async () => {
+		try {
+			setIsLoading(true);
+			setError('');
 			const result = await axios.get(`${url}/api/v1/user/files?uid=${uid}`);
 			const resData = result.data;
 			setAllFiles({
@@ -118,9 +109,34 @@ export default function Files(): JSX.Element {
 			} else {
 				setDisplayFiles(resData.ownedFiles);
 			}
+		} catch {
+			setError(error);
+		}
+		setIsLoading(false);
+	};
+	useEffect(() => {
+		const getFiles = async () => {
+			try {
+				setIsLoading(true);
+				setError('');
+				const result = await axios.get(`${url}/api/v1/user/files?uid=${uid}`);
+				const resData = result.data;
+				setAllFiles({
+					ownedFiles: resData.ownedFiles,
+					sharedFiles: resData.sharedFiles
+				});
+				if (fileViewPath === 'sharedFiles') {
+					setDisplayFiles(resData.sharedFiles);
+				} else {
+					setDisplayFiles(resData.ownedFiles);
+				}
+			} catch {
+				setError(error);
+			}
+			setIsLoading(false);
 		};
 		getFiles();
-	}, [uid, fileViewPath]);
+	}, [uid, fileViewPath, error]);
 
 	const files = displayFiles.map((file) => {
 		return (
@@ -163,7 +179,16 @@ export default function Files(): JSX.Element {
 
 	return (
 		<>
-			<nav>
+			<header className="files-header">
+				<div className="logo-and-title">
+					<Link to="/">
+						<img
+							className="logo"
+							src="../img/logo.png"
+							alt="Code Collab Logo"
+						/>
+					</Link>
+				</div>
 				<form onSubmit={handleSearch}>
 					<input
 						type="text"
@@ -177,15 +202,21 @@ export default function Files(): JSX.Element {
 				<button type="button" onClick={handleLogOut}>
 					Log out
 				</button>
-				<p>
-					<Link to="/files/ownedFiles">Owned Files</Link>
-					<Link to="/files/sharedFiles">Shared Files</Link>
-				</p>
-			</nav>
+				<nav>
+					<p>
+						<Link to="/files/ownedFiles">Owned Files</Link>
+						<Link to="/files/sharedFiles">Shared Files</Link>
+					</p>
+				</nav>
+			</header>
 			<div>
 				Files
 				<FileCreation uid={uid} refreshPage={getAllFiles} />
-				<div className="file-container">{files}</div>
+				{isLoading ? (
+					<p>Loading</p>
+				) : (
+					<div className="file-container">{files}</div>
+				)}
 			</div>
 		</>
 	);

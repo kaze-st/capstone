@@ -83,6 +83,14 @@ footer {
 	color: #ffffff;
 }
 
+header {
+	padding-right: 1rem;
+}
+
+.files-header {
+	background-color: #3F4756;
+}
+
 .logo-and-title {
 	display: flex;
 	align-items: center;
@@ -108,13 +116,22 @@ li {
 }
 
 button {
-	margin: 1rem;
-	padding: 0.5rem 1rem;
-	font-size: 0.75rem;
-	color: #007acc;
-	border-radius: 10px;
-	border: #ffffff;
+	margin: auto;
+	width: fit-content;
+
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+
+	padding: 0.8em;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+	border-radius: 0.5rem;
 	cursor: pointer;
+}
+
+.white-button {
+	color: #007acc;
+	background-color: #ffffff;
 }
 
 main {

@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import Files from './components/FilesPage/Files';
 import LandingPage from './components/LandingPage/LandingPage';
@@ -21,6 +21,7 @@ export default function Routes(): JSX.Element {
 			<Route exact path="/files/:ownedOrShared">
 				<Files />
 			</Route>
+			<Redirect exact to="/" />
 		</Switch>
 	);
 }

@@ -76,7 +76,9 @@ export function Login(): JSX.Element {
 		return <Redirect to="/files/ownedFiles" />;
 	}
 
-	return (
+	return isLoading ? (
+		<p>Loading</p>
+	) : (
 		<form className="login-form" onSubmit={handleSubmit}>
 			<div className="header">Log Into Your Account</div>
 
@@ -109,7 +111,7 @@ export function Login(): JSX.Element {
 				</div>
 				<div>Forgot password?</div>
 			</div>
-			<button type="submit" disabled={isLoading}>
+			<button className="blue-button" type="submit" disabled={isLoading}>
 				Log In
 			</button>
 			<div>

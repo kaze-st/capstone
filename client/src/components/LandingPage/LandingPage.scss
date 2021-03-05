@@ -18,19 +18,19 @@
 	display: none;
 }
 
-nav {
+.landing-nav {
 	flex: 1;
 	height: 100%;
 }
 
-nav ul {
+.landing-nav ul {
 	margin: 0;
 	height: inherit;
 	display: flex;
 	align-items: center;
 }
 
-nav li {
+.landing-nav li {
 	display: inline;
 	font-size: 18px;
 	padding: 1rem 2rem;
