@@ -30,7 +30,7 @@ export default function Files(): JSX.Element {
 		sharedFiles: Array<IFileViewFile>()
 	});
 	const [displayFiles, setDisplayFiles] = useState<Array<IFileViewFile>>([]);
-	const [fileSearchName, setFileSearchName] = useState('');
+	// const [fileSearchName, setFileSearchName] = useState('');
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [modal, setModal] = useState(false);
@@ -103,27 +103,46 @@ export default function Files(): JSX.Element {
 		);
 	});
 
+	const recentFiles = displayFiles
+		.sort((file1, file2) => {
+			const date1 = new Date(file1.editedOn);
+			const date2 = new Date(file2.editedOn);
+			return date1.getTime() - date2.getTime();
+		})
+		.slice(0, 3)
+		.map((file) => {
+			return (
+				<FileCard
+					// eslint-disable-next-line
+					key={file._id}
+					imageSource={`/logo/${file.extension}.png`}
+					name={file.name}
+					extension={file.extension}
+				/>
+			);
+		});
 	const handleLogOut = async () => {
 		if (logout) {
 			await logout();
 		}
 	};
-
-	const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setFileSearchName(event.target.value);
-	};
-
-	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
-		if (fileSearchName === '') {
+		if (event.target.value === '') {
 			if (fileViewPath === 'sharedFiles') {
 				setDisplayFiles(allFiles.sharedFiles);
 			} else {
 				setDisplayFiles(allFiles.ownedFiles);
 			}
 		} else {
-			const ownedFileVal = displayFiles.filter((file) => {
-				return file.name.includes(fileSearchName);
+			let filesToBeFiltered;
+			if (fileViewPath === 'sharedFiles') {
+				filesToBeFiltered = allFiles.sharedFiles;
+			} else {
+				filesToBeFiltered = allFiles.ownedFiles;
+			}
+			const ownedFileVal = filesToBeFiltered.filter((file) => {
+				return file.name.includes(event.target.value);
 			});
 			setDisplayFiles(ownedFileVal);
 		}
@@ -143,8 +162,10 @@ export default function Files(): JSX.Element {
 		return <Redirect to="/" />;
 	}
 
-	return (
-		<>
+	return isLoading ? (
+		<p>Loading</p>
+	) : (
+		<div className="page-wrapper">
 			<header className="files-header">
 				<div className="logo-and-title">
 					<Link to="/">
@@ -155,44 +176,68 @@ export default function Files(): JSX.Element {
 						/>
 					</Link>
 				</div>
-				<form onSubmit={handleSearch}>
-					<input
-						type="text"
-						value={fileSearchName}
-						placeholder="file name"
-						onChange={handleSearchInput}
-					/>
-					<button type="submit">search</button>
+				<form>
+					<input type="text" placeholder="File Name" onChange={handleSearch} />
 				</form>
 
-				<button type="button" onClick={handleLogOut}>
-					Log out
+				<button className="white-button" type="button" onClick={handleLogOut}>
+					LOG OUT
 				</button>
-				<nav>
-					<p>
-						<Link to="/files/ownedFiles">Owned Files</Link>
-						<Link to="/files/sharedFiles">Shared Files</Link>
-					</p>
-				</nav>
 			</header>
-			<div className={modalBackgroundState}>
-				<button type="submit" onClick={handleModalOpen}>
-					Create File
-				</button>
+			<main>
+				<div className="flex-container outer-file-container">
+					<nav className="files-nav">
+						<ul>
+							<Link to="/files/ownedFiles">
+								<li
+									className={fileViewPath === 'ownedFiles' ? 'active-nav' : ''}
+								>
+									<img alt="" src="../img/ownedFiles.png" aria-hidden="true" />
+									<div>My Files</div>
+								</li>
+							</Link>
+							<Link to="/files/sharedFiles">
+								<li
+									className={fileViewPath === 'sharedFiles' ? 'active-nav' : ''}
+								>
+									<img alt="" src="../img/sharedFiles.png" aria-hidden="true" />
+									<div>Shared Files</div>
+								</li>
+							</Link>
+						</ul>
+					</nav>
+					<div className="inner-file-container">
+						<h2>Recent Files</h2>
+						<div className="file-container">{recentFiles}</div>
+						<h2>Files</h2>
+						<div className={modalBackgroundState}>
+							<button type="submit" onClick={handleModalOpen}>
+								Create File
+							</button>
 
-				{isLoading ? (
-					<p>Loading</p>
-				) : (
-					<div className="file-container">{files}</div>
-				)}
-			</div>
-			<Modal show={modal}>
-				<FileCreation
-					uid={uid}
-					refreshPage={getAllFiles}
-					handleModalClose={handleModalClose}
-				/>
-			</Modal>
-		</>
+							{isLoading ? (
+								<p>Loading</p>
+							) : (
+								<div className="file-container">{files}</div>
+							)}
+						</div>
+						<Modal show={modal}>
+							<FileCreation
+								uid={uid}
+								refreshPage={getAllFiles}
+								handleModalClose={handleModalClose}
+							/>
+						</Modal>
+					</div>
+				</div>
+			</main>
+			<footer>
+				<p>
+					&copy; CodeCollab 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao
+					Chen
+				</p>
+				<img alt="" src="../img/ischool-logo.png" aria-hidden="true" />
+			</footer>
+		</div>
 	);
 }
