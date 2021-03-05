@@ -36,7 +36,7 @@ export default class UserController {
 			return;
 		}
 
-		res.status(201).json({
+		res.status(201).jsonp({
 			message: 'Document saved with success'
 		});
 	}
@@ -56,8 +56,7 @@ export default class UserController {
 			return;
 		}
 
-		res.set('Content-Type', 'application/json');
-		res.status(200).json(user);
+		res.status(200).jsonp(user);
 	}
 
 	static async getAllFiles(req: Request, res: Response): Promise<void> {
@@ -83,7 +82,7 @@ export default class UserController {
 		}).select('-content');
 
 		res.set('Content-Type', 'application/json');
-		res.status(200).json({
+		res.status(200).jsonp({
 			ownedFiles: ownedFiles,
 			sharedFiles: sharedFiles
 		});
