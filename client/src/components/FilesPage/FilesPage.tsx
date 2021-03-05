@@ -1,4 +1,3 @@
-import CurrentDoc from '../CurrentDoc/CurrentDoc';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -19,7 +18,6 @@ export default function FilesPage(): JSX.Element {
 				<button type="submit" onClick={handleOnClick}>
 					Log out
 				</button>
-				<CurrentDoc />
 			</>
 		);
 	}

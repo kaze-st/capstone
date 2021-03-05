@@ -36,10 +36,8 @@ export default (server: http.Server): void => {
 			return Y.applyUpdate(doc, ecodedState);
 		},
 		writeState: async (string: string, doc: Y.Doc) => {
-			consola.log('closed');
-			const arr = doc.getArray('puta');
+			consola.log('closed', string);
 			const encodedState = Y.encodeStateAsUpdate(doc);
-			// consola.log('closed', encodedState);
 			const fid = '60415ddd4f85ad44966578a8';
 			const file = await FileModel.findById(fid);
 
@@ -47,11 +45,8 @@ export default (server: http.Server): void => {
 				file.state = Buffer.from(encodedState);
 				file.save();
 			}
-			// This is called when all connections to the document are closed.
-			// In the future, this method might also be called in intervals or after a certain number of updates.
+
 			return new Promise<void>((resolve) => {
-				// When the returned Promise resolves, the document will be destroyed.
-				// So make sure that the document really has been written to the database.
 				resolve();
 			});
 		}
