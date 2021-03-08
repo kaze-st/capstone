@@ -15,7 +15,6 @@ interface IFileProp {
 
 export default function FileCard(props: IFileProp): JSX.Element {
 	const { imageSource, name, extension, fid } = props;
-	console.log(fid);
 	return (
 		<div>
 			<ContextMenuTrigger id={fid}>
@@ -26,12 +25,39 @@ export default function FileCard(props: IFileProp): JSX.Element {
 						</div>
 
 						<div className="file-card-name">
-							<div>{`${name}.${extension}`}</div>
+							<p>{`${name}.${extension}`}</p>
 						</div>
 					</div>
 				</Link>
 			</ContextMenuTrigger>
 			<CustomContext fid={fid} />
+		</div>
+	);
+}
+
+export function RecentFileCard(
+	props: IFileProp & { createdOn: string }
+): JSX.Element {
+	const { imageSource, name, extension, fid, createdOn } = props;
+	const uniqueID = `${fid}-recent`;
+	const date = new Date(createdOn);
+	return (
+		<div>
+			<ContextMenuTrigger id={uniqueID}>
+				<Link to={`/file/${fid}`}>
+					<div className="file-card recent-file">
+						<div className={`file-card-img-container ${extension}`}>
+							<img src={imageSource} alt={name} />
+						</div>
+
+						<div className="file-card-name">
+							<p>{`${name}.${extension}`}</p>
+							<p>Created on {date.toUTCString()}</p>
+						</div>
+					</div>
+				</Link>
+			</ContextMenuTrigger>
+			<CustomContext fid={uniqueID} />
 		</div>
 	);
 }

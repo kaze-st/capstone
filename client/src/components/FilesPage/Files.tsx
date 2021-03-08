@@ -1,9 +1,9 @@
 import './Files.scss';
 
+import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
-import FileCard from './FileCard';
 import FileCreation from './FileCreation';
 import Modal from './Modal';
 import axios from 'axios';
@@ -113,7 +113,7 @@ export default function Files(): JSX.Element {
 		.slice(0, 3)
 		.map((file) => {
 			return (
-				<FileCard
+				<RecentFileCard
 					// eslint-disable-next-line
 					key={file._id}
 					imageSource={`/logo/${file.extension}.png`}
@@ -121,6 +121,7 @@ export default function Files(): JSX.Element {
 					extension={file.extension}
 					// eslint-disable-next-line
 					fid={file._id}
+					createdOn={file.createdOn}
 				/>
 			);
 		});
