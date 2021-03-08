@@ -15,7 +15,7 @@ interface IFileViewFile {
 	_id: string;
 	name: string;
 	createdOn: string;
-	editedOn: string;
+	lastEditedOn: string;
 	owner: string;
 	extension: string;
 }
@@ -77,6 +77,9 @@ export default function Files(): JSX.Element {
 					ownedFiles: resData.ownedFiles,
 					sharedFiles: resData.sharedFiles
 				});
+				console.log(
+					`owned files edited on tag: ${resData.ownedFiles[0].lastEditedOn}`
+				);
 				if (fileViewPath === 'sharedFiles') {
 					setDisplayFiles(resData.sharedFiles);
 				} else {
@@ -106,8 +109,8 @@ export default function Files(): JSX.Element {
 
 	const recentFiles = [...displayFiles]
 		.sort((file1, file2) => {
-			const date1 = new Date(file1.createdOn);
-			const date2 = new Date(file2.createdOn);
+			const date1 = new Date(file1.lastEditedOn);
+			const date2 = new Date(file2.lastEditedOn);
 			return date2.getTime() - date1.getTime();
 		})
 		.slice(0, 3)
@@ -121,7 +124,7 @@ export default function Files(): JSX.Element {
 					extension={file.extension}
 					// eslint-disable-next-line
 					fid={file._id}
-					createdOn={file.createdOn}
+					lastEditedOn={file.lastEditedOn}
 				/>
 			);
 		});

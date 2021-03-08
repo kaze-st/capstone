@@ -36,11 +36,11 @@ export default function FileCard(props: IFileProp): JSX.Element {
 }
 
 export function RecentFileCard(
-	props: IFileProp & { createdOn: string }
+	props: IFileProp & { lastEditedOn: string }
 ): JSX.Element {
-	const { imageSource, name, extension, fid, createdOn } = props;
+	const { imageSource, name, extension, fid, lastEditedOn } = props;
 	const uniqueID = `${fid}-recent`;
-	const date = new Date(createdOn);
+	const date = new Date(lastEditedOn);
 	return (
 		<div>
 			<ContextMenuTrigger id={uniqueID}>
@@ -52,7 +52,7 @@ export function RecentFileCard(
 
 						<div className="file-card-name">
 							<p>{`${name}.${extension}`}</p>
-							<p>Created on {date.toUTCString()}</p>
+							<p>Last edited on {date.toLocaleString()}</p>
 						</div>
 					</div>
 				</Link>
