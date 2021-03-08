@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  backend:
+    container_name: cc_server
+    env_file: "./server/dev.env"
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    image: "kaze-st/cc_server"
+    ports:
+      - "8080:8080"
+  frontend:
+    container_name: cc_web
+    env_file: "./client/.env"
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    image: "kaze-st/cc_web"
+    ports:
+      - "3000:3000"
