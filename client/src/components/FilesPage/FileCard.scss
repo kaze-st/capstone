@@ -2,7 +2,6 @@
 	display: flex;
 	justify-content: left;
 	flex-wrap: wrap;
-	padding: 1.5rem;
 }
 
 header input {
@@ -71,10 +70,15 @@ header form {
 
 .inner-file-container {
 	flex: 1;
+	margin-right: 1.5rem;
+}
+
+.createFile-and-filter-container {
+	text-align: right;
 }
 
 .outer-file-container {
-	justify-content: space-around;
+	justify-content: left;
 	align-items: baseline;
 	flex: 1;
 }

@@ -105,11 +105,11 @@ export default function Files(): JSX.Element {
 		);
 	});
 
-	const recentFiles = displayFiles
+	const recentFiles = [...displayFiles]
 		.sort((file1, file2) => {
-			const date1 = new Date(file1.editedOn);
-			const date2 = new Date(file2.editedOn);
-			return date1.getTime() - date2.getTime();
+			const date1 = new Date(file1.createdOn);
+			const date2 = new Date(file2.createdOn);
+			return date2.getTime() - date1.getTime();
 		})
 		.slice(0, 3)
 		.map((file) => {
@@ -166,9 +166,7 @@ export default function Files(): JSX.Element {
 		return <Redirect to="/" />;
 	}
 
-	return isLoading ? (
-		<p>Loading</p>
-	) : (
+	return (
 		<div className="page-wrapper">
 			<header className="files-header">
 				<div className="logo-and-title">
@@ -212,18 +210,32 @@ export default function Files(): JSX.Element {
 							</Link>
 						</ul>
 					</nav>
-					<div className="inner-file-container">
-						<div>
-							<h2>Recent Files</h2>
-							<div className="file-container">{recentFiles}</div>
-							<h2>Files</h2>
-							<button type="submit" onClick={handleModalOpen}>
-								Create File
-							</button>
-
-							<div className="file-container">{files}</div>
+					{isLoading ? (
+						<p>Loading</p>
+					) : (
+						<div className="inner-file-container">
+							{fileViewPath !== 'sharedFiles' ? (
+								<div className="createFile-and-filter-container">
+									<button
+										className="white-button"
+										type="submit"
+										onClick={handleModalOpen}
+									>
+										Create File
+									</button>
+									<hr />
+								</div>
+							) : (
+								<></>
+							)}
+							<div>
+								<h2>RECENT</h2>
+								<div className="file-container">{recentFiles}</div>
+								<h2>FILES</h2>
+								<div className="file-container">{files}</div>
+							</div>
 						</div>
-					</div>
+					)}
 				</div>
 				<Modal show={modal}>
 					<FileCreation
