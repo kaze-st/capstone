@@ -30,7 +30,6 @@ export default function Files(): JSX.Element {
 		sharedFiles: Array<IFileViewFile>()
 	});
 	const [displayFiles, setDisplayFiles] = useState<Array<IFileViewFile>>([]);
-	// const [fileSearchName, setFileSearchName] = useState('');
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [modal, setModal] = useState(false);
@@ -228,12 +227,18 @@ export default function Files(): JSX.Element {
 							) : (
 								<></>
 							)}
-							<div>
-								<h2>RECENT</h2>
-								<div className="file-container">{recentFiles}</div>
-								<h2>FILES</h2>
-								<div className="file-container">{files}</div>
-							</div>
+							{displayFiles.length === 0 ? (
+								<div className="empty-img-container">
+									<img alt="" src="../img/emptyFiles.png" />
+								</div>
+							) : (
+								<div>
+									<h2>RECENT</h2>
+									<div className="file-container">{recentFiles}</div>
+									<h2>FILES</h2>
+									<div className="file-container">{files}</div>
+								</div>
+							)}
 						</div>
 					)}
 				</div>

@@ -1,8 +1,7 @@
 import './FileCard.scss';
 import './ExtensionsColor.scss';
 
-import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
-
+import { ContextMenuTrigger } from 'react-contextmenu';
 import CustomContext from './CustomContext';
 import { Link } from 'react-router-dom';
 import React from 'react';
@@ -19,7 +18,7 @@ export default function FileCard(props: IFileProp): JSX.Element {
 	console.log(fid);
 	return (
 		<div>
-			<ContextMenuTrigger id="same_unique_identifier">
+			<ContextMenuTrigger id={fid}>
 				<Link to={`/file/${fid}`}>
 					<div className="file-card">
 						<div className={`file-card-img-container ${extension}`}>
@@ -32,7 +31,7 @@ export default function FileCard(props: IFileProp): JSX.Element {
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CustomContext />
+			<CustomContext fid={fid} />
 		</div>
 	);
 }

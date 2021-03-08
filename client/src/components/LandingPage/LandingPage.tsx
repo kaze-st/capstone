@@ -45,7 +45,9 @@ function Main() {
 					</p>
 					<Link to="/register">
 						<button className="white-button" type="button">
-							CREATE ACCOUNT
+							{userContext === undefined
+								? 'CREATE ACCOUNT'
+								: 'GO TO YOUR FILES'}
 						</button>
 					</Link>
 				</div>

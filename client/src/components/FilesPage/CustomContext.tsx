@@ -1,10 +1,11 @@
-import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
+import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 import React from 'react';
 
-export default function CustomContext() {
+export default function CustomContext(props: { fid: string }) {
+	const { fid } = props;
 	const handleClick = (e: MouseEvent, data: Record<string, unknown>) => {
-		console.log(data);
+		console.log(fid);
 	};
 
 	return (
@@ -12,16 +13,16 @@ export default function CustomContext() {
 			{/* NOTICE: id must be unique between EVERY <ContextMenuTrigger> and <ContextMenu> pair */}
 			{/* NOTICE: inside the pair, <ContextMenuTrigger> and <ContextMenu> must have the same id */}
 
-			<ContextMenu id="same_unique_identifier">
+			<ContextMenu id={fid}>
 				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
-					ContextMenu Item 1
+					Open File
 				</MenuItem>
 				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
-					ContextMenu Item 2
+					Share File
 				</MenuItem>
 				<MenuItem divider />
 				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
-					ContextMenu Item 3
+					Delete File
 				</MenuItem>
 			</ContextMenu>
 		</div>
