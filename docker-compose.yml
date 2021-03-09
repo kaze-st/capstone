@@ -6,7 +6,6 @@ services:
     environment:
       - MONGODB_URL=${MONGODB_URL}
       - ENVIRONMENT=${ENVIRONMENT}
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
     build:
       context: ./server
       dockerfile: ./Dockerfile
