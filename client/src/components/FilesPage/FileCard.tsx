@@ -30,7 +30,7 @@ export default function FileCard(props: IFileProp): JSX.Element {
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CustomContext fid={fid} />
+			<CustomContext fid={fid} id={fid} />
 		</div>
 	);
 }
@@ -57,7 +57,7 @@ export function RecentFileCard(
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CustomContext fid={uniqueID} />
+			<CustomContext id={uniqueID} fid={fid} />
 		</div>
 	);
 }

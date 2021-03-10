@@ -1,27 +1,24 @@
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 
+import { Link } from 'react-router-dom';
 import React from 'react';
 
-export default function CustomContext(props: { fid: string }) {
-	const { fid } = props;
-	const handleClick = (e: MouseEvent, data: Record<string, unknown>) => {
-		console.log(fid);
+export default function CustomContext(props: { id: string; fid: string }) {
+	const { id, fid } = props;
+
+	const handleShare = () => {
+		console.log(`/file/${fid}`);
 	};
 
 	return (
 		<div>
 			{/* NOTICE: id must be unique between EVERY <ContextMenuTrigger> and <ContextMenu> pair */}
 			{/* NOTICE: inside the pair, <ContextMenuTrigger> and <ContextMenu> must have the same id */}
-			<ContextMenu id={fid}>
-				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
-					Open File
+			<ContextMenu id={id}>
+				<MenuItem>
+					<Link to={`/file/${fid}`}>Open File</Link>
 				</MenuItem>
-				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
-					Share File
-				</MenuItem>
-				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
-					Delete File
-				</MenuItem>
+				<MenuItem onClick={handleShare}>Share File</MenuItem>
 			</ContextMenu>
 		</div>
 	);
