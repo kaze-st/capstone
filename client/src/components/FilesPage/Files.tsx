@@ -224,7 +224,7 @@ export default function Files(): JSX.Element {
 										type="submit"
 										onClick={handleModalOpen}
 									>
-										Create File
+										+ NEW FILE
 									</button>
 									<hr />
 								</div>

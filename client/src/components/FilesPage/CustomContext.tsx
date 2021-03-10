@@ -12,7 +12,6 @@ export default function CustomContext(props: { fid: string }) {
 		<div>
 			{/* NOTICE: id must be unique between EVERY <ContextMenuTrigger> and <ContextMenu> pair */}
 			{/* NOTICE: inside the pair, <ContextMenuTrigger> and <ContextMenu> must have the same id */}
-
 			<ContextMenu id={fid}>
 				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
 					Open File
@@ -20,7 +19,6 @@ export default function CustomContext(props: { fid: string }) {
 				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
 					Share File
 				</MenuItem>
-				<MenuItem divider />
 				<MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
 					Delete File
 				</MenuItem>

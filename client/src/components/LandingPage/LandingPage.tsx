@@ -101,6 +101,9 @@ function Main() {
 						effortless. Interested to know more about our experiences? Click the
 						link below to learn more.
 					</p>
+					<button type="button" className="white-button">
+						ABOUT US
+					</button>
 				</div>
 			</section>
 		</main>
