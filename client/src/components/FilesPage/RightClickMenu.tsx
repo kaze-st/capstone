@@ -30,9 +30,9 @@ export default function CardRightClickMenu(
 	return (
 		<div>
 			<ContextMenu id={id} className="right-click-menu">
-				<MenuItem className="menu-item">
-					<Link to={`/file/${fid}`}>Open File</Link>
-				</MenuItem>
+				<Link to={`/file/${fid}`}>
+					<MenuItem className="menu-item">Open File</MenuItem>
+				</Link>
 				<MenuItem onClick={handleShare} className="menu-item">
 					Share File
 				</MenuItem>
