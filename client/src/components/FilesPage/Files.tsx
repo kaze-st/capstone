@@ -26,10 +26,11 @@ export default function Files(): JSX.Element {
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [createFileModal, setCreateFileModal] = useState(false);
+	const [shareFileModal, setShareFileModal] = useState(false);
+	const [modalOpen, setModaOpen] = useState(false);
 	const [modalBackgroundState, setModalBackgroundState] = useState(
 		'not-dimmed'
 	);
-	const [shareFileModal, setShareFileModal] = useState(false);
 
 	const [currentFileToShare, setCurrentFileToShare] = useState<IFile>();
 
@@ -43,21 +44,25 @@ export default function Files(): JSX.Element {
 
 	const handleCreateFileModalOpen = () => {
 		setCreateFileModal(true);
+		setModaOpen(true);
 		setModalBackgroundState('dimmed');
 	};
 
 	const handleCreateFileModalClose = () => {
 		setCreateFileModal(false);
+		setModaOpen(false);
 		setModalBackgroundState('not-dimmed');
 	};
 
 	const handleShareFileModalOpen = () => {
 		setShareFileModal(true);
+		setModaOpen(true);
 		setModalBackgroundState('dimmed');
 	};
 
 	const handleShareFileModalClose = () => {
 		setShareFileModal(false);
+		setModaOpen(false);
 		setModalBackgroundState('not-dimmed');
 	};
 
@@ -196,7 +201,7 @@ export default function Files(): JSX.Element {
 					LOG OUT
 				</button>
 			</header>
-			<main>
+			<main className={modalOpen ? 'modal-open' : ''}>
 				<div
 					className={`flex-container outer-file-container ${modalBackgroundState}`}
 				>
