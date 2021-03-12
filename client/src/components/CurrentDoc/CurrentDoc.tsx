@@ -1,11 +1,18 @@
+import './CurrentDoc.scss';
+
 import * as Y from 'yjs';
 
 import Editor, { OnMount } from '@monaco-editor/react';
-import React, { useEffect, useRef } from 'react';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 
+import IFile from '../../types/IFile';
 import { MonacoBinding } from 'y-monaco';
-import { RouteComponentProps } from 'react-router-dom';
 import { WebsocketProvider } from 'y-websocket';
+import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // eslint-disable-next-line
 // const MonacoBinding = require('y-monaco');
@@ -21,18 +28,33 @@ export default function CurrentDoc(
 
 	const editorRef = useRef<any>(null);
 	const provider = useRef<any>(null);
+	const [file, setFile] = useState<IFile | null>(null);
+
+	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
+	const { fid } = match.params;
+
+	useEffect(() => {
+		axios
+			.get(`${url}/api/v1/file/get-file`, { params: { fid } })
+			.then((response) => {
+				console.log(response);
+				setFile(response.data);
+			});
+	}, [url, fid]);
 
 	useEffect(() => {
 		console.log('editor', editorRef);
 
 		return () => {
+			if (provider.current === null) {
+				return;
+			}
 			console.log('called');
-			console.log(provider);
 			provider.current.destroy();
-			console.log(provider);
 		};
 	});
 	const handleEditorDidMount: OnMount = (editor: any): void => {
+		console.log('here3');
 		editorRef.current = editor;
 		const ydoc = new Y.Doc();
 		const ytext = ydoc.getText('content');
@@ -49,15 +71,28 @@ export default function CurrentDoc(
 		);
 	};
 
+	if (file === null) {
+		console.log('here');
+		return <p>Loading...</p>;
+	}
+
+	console.log('file', file);
+
+	const displayedFileName = `${file.name}.${file.extension}`;
 	return (
 		<>
 			<nav className="editor-nav">
-				<button className="white-button" type="button">
-					Hi
-				</button>
+				<ul className="editor-nav-links">
+					<li>
+						<button className="white-button" type="button">
+							<Link to="/files/ownedFiles">Go Back to Files</Link>
+						</button>
+					</li>
+					<li className="display-name">{displayedFileName}</li>
+				</ul>
 			</nav>
 			<Editor
-				height="90vh"
+				height="calc(100vh - 23px - 80px)"
 				defaultLanguage="javascript"
 				onMount={handleEditorDidMount}
 				theme="vs-dark"

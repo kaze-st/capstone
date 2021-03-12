@@ -1,10 +1,11 @@
 import './Login.scss';
+import '../../Spinner.scss';
 
 import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
+import dotenv, { load } from 'dotenv';
 
 import axios from 'axios';
-import dotenv from 'dotenv';
 import { useAuth } from '../../contexts/AuthContext';
 
 dotenv.config();
@@ -66,7 +67,18 @@ export default function Register(): JSX.Element {
 		return <Redirect to="/files/ownedFiles" />;
 	}
 
-	return (
+	return loading ? (
+		<div id="floatingCirclesG">
+			<div className="f_circleG" id="frotateG_01" />
+			<div className="f_circleG" id="frotateG_02" />
+			<div className="f_circleG" id="frotateG_03" />
+			<div className="f_circleG" id="frotateG_04" />
+			<div className="f_circleG" id="frotateG_05" />
+			<div className="f_circleG" id="frotateG_06" />
+			<div className="f_circleG" id="frotateG_07" />
+			<div className="f_circleG" id="frotateG_08" />
+		</div>
+	) : (
 		<form className="login-form" onSubmit={handleSubmit}>
 			<div className="header">Create your account</div>
 
