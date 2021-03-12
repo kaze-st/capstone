@@ -5,16 +5,30 @@ import CardRightClickMenu from './RightClickMenu';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import { Link } from 'react-router-dom';
 import React from 'react';
+import IFile from './interfaces/IFile';
 
-interface IFileProp {
+interface IFileCardProp {
 	imageSource: string;
 	name: string;
 	extension: string;
-	fid: string;
+	file: IFile;
+	handleShareModalOpen: () => void;
+	setCurrentFileToShare: React.Dispatch<
+		React.SetStateAction<IFile | undefined>
+	>;
 }
 
-export default function FileCard(props: IFileProp): JSX.Element {
-	const { imageSource, name, extension, fid } = props;
+export default function FileCard(props: IFileCardProp): JSX.Element {
+	const {
+		imageSource,
+		name,
+		extension,
+		file,
+		handleShareModalOpen,
+		setCurrentFileToShare
+	} = props;
+	// eslint-disable-next-line
+	const fid = file._id;
 	return (
 		<div>
 			<ContextMenuTrigger id={fid}>
@@ -30,15 +44,30 @@ export default function FileCard(props: IFileProp): JSX.Element {
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CardRightClickMenu fid={fid} id={fid} />
+			<CardRightClickMenu
+				file={file}
+				id={fid}
+				handleShareModalOpen={handleShareModalOpen}
+				setCurrentFileToShare={setCurrentFileToShare}
+			/>
 		</div>
 	);
 }
 
 export function RecentFileCard(
-	props: IFileProp & { lastEditedOn: string }
+	props: IFileCardProp & { lastEditedOn: string }
 ): JSX.Element {
-	const { imageSource, name, extension, fid, lastEditedOn } = props;
+	const {
+		imageSource,
+		name,
+		extension,
+		file,
+		lastEditedOn,
+		handleShareModalOpen,
+		setCurrentFileToShare
+	} = props;
+	// eslint-disable-next-line
+	const fid = file._id;
 	const uniqueID = `${fid}-recent`;
 	const date = new Date(lastEditedOn);
 	return (
@@ -57,7 +86,12 @@ export function RecentFileCard(
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CardRightClickMenu id={uniqueID} fid={fid} />
+			<CardRightClickMenu
+				id={uniqueID}
+				file={file}
+				handleShareModalOpen={handleShareModalOpen}
+				setCurrentFileToShare={setCurrentFileToShare}
+			/>
 		</div>
 	);
 }

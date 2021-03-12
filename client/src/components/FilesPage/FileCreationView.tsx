@@ -30,13 +30,15 @@ export function FileExtensionIcon(props: IFileExtensionIcon): JSX.Element {
 	);
 }
 
-interface IFileCreationProps {
+interface IFileCreationDialogueProps {
 	uid: string | undefined;
 	refreshPage: () => void;
 	handleModalClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function FileCreation(props: IFileCreationProps): JSX.Element {
+export default function FileCreationDialogue(
+	props: IFileCreationDialogueProps
+): JSX.Element {
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const { uid, refreshPage, handleModalClose } = props;
 

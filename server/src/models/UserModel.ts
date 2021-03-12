@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 
 export interface IUser extends Document {
 	uid: string;
+	email: string;
 	name: string;
 	lastName: string;
 	ownedFiles: Array<ObjectId>;
@@ -19,6 +20,7 @@ class UserModel extends BaseModel<IUser> {
 		return new mongoose.Schema(
 			{
 				uid: { type: String, required: true },
+				email: { type: String, required: true },
 				name: { type: String, required: true },
 				lastName: { type: String, required: true },
 				ownedFiles: { type: [ObjectId], required: true },

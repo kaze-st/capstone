@@ -1,13 +1,28 @@
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 import { Link } from 'react-router-dom';
+import IFile from './interfaces/IFile';
 import React from 'react';
 
-export default function CardRightClickMenu(props: { id: string; fid: string }) {
-	const { id, fid } = props;
+interface ICardRightClickMenuProps {
+	id: string;
+	file: IFile;
+	handleShareModalOpen: () => void;
+	setCurrentFileToShare: React.Dispatch<
+		React.SetStateAction<IFile | undefined>
+	>;
+}
+
+export default function CardRightClickMenu(
+	props: ICardRightClickMenuProps
+): JSX.Element {
+	const { id, file, handleShareModalOpen, setCurrentFileToShare } = props;
+	const fid = id;
 
 	const handleShare = () => {
 		console.log(`/file/${fid}`);
+		handleShareModalOpen();
+		setCurrentFileToShare(file);
 	};
 
 	return (
