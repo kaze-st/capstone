@@ -67,7 +67,6 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 	};
 
 	const onFileExtensionIconClick = async (event) => {
-		console.log('lul');
 		setNewFile({ ...newFile, extension: event.target.value });
 	};
 
