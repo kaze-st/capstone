@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
 import './FileCreation.scss';
 import './ExtensionsColor.scss';
 
+import React, { useState } from 'react';
+
 import Extensions from './FileExtensions';
+import axios from 'axios';
 
 interface IFileExtensionIcon {
 	extension: string;
@@ -85,7 +86,11 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 		<form>
 			{error && <div>Error: {error}</div>}
 			<div className="card-creation-container">
-				<button type="button" onClick={handleModalClose}>
+				<button
+					type="button"
+					className="blue-button"
+					onClick={handleModalClose}
+				>
 					Close
 				</button>
 				<div className="card-creation-label">File Name:</div>
@@ -98,7 +103,7 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 				<div className="card-creation-label">File Type:</div>
 				<div className="extension-icons-container">{ExtensionsIcon}</div>
 
-				<button type="button" onClick={handleSubmit}>
+				<button type="button" className="blue-button" onClick={handleSubmit}>
 					Create File
 				</button>
 			</div>
