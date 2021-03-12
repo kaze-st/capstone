@@ -67,6 +67,10 @@ p {
 	flex: 1;
 }
 
+a {
+	text-decoration: none;
+}
+
 .page-wrapper {
 	height: 100%;
 	display: flex;
@@ -81,6 +85,18 @@ footer {
 	align-items: center;
 	background-color: #007acc;
 	color: #ffffff;
+}
+
+header {
+	padding-right: 1rem;
+}
+
+footer {
+	justify-content: space-between;
+}
+
+.files-header {
+	background-color: #3f4756;
 }
 
 .logo-and-title {
@@ -103,27 +119,9 @@ footer {
 	display: none;
 }
 
-nav {
-	flex: 1;
-	height: 100%;
-}
-
-nav ul {
-	margin: 0;
-	height: inherit;
-	display: flex;
-	align-items: center;
-}
-
-nav li {
-	display: inline;
-	font-size: 18px;
-	padding: 1rem 2rem;
-	cursor: pointer;
-}
-
-nav li:hover {
-	background-color: rgb(0 63 105);
+ul {
+	list-style-type: none;
+	padding: 0;
 }
 
 li {
@@ -131,13 +129,22 @@ li {
 }
 
 button {
-	margin: 1rem;
-	padding: 0.5rem 1rem;
-	font-size: 0.75rem;
-	color: #007acc;
-	border-radius: 10px;
-	border: #ffffff;
+	margin: auto;
+	width: fit-content;
+
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+
+	padding: 0.8em;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+	border-radius: 0.5rem;
 	cursor: pointer;
+}
+
+.white-button {
+	color: #007acc;
+	background-color: #ffffff;
 }
 
 main {
@@ -149,8 +156,14 @@ main {
 
 footer {
 	padding: 0 1rem;
+	height: 3rem;
+	background-color: #3f4756;
 }
 
 footer p {
 	font-size: 0.75rem;
+}
+
+footer img {
+	height: 1.5rem;
 }

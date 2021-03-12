@@ -18,41 +18,40 @@
 	display: none;
 }
 
-nav {
+.landing-nav {
 	flex: 1;
 	height: 100%;
 }
 
-nav ul {
+.landing-nav ul {
 	margin: 0;
 	height: inherit;
 	display: flex;
 	align-items: center;
 }
 
-nav li {
+.landing-nav li {
 	display: inline;
 	font-size: 18px;
 	padding: 1rem 2rem;
 	cursor: pointer;
 }
 
-nav li:hover {
+nav li:hover, .active-nav {
 	background-color: rgb(0 63 105);
 }
 
-li {
-	font-size: 1.25rem;
-}
-
 .landing-section {
-	padding: 2rem 3rem;
 	align-items: center;
 	justify-content: space-between;
 }
 
 .landing-section:nth-child(odd) {
 	background-color: #3f4756;
+}
+
+.landing-section:nth-child(odd) .row1, .landing-section:nth-child(even) .row2 {
+	padding: 3rem 2rem;
 }
 
 .landing-section:last-child {

@@ -1,6 +1,6 @@
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
-import FilesPage from './components/FilesPage/FilesPage';
+import Files from './components/FilesPage/Files';
 import LandingPage from './components/LandingPage/LandingPage';
 import { Login } from './components/Login/Login';
 import React from 'react';
@@ -18,9 +18,10 @@ export default function Routes(): JSX.Element {
 			<Route exact path="/">
 				<LandingPage />
 			</Route>
-			<Route exact path="/files">
-				<FilesPage />
+			<Route exact path="/files/:ownedOrShared">
+				<Files />
 			</Route>
+			<Redirect exact to="/" />
 		</Switch>
 	);
 }

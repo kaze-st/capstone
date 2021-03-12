@@ -63,7 +63,7 @@ export default function Register(): JSX.Element {
 	};
 
 	if (userContext !== null) {
-		return <Redirect to="/files" />;
+		return <Redirect to="/files/ownedFiles" />;
 	}
 
 	return (
@@ -93,7 +93,7 @@ export default function Register(): JSX.Element {
 				/>
 			</div>
 
-			<button disabled={loading} type="submit">
+			<button className="blue-button" disabled={loading} type="submit">
 				Create Account
 			</button>
 
