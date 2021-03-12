@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  backend:
+    container_name: cc_server
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+      - ENVIRONMENT=${ENVIRONMENT}
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    image: "kaze-st/cc_server"
+    ports:
+      - "8080:8080"
+  frontend:
+    container_name: cc_web
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+      args:
+        - REACT_APP_FIREBASE_AUTH_DOMAIN=${REACT_APP_FIREBASE_AUTH_DOMAIN}
+        - REACT_APP_FIREBASE_PROJECT_ID=${REACT_APP_FIREBASE_PROJECT_ID}
+        - REACT_APP_FIREBASE_STORAGE_BUCKET=${REACT_APP_FIREBASE_STORAGE_BUCKET}
+        - REACT_APP_FIREBASE_MESSAGE_SENDER_ID=${REACT_APP_FIREBASE_MESSAGE_SENDER_ID}
+        - REACT_APP_FIREBASE_APP_ID=${REACT_APP_FIREBASE_APP_ID}
+        - REACT_APP_FIREBASE_MEASUREMENT_ID=${REACT_APP_FIREBASE_MEASUREMENT_ID}
+        - REACT_APP_CODE_COLLAB_API_BASE_URL=${REACT_APP_CODE_COLLAB_API_BASE_URL}
+        - REACT_APP_FIREBASE_API_KEY=${REACT_APP_FIREBASE_API_KEY}
+    image: "kaze-st/cc_web"
+    ports:
+      - "80:3000"
