@@ -1,9 +1,9 @@
 import './FileCard.scss';
 import './ExtensionsColor.scss';
 
-import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
+import { ContextMenuTrigger } from 'react-contextmenu';
 
-import CustomContext from './CustomContext';
+import CardRightClickMenu from './RightClickMenu';
 import React from 'react';
 
 interface IFileProp {
@@ -27,7 +27,7 @@ export default function FileCard(props: IFileProp): JSX.Element {
 					</div>
 				</div>
 			</ContextMenuTrigger>
-			<CustomContext />
+			<CardRightClickMenu />
 		</div>
 	);
 }
