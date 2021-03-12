@@ -1,4 +1,5 @@
 import './CurrentDoc.scss';
+import '../../Spinner.scss';
 
 import * as Y from 'yjs';
 
@@ -8,6 +9,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import IFile from '../../types/IFile';
 import { MonacoBinding } from 'y-monaco';
+import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -73,7 +75,7 @@ export default function CurrentDoc(
 
 	if (file === null) {
 		console.log('here');
-		return <p>Loading...</p>;
+		return <Spinner />;
 	}
 
 	console.log('file', file);

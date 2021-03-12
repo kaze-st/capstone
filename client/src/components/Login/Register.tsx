@@ -5,6 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 import dotenv, { load } from 'dotenv';
 
+import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -81,16 +82,7 @@ export default function Register(): JSX.Element {
 	}
 
 	return loading ? (
-		<div id="floatingCirclesG">
-			<div className="f_circleG" id="frotateG_01" />
-			<div className="f_circleG" id="frotateG_02" />
-			<div className="f_circleG" id="frotateG_03" />
-			<div className="f_circleG" id="frotateG_04" />
-			<div className="f_circleG" id="frotateG_05" />
-			<div className="f_circleG" id="frotateG_06" />
-			<div className="f_circleG" id="frotateG_07" />
-			<div className="f_circleG" id="frotateG_08" />
-		</div>
+		<Spinner />
 	) : (
 		<form className="login-form" onSubmit={handleSubmit}>
 			<div className="header">Create your account</div>

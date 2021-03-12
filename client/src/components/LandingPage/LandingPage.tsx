@@ -114,8 +114,7 @@ export function Footer(): JSX.Element {
 	return (
 		<footer>
 			<p>
-				&copy; CodeCollab 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao
-				Chen
+				&copy; SSCode 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao Chen
 			</p>
 			<img alt="" src="./img/ischool-logo.png" aria-hidden="true" />
 		</footer>

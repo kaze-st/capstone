@@ -9,6 +9,7 @@ import FileCreationView from './FileCreationView';
 import IFile from './interfaces/IFile';
 import Modal from './Modal';
 import ShareFileView from './ShareFileView';
+import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -231,16 +232,7 @@ export default function Files(): JSX.Element {
 						</ul>
 					</nav>
 					{isLoading ? (
-						<div id="floatingCirclesG">
-							<div className="f_circleG" id="frotateG_01" />
-							<div className="f_circleG" id="frotateG_02" />
-							<div className="f_circleG" id="frotateG_03" />
-							<div className="f_circleG" id="frotateG_04" />
-							<div className="f_circleG" id="frotateG_05" />
-							<div className="f_circleG" id="frotateG_06" />
-							<div className="f_circleG" id="frotateG_07" />
-							<div className="f_circleG" id="frotateG_08" />
-						</div>
+						<Spinner />
 					) : (
 						<div className="inner-file-container">
 							{fileViewPath !== 'sharedFiles' ? (
@@ -298,8 +290,7 @@ export default function Files(): JSX.Element {
 			</main>
 			<footer>
 				<p>
-					&copy; CodeCollab 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao
-					Chen
+					&copy; SSCode 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao Chen
 				</p>
 				<img alt="" src="../img/ischool-logo.png" aria-hidden="true" />
 			</footer>

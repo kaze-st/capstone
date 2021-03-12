@@ -19,7 +19,8 @@ export default function CardRightClickMenu(
 	props: ICardRightClickMenuProps
 ): JSX.Element {
 	const { id, file, handleShareModalOpen, setCurrentFileToShare } = props;
-	const fid = id;
+	// eslint-disable-next-line
+	const fid = file._id;
 
 	const handleShare = () => {
 		handleShareModalOpen();
