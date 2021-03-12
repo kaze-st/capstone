@@ -1,3 +1,5 @@
+import './RightClickMenu.scss';
+
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 import { Link } from 'react-router-dom';
@@ -27,13 +29,13 @@ export default function CardRightClickMenu(
 
 	return (
 		<div>
-			{/* NOTICE: id must be unique between EVERY <ContextMenuTrigger> and <ContextMenu> pair */}
-			{/* NOTICE: inside the pair, <ContextMenuTrigger> and <ContextMenu> must have the same id */}
-			<ContextMenu id={id}>
-				<MenuItem>
+			<ContextMenu id={id} className="right-click-menu">
+				<MenuItem className="menu-item">
 					<Link to={`/file/${fid}`}>Open File</Link>
 				</MenuItem>
-				<MenuItem onClick={handleShare}>Share File</MenuItem>
+				<MenuItem onClick={handleShare} className="menu-item">
+					Share File
+				</MenuItem>
 			</ContextMenu>
 		</div>
 	);

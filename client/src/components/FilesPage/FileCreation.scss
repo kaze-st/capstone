@@ -8,25 +8,30 @@
 	background-color: #ffffff;
 
 	position: fixed;
-	top: 30%;
+	top: 20%;
 	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, 10%);
 
 	border-radius: 5%;
-	width: 25rem;
-	padding: 0.5rem;
+	width: 30rem;
+	padding: 1rem;
+}
+
+.card-creation-container .close-button {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+.card-creation-container .create-file-button {
+	margin-left: auto;
+	margin-right: 0;
 }
 
 .card-creation-container input {
 	margin: 0.2em;
 	background-color: #e6e6e6;
 	border: 0.1em solid #828282;
-	border-radius: 5%;
-
-	margin-left: 0.5em;
-	margin-right: 0.5em;
-	margin-top: -0.1em;
 
 	padding: 0.5em;
 }
@@ -36,11 +41,16 @@
 	margin-left: 0.5rem;
 	margin-bottom: 0.5rem;
 	margin-top: 1rem;
+	font-weight: bold;
+	color: #007acc;
 }
 
 .extension-icons-container {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .extension-icon-outer {
@@ -48,12 +58,13 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin: 0.3rem;
 }
 
 .extension-icon {
 	border-radius: 50%;
-	height: 3rem;
-	width: 3rem;
+	height: 5rem;
+	width: 5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -64,6 +75,19 @@
 	max-height: 60%;
 }
 
-.extension-icon:hover {
-	cursor: pointer;
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + .extension-icon {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + .extension-icon {
+  outline: 2px solid black;
 }

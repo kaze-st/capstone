@@ -1,12 +1,17 @@
 import './Files.scss';
 import IFile from './interfaces/IFile';
 
+import '../../Spinner.scss';
+
+
 import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import FileCreationView from './FileCreationView';
 import ShareFileView from './ShareFileView';
+
+
 import Modal from './Modal';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
@@ -230,7 +235,16 @@ export default function Files(): JSX.Element {
 						</ul>
 					</nav>
 					{isLoading ? (
-						<p>Loading</p>
+						<div id="floatingCirclesG">
+							<div className="f_circleG" id="frotateG_01" />
+							<div className="f_circleG" id="frotateG_02" />
+							<div className="f_circleG" id="frotateG_03" />
+							<div className="f_circleG" id="frotateG_04" />
+							<div className="f_circleG" id="frotateG_05" />
+							<div className="f_circleG" id="frotateG_06" />
+							<div className="f_circleG" id="frotateG_07" />
+							<div className="f_circleG" id="frotateG_08" />
+						</div>
 					) : (
 						<div className="inner-file-container">
 							{fileViewPath !== 'sharedFiles' ? (
@@ -250,6 +264,7 @@ export default function Files(): JSX.Element {
 							{displayFiles.length === 0 ? (
 								<div className="empty-img-container">
 									<img alt="" src="../img/emptyFiles.png" />
+									<p>No Files Found!</p>
 								</div>
 							) : (
 								<div>

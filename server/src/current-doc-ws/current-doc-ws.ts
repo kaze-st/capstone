@@ -14,15 +14,24 @@ export default (server: http.Server): void => {
 
 	utils.setPersistence({
 		bindState: async (documentName: string, doc: Y.Doc) => {
-			const r = _.debounce(() => {
-				consola.log('Here');
-			}, 1000);
+			const debouncedSaveFile = _.debounce(async (update) => {
+				Y.applyUpdate(doc, update);
+				const encodedState = Y.encodeStateAsUpdate(doc);
+				const file = await FileModel.findById(documentName);
+
+				if (file) {
+					file.state = Buffer.from(encodedState);
+					file.lastEditedOn = new Date();
+					file.save();
+					consola.log('saved');
+				}
+			}, 5000);
 
 			// eslint-disable-next-line
-			doc.on('update', (update: any) => {
+			doc.on('update', async (update: any) => {
 				consola.log('aya');
-				r();
-				// Y.applyUpdate(doc, update);
+				consola.log('update');
+				debouncedSaveFile(update);
 			});
 
 			const file = await FileModel.findById(documentName);
@@ -41,6 +50,7 @@ export default (server: http.Server): void => {
 
 			if (file) {
 				file.state = Buffer.from(encodedState);
+				file.lastEditedOn = new Date();
 				file.save();
 			}
 
