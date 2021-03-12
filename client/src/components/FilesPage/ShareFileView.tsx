@@ -63,7 +63,8 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 					return {
 						name: user.name,
 						lastName: user.lastName,
-						email: user.email
+						email: user.email,
+						uid: user.uid
 					};
 				});
 				setCurrentCollaborators(currCollaborators);
