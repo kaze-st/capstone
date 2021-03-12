@@ -59,6 +59,7 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 				owner: uid,
 				extension: newFile.extension
 			});
+			setNewFile({ ...newFile, name: '' });
 			handleModalClose(event);
 			refreshPage();
 		} catch {
