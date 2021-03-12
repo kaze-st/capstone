@@ -80,6 +80,19 @@ export default function CurrentDoc(
 
 	console.log('file', file);
 
+	// change this shit later we don't support txt
+	const extensions = {
+		py: 'python',
+		java: 'java',
+		rb: 'ruby',
+		go: 'go',
+		js: 'javascript',
+		cpp: 'cpp',
+		txt: 'javascript'
+	};
+	// console.log(file.extension);
+	// console.log(extensions[file.extension]);
+
 	const displayedFileName = `${file.name}.${file.extension}`;
 	return (
 		<>
@@ -95,7 +108,7 @@ export default function CurrentDoc(
 			</nav>
 			<Editor
 				height="calc(100vh - 23px - 80px)"
-				defaultLanguage="javascript"
+				defaultLanguage={extensions[file.extension]}
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
 			/>
