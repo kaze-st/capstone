@@ -97,6 +97,7 @@ header form {
 	justify-content: center;
 	align-items: center;
 	display: flex;
+	flex-direction: column;
 }
 
 .empty-img-container > img {

@@ -242,6 +242,7 @@ export default function Files(): JSX.Element {
 							{displayFiles.length === 0 ? (
 								<div className="empty-img-container">
 									<img alt="" src="../img/emptyFiles.png" />
+									<p>No Files Found!</p>
 								</div>
 							) : (
 								<div>
