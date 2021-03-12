@@ -51,6 +51,11 @@ export default function CurrentDoc(
 
 	return (
 		<>
+			<nav className="editor-nav">
+				<button className="white-button" type="button">
+					Hi
+				</button>
+			</nav>
 			<Editor
 				height="90vh"
 				defaultLanguage="javascript"
