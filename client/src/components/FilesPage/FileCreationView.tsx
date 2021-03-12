@@ -8,26 +8,26 @@ import axios from 'axios';
 
 interface IFileExtensionIcon {
 	extension: string;
-	onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+	onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
 }
 export function FileExtensionIcon(props: IFileExtensionIcon): JSX.Element {
 	const { extension, onClick } = props;
 	const logoSrc = `/logo/${extension}.png`;
 
 	return (
-		<div className="extension-icon-outer">
-			<div
-				id={extension}
-				className={`extension-icon ${extension}`}
+		<label htmlFor={extension.toString()} className="extension-icon-outer">
+			<input
+				type="radio"
+				name="extension"
+				value={extension}
 				onClick={onClick}
-				tabIndex={0}
-				role="button"
-				aria-hidden="true"
-			>
+				id={extension}
+			/>
+			<div className={`extension-icon ${extension}`}>
 				<img id={extension} src={logoSrc} alt={`logo for ${extension}`} />
 			</div>
 			<div>{`.${extension}`}</div>
-		</div>
+		</label>
 	);
 }
 
@@ -66,10 +66,9 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 		}
 	};
 
-	const onFileExtensionIconClick = async (
-		event: React.MouseEvent<HTMLDivElement>
-	) => {
-		setNewFile({ ...newFile, extension: event.currentTarget.id });
+	const onFileExtensionIconClick = async (event) => {
+		console.log('lul');
+		setNewFile({ ...newFile, extension: event.target.value });
 	};
 
 	const extensions = Object.values(Extensions) as string[];
@@ -88,7 +87,7 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 			<div className="card-creation-container">
 				<button
 					type="button"
-					className="blue-button"
+					className="blue-button close-button"
 					onClick={handleModalClose}
 				>
 					Close
@@ -103,7 +102,11 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 				<div className="card-creation-label">File Type:</div>
 				<div className="extension-icons-container">{ExtensionsIcon}</div>
 
-				<button type="button" className="blue-button" onClick={handleSubmit}>
+				<button
+					type="button"
+					className="blue-button create-file-button"
+					onClick={handleSubmit}
+				>
 					Create File
 				</button>
 			</div>

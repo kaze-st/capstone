@@ -8,19 +8,24 @@
 	background-color: #ffffff;
 
 	position: fixed;
-	top: 30%;
+	top: 20%;
 	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, 10%);
 
 	border-radius: 5%;
-	width: 25rem;
+	width: 30rem;
 	padding: 1rem;
 }
 
-.card-creation-container button {
+.card-creation-container .close-button {
 	margin-left: 0;
 	margin-right: auto;
+}
+
+.card-creation-container .create-file-button {
+	margin-left: auto;
+	margin-right: 0;
 }
 
 .card-creation-container input {
@@ -42,7 +47,8 @@
 
 .extension-icons-container {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
+	flex-wrap: wrap;
 	margin-top: 0.5rem;
 	margin-bottom: 0.5rem;
 }
@@ -52,12 +58,13 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin: 0.3rem;
 }
 
 .extension-icon {
 	border-radius: 50%;
-	height: 3rem;
-	width: 3rem;
+	height: 5rem;
+	width: 5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -68,6 +75,19 @@
 	max-height: 60%;
 }
 
-.extension-icon:hover {
-	cursor: pointer;
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + .extension-icon {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + .extension-icon {
+  outline: 2px solid black;
 }
