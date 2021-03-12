@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+
 import IFile from './interfaces/IFile';
+import axios from 'axios';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 /*
@@ -160,29 +161,40 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 	return (
 		<form>
 			<div className="card-creation-container">
-				<button type="button" onClick={handleModalClose}>
-					Close
+				<button
+					type="button"
+					className="blue-button close-button"
+					onClick={handleModalClose}
+				>
+					CLOSE
 				</button>
 				{error && <div>Error: {error}</div>}
-				<div>{`${file.name}.${file.extension}`}</div>
 				<input
 					type="text"
 					value={email}
 					placeholder="Email"
 					onChange={handleEmailChange}
 				/>
-				<button type="button" onClick={handleGetUserByEmail}>
-					Add
+				<button
+					type="button"
+					className="blue-button add-button"
+					onClick={handleGetUserByEmail}
+				>
+					ADD
 				</button>
 				<div>
-					Current Collaborators:
+					<p className="card-creation-label">Current Collaborators:</p>
 					{currCollaboratorsCards}
 				</div>
 				<div>
 					Pending Collaborators:
 					{pendingCollaboratorsCards}
 				</div>
-				<button type="button" onClick={handleAddAllPendingCollaborators}>
+				<button
+					type="button"
+					className="blue-button"
+					onClick={handleAddAllPendingCollaborators}
+				>
 					Share File To Pending Collaborators
 				</button>
 			</div>

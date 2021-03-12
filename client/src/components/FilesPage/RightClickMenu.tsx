@@ -2,8 +2,8 @@ import './RightClickMenu.scss';
 
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 
-import { Link } from 'react-router-dom';
 import IFile from './interfaces/IFile';
+import { Link } from 'react-router-dom';
 import React from 'react';
 
 interface ICardRightClickMenuProps {
@@ -22,7 +22,6 @@ export default function CardRightClickMenu(
 	const fid = id;
 
 	const handleShare = () => {
-		console.log(`/file/${fid}`);
 		handleShareModalOpen();
 		setCurrentFileToShare(file);
 	};

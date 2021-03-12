@@ -4,9 +4,9 @@ import { Request, Response } from 'express';
 
 import FileModel from '@models/FileModel';
 import UserModel from '@models/UserModel';
+import consola from 'consola';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
-import consola from 'consola';
 
 export default class FileController {
 	static async createFile(req: Request, res: Response): Promise<void> {

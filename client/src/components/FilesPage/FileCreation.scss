@@ -23,7 +23,8 @@
 	margin-right: auto;
 }
 
-.card-creation-container .create-file-button {
+.card-creation-container .create-file-button,
+.card-creation-container .add-button {
 	margin-left: auto;
 	margin-right: 0;
 }
@@ -75,19 +76,19 @@
 	max-height: 60%;
 }
 
-[type=radio] { 
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+[type='radio'] {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 /* IMAGE STYLES */
-[type=radio] + .extension-icon {
-  cursor: pointer;
+[type='radio'] + .extension-icon {
+	cursor: pointer;
 }
 
 /* CHECKED STYLES */
-[type=radio]:checked + .extension-icon {
-  outline: 2px solid black;
+[type='radio']:checked + .extension-icon {
+	outline: 2px solid black;
 }
