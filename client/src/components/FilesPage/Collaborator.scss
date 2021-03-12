@@ -1,0 +1,24 @@
+.collaborator-container {
+	display: flex;
+	margin-bottom: 1rem;
+}
+
+.collaborator-container img {
+	width: 2.5rem;
+}
+
+.collaborator-names-container {
+	display: flex;
+	flex-direction: column;
+	margin-left: 0.3rem;
+}
+
+.collaborator-name {
+	font-weight: bold;
+}
+
+// refactor this
+.who-do-share-with {
+	color: #007acc;
+	font-weight: bold;
+}

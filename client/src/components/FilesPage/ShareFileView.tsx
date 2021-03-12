@@ -1,3 +1,4 @@
+import './Collaborator.scss';
 import React, { useEffect, useState } from 'react';
 
 import IFile from './interfaces/IFile';
@@ -20,7 +21,15 @@ interface ICollaborator {
 
 export function Collaborator(props: ICollaborator): JSX.Element {
 	const { name, lastName, email, uid } = props;
-	return <div>{`Name: ${name} ${lastName}. Email: ${email}`} </div>;
+	return (
+		<div className="collaborator-container">
+			<img src="../img/user.png" alt="user-avatar" />
+			<div className="collaborator-names-container">
+				<div className="collaborator-name">{`${name} ${lastName}`}</div>
+				<div>{`${email}`}</div>
+			</div>
+		</div>
+	);
 }
 
 interface IShareFileDialog {
@@ -49,7 +58,6 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 					uids: file?.sharedTo
 				});
 				const resData = result.data;
-				console.log(resData);
 				const currCollaborators = resData.map((user) => {
 					return {
 						name: user.name,
@@ -169,6 +177,8 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 					CLOSE
 				</button>
 				{error && <div>Error: {error}</div>}
+
+				<div className="who-do-share-with">Who do you want to share with?</div>
 				<input
 					type="text"
 					value={email}
