@@ -22,8 +22,8 @@ export default function Routes(): JSX.Element {
 			</Route>
 			<PrivateRoute exact path="/files/:ownedOrShared" component={Files} />
 			<PrivateRoute exact path="/file/:fid" component={CurrentDoc} />
-
-			{/* <Redirect exact to="/" /> */}
+			{/* Redirect to landing page in case of invalid path */}
+			<Redirect exact to="/" />
 		</Switch>
 	);
 }
