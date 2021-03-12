@@ -3,7 +3,7 @@ import { ContextMenu, MenuItem } from 'react-contextmenu';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-export default function CustomContext(props: { id: string; fid: string }) {
+export default function CardRightClickMenu(props: { id: string; fid: string }) {
 	const { id, fid } = props;
 
 	const handleShare = () => {

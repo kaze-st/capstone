@@ -4,7 +4,7 @@ import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
-import FileCreation from './FileCreation';
+import FileCreationView from './FileCreationView';
 import Modal from './Modal';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
@@ -20,8 +20,13 @@ interface IFileViewFile {
 	extension: string;
 }
 
+enum FilePath {
+	Owned = 'ownedFiles',
+	Shared = 'sharedFiles'
+}
+
 interface RouteParams {
-	ownedOrShared: string;
+	ownedOrShared: FilePath;
 }
 
 export default function Files(): JSX.Element {
@@ -55,7 +60,7 @@ export default function Files(): JSX.Element {
 				ownedFiles: resData.ownedFiles,
 				sharedFiles: resData.sharedFiles
 			});
-			if (fileViewPath === 'sharedFiles') {
+			if (fileViewPath === FilePath.Shared) {
 				setDisplayFiles(resData.sharedFiles);
 			} else {
 				setDisplayFiles(resData.ownedFiles);
@@ -77,10 +82,7 @@ export default function Files(): JSX.Element {
 					ownedFiles: resData.ownedFiles,
 					sharedFiles: resData.sharedFiles
 				});
-				console.log(
-					`owned files edited on tag: ${resData.ownedFiles[0].lastEditedOn}`
-				);
-				if (fileViewPath === 'sharedFiles') {
+				if (fileViewPath === FilePath.Shared) {
 					setDisplayFiles(resData.sharedFiles);
 				} else {
 					setDisplayFiles(resData.ownedFiles);
@@ -136,14 +138,14 @@ export default function Files(): JSX.Element {
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		if (event.target.value === '') {
-			if (fileViewPath === 'sharedFiles') {
+			if (fileViewPath === FilePath.Shared) {
 				setDisplayFiles(allFiles.sharedFiles);
 			} else {
 				setDisplayFiles(allFiles.ownedFiles);
 			}
 		} else {
 			let filesToBeFiltered;
-			if (fileViewPath === 'sharedFiles') {
+			if (fileViewPath === FilePath.Shared) {
 				filesToBeFiltered = allFiles.sharedFiles;
 			} else {
 				filesToBeFiltered = allFiles.ownedFiles;
@@ -155,12 +157,12 @@ export default function Files(): JSX.Element {
 		}
 	};
 
-	const handleModalOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+	const handleModalOpen = () => {
 		setModal(true);
 		setModalBackgroundState('dimmed');
 	};
 
-	const handleModalClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+	const handleModalClose = () => {
 		setModal(false);
 		setModalBackgroundState('not-dimmed');
 	};
@@ -197,7 +199,9 @@ export default function Files(): JSX.Element {
 						<ul>
 							<Link to="/files/ownedFiles">
 								<li
-									className={fileViewPath === 'ownedFiles' ? 'active-nav' : ''}
+									className={
+										fileViewPath === FilePath.Owned ? 'active-nav' : ''
+									}
 								>
 									<img alt="" src="../img/ownedFiles.png" aria-hidden="true" />
 									<div>My Files</div>
@@ -205,7 +209,9 @@ export default function Files(): JSX.Element {
 							</Link>
 							<Link to="/files/sharedFiles">
 								<li
-									className={fileViewPath === 'sharedFiles' ? 'active-nav' : ''}
+									className={
+										fileViewPath === FilePath.Shared ? 'active-nav' : ''
+									}
 								>
 									<img alt="" src="../img/sharedFiles.png" aria-hidden="true" />
 									<div>Shared Files</div>
@@ -247,7 +253,7 @@ export default function Files(): JSX.Element {
 					)}
 				</div>
 				<Modal show={modal}>
-					<FileCreation
+					<FileCreationView
 						uid={uid}
 						refreshPage={getAllFiles}
 						handleModalClose={handleModalClose}

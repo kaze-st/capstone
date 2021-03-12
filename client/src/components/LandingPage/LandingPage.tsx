@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
-function Header() {
+function Header(): JSX.Element {
 	const { userContext } = useAuth();
 
 	return (
@@ -31,7 +31,7 @@ function Header() {
 	);
 }
 
-function Main() {
+function Main(): JSX.Element {
 	const { userContext } = useAuth();
 
 	return (
@@ -110,7 +110,7 @@ function Main() {
 	);
 }
 
-export function Footer() {
+export function Footer(): JSX.Element {
 	return (
 		<footer>
 			<p>

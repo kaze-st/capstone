@@ -1,8 +1,8 @@
 import './FileCard.scss';
 import './ExtensionsColor.scss';
 
+import CardRightClickMenu from './RightClickMenu';
 import { ContextMenuTrigger } from 'react-contextmenu';
-import CustomContext from './CustomContext';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
@@ -30,7 +30,7 @@ export default function FileCard(props: IFileProp): JSX.Element {
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CustomContext fid={fid} id={fid} />
+			<CardRightClickMenu fid={fid} id={fid} />
 		</div>
 	);
 }
@@ -57,7 +57,7 @@ export function RecentFileCard(
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CustomContext id={uniqueID} fid={fid} />
+			<CardRightClickMenu id={uniqueID} fid={fid} />
 		</div>
 	);
 }
