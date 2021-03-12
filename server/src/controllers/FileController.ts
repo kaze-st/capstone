@@ -6,6 +6,7 @@ import FileModel from '@models/FileModel';
 import UserModel from '@models/UserModel';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
+import consola from 'consola';
 
 export default class FileController {
 	static async createFile(req: Request, res: Response): Promise<void> {
@@ -133,6 +134,82 @@ export default class FileController {
 			message: 'File saved with success',
 			owner: owner,
 			receiver: receiver
+		});
+	}
+
+	static async shareFileToMultipleUsers(
+		req: Request,
+		res: Response
+	): Promise<void> {
+		consola.log(req.body);
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			consola.log(errors.array());
+			res.status(422).jsonp(errors.array());
+			return;
+		}
+
+		const reqBody = req.body;
+		const ownerUID: string = reqBody.owner;
+		const owner = await UserModel.findOne({ uid: ownerUID });
+		if (owner === null) {
+			res.status(400).jsonp({ message: 'Owner not found' });
+			return;
+		}
+
+		const receiverUIDs = reqBody.receivers;
+		const receivers = await UserModel.find({
+			uid: { $in: receiverUIDs }
+		});
+
+		if (receivers === null) {
+			res.status(400).jsonp({ message: 'Receivers not found' });
+			return;
+		}
+
+		const fid = String(reqBody.fid);
+		const file = await FileModel.findById(fid);
+		if (file === null) {
+			res.status(400).jsonp({ message: 'File not found' });
+			return;
+		}
+
+		if (file.owner !== owner.uid) {
+			res.status(401).jsonp({ message: 'User not authorized to share file' });
+			return;
+		}
+
+		for (const receiver of receivers) {
+			if (
+				receiver.sharedFiles.includes(file._id) ||
+				file.sharedTo.includes(receiver.uid)
+			) {
+				continue;
+			}
+
+			receiver.sharedFiles.push(file._id);
+			file.sharedTo.push(receiver.uid);
+			const session = await startSession();
+
+			try {
+				session.startTransaction();
+				await Promise.all([receiver.save(), file.save()]);
+				session.commitTransaction();
+			} catch (err) {
+				session.abortTransaction();
+				let message = err?.message;
+				if (message === null || message === undefined) {
+					message = 'Error saving files';
+				}
+				res.status(422).jsonp({ message: message });
+				return;
+			}
+		}
+
+		res.status(200).jsonp({
+			message: 'File saved with success',
+			owner: owner,
+			receiver: receivers
 		});
 	}
 

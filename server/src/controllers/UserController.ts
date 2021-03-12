@@ -1,5 +1,5 @@
+import FileModel, { IFile } from '@models/FileModel';
 import { Request, Response } from 'express';
-import FileModel from '@models/FileModel';
 import UserModel from '@models/UserModel';
 import { validationResult } from 'express-validator';
 
@@ -16,23 +16,21 @@ export default class UserController {
 			name: reqBody.name,
 			lastName: reqBody.lastName,
 			uid: reqBody.uid,
-			// eslint-disable-next-line -- fill in with File type
-			ownedFiles: new Array<any>(),
-			// eslint-disable-next-line -- fill in with File type
-			sharedFiles: new Array<any>()
+			email: reqBody.email,
+			ownedFiles: new Array<IFile>(),
+			sharedFiles: new Array<IFile>()
 		});
 
 		// eslint-disable-next-line -- callbackErr is never
 		let callbackErr: any = null;
-
-		newUser.save((err) => {
-			if (err !== null) {
-				callbackErr = err;
-			}
-		});
+		try {
+			newUser.save();
+		} catch (err) {
+			callbackErr = err;
+		}
 
 		if (callbackErr !== null) {
-			res.status(422).jsonp({ message: callbackErr?.message });
+			res.status(422).jsonp({ message: callbackErr });
 			return;
 		}
 
@@ -41,7 +39,7 @@ export default class UserController {
 		});
 	}
 
-	static async getUser(req: Request, res: Response): Promise<void> {
+	static async getUserByUID(req: Request, res: Response): Promise<void> {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			res.status(422).jsonp(errors.array());
@@ -57,6 +55,51 @@ export default class UserController {
 		}
 
 		res.status(200).jsonp(user);
+	}
+
+	static async getUserWithoutFilesByEmail(
+		req: Request,
+		res: Response
+	): Promise<void> {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			res.status(422).jsonp(errors.array());
+			return;
+		}
+
+		const email = String(req.query.email);
+		const user = await UserModel.findOne({ email: email }).select(
+			'-ownedFiles -sharedFiles'
+		);
+
+		if (user === null) {
+			res.status(400).jsonp({ message: 'User email not found' });
+			return;
+		}
+
+		res.status(200).jsonp(user);
+	}
+
+	static async getAllUsersByIds(req: Request, res: Response): Promise<void> {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			res.status(422).jsonp(errors.array());
+			return;
+		}
+
+		const reqBody = req.body;
+		const userIDs = reqBody.uids;
+
+		const users = await UserModel.find({
+			uid: { $in: userIDs }
+		}).select('-ownedFiles -sharedFiles');
+
+		if (users === null) {
+			res.status(400).jsonp({ message: 'Users not found' });
+			return;
+		}
+
+		res.status(200).jsonp(users);
 	}
 
 	static async getAllFiles(req: Request, res: Response): Promise<void> {

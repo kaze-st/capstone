@@ -1,12 +1,17 @@
 import './Files.scss';
+import IFile from './interfaces/IFile';
+
 import '../../Spinner.scss';
+
 
 import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import FileCreationView from './FileCreationView';
-import IFile from '../../types/IFile';
+import ShareFileView from './ShareFileView';
+
+
 import Modal from './Modal';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
@@ -30,10 +35,13 @@ export default function Files(): JSX.Element {
 	const [displayFiles, setDisplayFiles] = useState<Array<IFile>>([]);
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const [modal, setModal] = useState(false);
+	const [createFileModal, setCreateFileModal] = useState(false);
 	const [modalBackgroundState, setModalBackgroundState] = useState(
 		'not-dimmed'
 	);
+	const [shareFileModal, setShareFileModal] = useState(false);
+
+	const [currentFileToShare, setCurrentFileToShare] = useState<IFile>();
 
 	const urlParams = useParams<RouteParams>();
 	const fileViewPath = urlParams.ownedOrShared;
@@ -42,6 +50,26 @@ export default function Files(): JSX.Element {
 	const { userContext } = useAuth();
 
 	const uid = userContext?.firebaseUser?.uid;
+
+	const handleCreateFileModalOpen = () => {
+		setCreateFileModal(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleCreateFileModalClose = () => {
+		setCreateFileModal(false);
+		setModalBackgroundState('not-dimmed');
+	};
+
+	const handleShareFileModalOpen = () => {
+		setShareFileModal(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleShareFileModalClose = () => {
+		setShareFileModal(false);
+		setModalBackgroundState('not-dimmed');
+	};
 
 	const getAllFiles = async () => {
 		try {
@@ -93,11 +121,12 @@ export default function Files(): JSX.Element {
 			<FileCard
 				// eslint-disable-next-line
 				key={file._id}
-				// eslint-disable-next-line
-				fid={file._id}
+				file={file}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}
+				handleShareModalOpen={handleShareFileModalOpen}
+				setCurrentFileToShare={setCurrentFileToShare}
 			/>
 		);
 	});
@@ -117,17 +146,20 @@ export default function Files(): JSX.Element {
 					imageSource={`/logo/${file.extension}.png`}
 					name={file.name}
 					extension={file.extension}
-					// eslint-disable-next-line
-					fid={file._id}
+					file={file}
 					lastEditedOn={file.lastEditedOn}
+					handleShareModalOpen={handleShareFileModalOpen}
+					setCurrentFileToShare={setCurrentFileToShare}
 				/>
 			);
 		});
+
 	const handleLogOut = async () => {
 		if (logout) {
 			await logout();
 		}
 	};
+
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		if (event.target.value === '') {
@@ -148,16 +180,6 @@ export default function Files(): JSX.Element {
 			});
 			setDisplayFiles(ownedFileVal);
 		}
-	};
-
-	const handleModalOpen = () => {
-		setModal(true);
-		setModalBackgroundState('dimmed');
-	};
-
-	const handleModalClose = () => {
-		setModal(false);
-		setModalBackgroundState('not-dimmed');
 	};
 
 	if (userContext === null) {
@@ -230,7 +252,7 @@ export default function Files(): JSX.Element {
 									<button
 										className="white-button"
 										type="submit"
-										onClick={handleModalOpen}
+										onClick={handleCreateFileModalOpen}
 									>
 										+ NEW FILE
 									</button>
@@ -255,11 +277,18 @@ export default function Files(): JSX.Element {
 						</div>
 					)}
 				</div>
-				<Modal show={modal}>
+				<Modal show={createFileModal}>
 					<FileCreationView
 						uid={uid}
 						refreshPage={getAllFiles}
-						handleModalClose={handleModalClose}
+						handleModalClose={handleCreateFileModalClose}
+					/>
+				</Modal>
+				<Modal show={shareFileModal}>
+					<ShareFileView
+						file={currentFileToShare}
+						refreshPage={getAllFiles}
+						handleModalClose={handleShareFileModalClose}
 					/>
 				</Modal>
 			</main>

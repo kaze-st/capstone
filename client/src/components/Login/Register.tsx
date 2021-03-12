@@ -14,6 +14,8 @@ export default function Register(): JSX.Element {
 	const [newUser, setNewUser] = useState({
 		email: '',
 		password: '',
+		firstName: '',
+		lastName: '',
 		confirmPassword: ''
 	});
 
@@ -25,6 +27,16 @@ export default function Register(): JSX.Element {
 
 	const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setNewUser({ ...newUser, email: event.target.value });
+	};
+
+	const handleFirstNameChange = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setNewUser({ ...newUser, firstName: event.target.value });
+	};
+
+	const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setNewUser({ ...newUser, lastName: event.target.value });
 	};
 
 	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +65,9 @@ export default function Register(): JSX.Element {
 				const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 				await axios.post(`${url}/api/v1/user/create-user`, {
 					uid: credentials.user?.uid,
-					name: 'firstName',
-					lastName: 'lastName'
+					email: newUser.email,
+					name: newUser.firstName,
+					lastName: newUser.lastName
 				});
 			}
 		} catch {
@@ -90,6 +103,18 @@ export default function Register(): JSX.Element {
 					value={newUser.email}
 					placeholder="Email Address"
 					onChange={handleEmailChange}
+				/>
+				<input
+					type="text"
+					value={newUser.firstName}
+					placeholder="First Name"
+					onChange={handleFirstNameChange}
+				/>
+				<input
+					type="text"
+					value={newUser.lastName}
+					placeholder="Last Name"
+					onChange={handleLastNameChange}
 				/>
 				<input
 					type="password"
