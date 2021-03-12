@@ -82,6 +82,10 @@ a {
 	flex-wrap: nowrap;
 }
 
+.landing-nav li:hover, .files-nav li:hover, .active-nav {
+	background-color: rgb(0 63 105);
+}
+
 header,
 .flex-container,
 footer {

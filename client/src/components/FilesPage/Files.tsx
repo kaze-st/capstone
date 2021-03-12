@@ -1,4 +1,5 @@
 import './Files.scss';
+import '../../Spinner.scss';
 
 import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
@@ -11,15 +12,6 @@ import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-
-interface IFileViewFile {
-	_id: string;
-	name: string;
-	createdOn: string;
-	lastEditedOn: string;
-	owner: string;
-	extension: string;
-}
 
 enum FilePath {
 	Owned = 'ownedFiles',
@@ -221,7 +213,16 @@ export default function Files(): JSX.Element {
 						</ul>
 					</nav>
 					{isLoading ? (
-						<p>Loading</p>
+						<div id="floatingCirclesG">
+							<div className="f_circleG" id="frotateG_01" />
+							<div className="f_circleG" id="frotateG_02" />
+							<div className="f_circleG" id="frotateG_03" />
+							<div className="f_circleG" id="frotateG_04" />
+							<div className="f_circleG" id="frotateG_05" />
+							<div className="f_circleG" id="frotateG_06" />
+							<div className="f_circleG" id="frotateG_07" />
+							<div className="f_circleG" id="frotateG_08" />
+						</div>
 					) : (
 						<div className="inner-file-container">
 							{fileViewPath !== 'sharedFiles' ? (

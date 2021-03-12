@@ -2,7 +2,7 @@ export default interface IFile {
 	_id: string;
 	name: string;
 	createdOn: string;
-	editedOn: string;
+	lastEditedOn: string;
 	owner: string;
 	extension: string;
 }
