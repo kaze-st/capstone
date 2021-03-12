@@ -187,7 +187,7 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 					{currCollaboratorsCards}
 				</div>
 				<div>
-					Pending Collaborators:
+					<p className="card-creation-label">Pending Collaborators:</p>
 					{pendingCollaboratorsCards}
 				</div>
 				<button
