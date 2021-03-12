@@ -114,7 +114,7 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 
 			setEmail('');
 		} catch {
-			setError('Failed to find user');
+			setError('No user associated with that email. Please use a valid email.');
 		}
 	};
 
