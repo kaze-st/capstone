@@ -1,9 +1,10 @@
-import React from 'react';
 import './Modal.scss';
+
+import React from 'react';
 
 interface IModalProp {
 	show: boolean;
-	children: any;
+	children: JSX.Element | JSX.Element[] | string;
 }
 
 export default function Modal(props: IModalProp): JSX.Element {

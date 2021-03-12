@@ -20,8 +20,8 @@ export function FileExtensionIcon(props: IFileExtensionIcon): JSX.Element {
 				className={`extension-icon ${extension}`}
 				onClick={onClick}
 				tabIndex={0}
-				onKeyDown={() => {}}
 				role="button"
+				aria-hidden="true"
 			>
 				<img id={extension} src={logoSrc} alt={`logo for ${extension}`} />
 			</div>
@@ -48,12 +48,6 @@ export default function FileCreation(props: IFileCreationProps): JSX.Element {
 
 	const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setNewFile({ ...newFile, name: event.target.value });
-	};
-
-	const handleExtensionChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		setNewFile({ ...newFile, extension: event.target.value });
 	};
 
 	const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
