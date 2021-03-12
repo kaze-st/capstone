@@ -6,23 +6,16 @@ import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import FileCreationView from './FileCreationView';
+import FilePath from '../../types/FilePath';
 import IFile from './interfaces/IFile';
 import Modal from './Modal';
+import RouteParams from '../../types/RouteParams';
 import ShareFileView from './ShareFileView';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-
-enum FilePath {
-	Owned = 'ownedFiles',
-	Shared = 'sharedFiles'
-}
-
-interface RouteParams {
-	ownedOrShared: FilePath;
-}
 
 export default function Files(): JSX.Element {
 	const [allFiles, setAllFiles] = useState({
