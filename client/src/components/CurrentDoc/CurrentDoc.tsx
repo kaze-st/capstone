@@ -14,9 +14,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// eslint-disable-next-line
-// const MonacoBinding = require('y-monaco');
-
 interface MatchParams {
 	fid: string;
 }
@@ -24,45 +21,46 @@ export default function CurrentDoc(
 	props: RouteComponentProps<MatchParams>
 ): JSX.Element {
 	const { match } = props;
-	console.log('props lolol ', match.params.fid);
 
+	// eslint-disable-next-line
 	const editorRef = useRef<any>(null);
+	// eslint-disable-next-line
 	const provider = useRef<any>(null);
 	const [file, setFile] = useState<IFile | null>(null);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
+	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { fid } = match.params;
 
 	useEffect(() => {
 		axios
 			.get(`${url}/api/v1/file/get-file`, { params: { fid } })
 			.then((response) => {
-				console.log(response);
 				setFile(response.data);
 			});
 	}, [url, fid]);
 
 	useEffect(() => {
-		console.log('editor', editorRef);
-
 		return () => {
 			if (provider.current === null) {
 				return;
 			}
-			console.log('called');
 			provider.current.destroy();
 		};
 	});
+
+	if (wsurl === undefined || url === undefined) {
+		return <></>;
+	}
+
+	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor: any): void => {
-		console.log('here3');
 		editorRef.current = editor;
 		const ydoc = new Y.Doc();
 		const ytext = ydoc.getText('content');
-		provider.current = new WebsocketProvider(
-			'ws://localhost:8080',
-			match.params.fid,
-			ydoc
-		);
+		provider.current = new WebsocketProvider(wsurl, match.params.fid, ydoc);
+
+		// eslint-disable-next-line
 		const monacoBinding = new MonacoBinding(
 			ytext,
 			/** @type {monaco.editor.ITextModel} */ editor.getModel(),
@@ -72,11 +70,8 @@ export default function CurrentDoc(
 	};
 
 	if (file === null) {
-		console.log('here');
 		return <p>Loading...</p>;
 	}
-
-	console.log('file', file);
 
 	const displayedFileName = `${file.name}.${file.extension}`;
 	return (

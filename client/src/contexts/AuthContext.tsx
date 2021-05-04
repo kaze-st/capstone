@@ -4,6 +4,11 @@ import UserContext from '../types/UserContext';
 import { auth } from '../firebase-config';
 import axios from 'axios';
 import firebase from 'firebase/app';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
 interface IAuthContext {
 	userContext: UserContext | null | undefined;
@@ -72,16 +77,29 @@ export function AuthProvider({ children }: Props): JSX.Element {
 				setLoading(false);
 				return;
 			}
-			user.getIdToken(true).then((idToken) => {
+			user.getIdToken(true).then(async (idToken) => {
+				axios.interceptors.request.use((config) => {
+					config.headers.Authorization = idToken;
+					return config;
+				});
+
+				const response = await axios.get(
+					`${url}/api/v1/user/get-user?uid=${user.uid}`
+				);
+
+				if (response.data.user === null) {
+					await axios.post(`${url}/api/v1/user/create-user`, {
+						uid: user.uid,
+						name: 'firstName',
+						lastName: 'lastName'
+					});
+				}
+
 				const tempUserContext: UserContext = {
 					firebaseUser: user,
 					idToken
 				};
 				setUserContext(tempUserContext);
-				axios.interceptors.request.use((config) => {
-					config.headers.Authorization = idToken;
-					return config;
-				});
 
 				setLoading(false);
 			});

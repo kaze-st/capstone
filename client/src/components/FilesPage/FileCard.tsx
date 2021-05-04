@@ -15,7 +15,6 @@ interface IFileProp {
 
 export default function FileCard(props: IFileProp): JSX.Element {
 	const { imageSource, name, extension, fid } = props;
-	console.log(fid);
 	return (
 		<div>
 			<ContextMenuTrigger id="same_unique_identifier">
