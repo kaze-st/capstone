@@ -1,4 +1,7 @@
+import * as Y from 'yjs';
+
 import { Request, Response } from 'express';
+
 import FileModel from '@models/FileModel';
 import UserModel from '@models/UserModel';
 import { startSession } from 'mongoose';
@@ -20,6 +23,10 @@ export default class FileController {
 			return;
 		}
 
+		const doc = new Y.Doc();
+		doc.getText('content');
+		const newState = Y.encodeStateAsUpdateV2(doc);
+		const buffer = Buffer.from(newState);
 		const currTime = new Date();
 		const newFile = new FileModel({
 			name: reqBody.name,
@@ -27,8 +34,9 @@ export default class FileController {
 			createdOn: currTime,
 			lastEditedOn: currTime,
 			owner: ownerUID,
-			// sharedTo: new Array<string>(),
-			extension: reqBody.extension
+			sharedTo: new Array<string>(),
+			extension: reqBody.extension,
+			state: buffer
 		});
 
 		owner.ownedFiles.push(newFile._id);
@@ -83,7 +91,7 @@ export default class FileController {
 			return;
 		}
 
-		const fid = String(req.query.fid);
+		const fid = String(reqBody.fid);
 		const file = await FileModel.findById(fid);
 		if (file === null) {
 			res.status(400).jsonp({ message: 'File not found' });
@@ -95,16 +103,24 @@ export default class FileController {
 			return;
 		}
 
-		if (receiver.sharedFiles.includes(file._id)) {
+		if (
+			receiver.sharedFiles.includes(file._id) ||
+			file.sharedTo.includes(receiver.uid)
+		) {
 			res.status(400).jsonp({ message: 'File already shared with this user' });
 			return;
 		}
 
 		receiver.sharedFiles.push(file._id);
+		file.sharedTo.push(receiver.uid);
+		const session = await startSession();
 
 		try {
-			await receiver.save();
+			session.startTransaction();
+			await Promise.all([receiver.save(), file.save()]);
+			session.commitTransaction();
 		} catch (err) {
+			session.abortTransaction();
 			let message = err?.message;
 			if (message === null || message === undefined) {
 				message = 'Error saving files';

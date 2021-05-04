@@ -1,24 +1,16 @@
+import './Files.scss';
+
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import FileCard from './FileCard';
 import FileCreationView from './FileCreationView';
+import IFile from '../../types/IFile';
 import Modal from './Modal';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
-import './Files.scss';
-
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-
-interface IFileViewFile {
-	_id: string;
-	name: string;
-	createdOn: string;
-	editedOn: string;
-	owner: string;
-	extension: string;
-}
 
 enum FilePath {
 	Owned = 'ownedFiles',
@@ -31,10 +23,10 @@ interface RouteParams {
 
 export default function Files(): JSX.Element {
 	const [allFiles, setAllFiles] = useState({
-		ownedFiles: Array<IFileViewFile>(),
-		sharedFiles: Array<IFileViewFile>()
+		ownedFiles: Array<IFile>(),
+		sharedFiles: Array<IFile>()
 	});
-	const [displayFiles, setDisplayFiles] = useState<Array<IFileViewFile>>([]);
+	const [displayFiles, setDisplayFiles] = useState<Array<IFile>>([]);
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [modal, setModal] = useState(false);
@@ -100,6 +92,8 @@ export default function Files(): JSX.Element {
 			<FileCard
 				// eslint-disable-next-line
 				key={file._id}
+				// eslint-disable-next-line
+				fid={file._id}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}
@@ -122,6 +116,8 @@ export default function Files(): JSX.Element {
 					imageSource={`/logo/${file.extension}.png`}
 					name={file.name}
 					extension={file.extension}
+					// eslint-disable-next-line
+					fid={file._id}
 				/>
 			);
 		});

@@ -1,0 +1,18 @@
+.editor-nav {
+	margin: 0;
+	.editor-nav-links {
+		margin: 0;
+	}
+	li {
+		display: inline-block;
+	}
+
+	.display-name {
+		float: none;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, 100%);
+		color: white;
+		font-weight: 600;
+	}
+}

@@ -9,6 +9,7 @@ export abstract class BaseModel<T extends Document> {
 		const schema = this.getSchema();
 		const name = this.getName();
 		mongoose.Schema.Types.String.checkRequired((v) => typeof v === 'string');
+		mongoose.Schema.Types.Buffer.checkRequired((v) => Buffer.isBuffer(v));
 		return mongoose.model<T>(name, schema);
 	}
 }
