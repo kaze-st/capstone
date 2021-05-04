@@ -1,4 +1,27 @@
 .dimmed {
 	background: rgba(0, 0, 0, 0.5);
-	opacity: 50%;
+	opacity: 0.5;
+}
+
+// for everything outside the modal to
+// be unclickable
+main.modal-open {
+	pointer-events: none;
+}
+
+main.modal-open button {
+	pointer-events: auto;
+}
+
+main.modal-open input {
+	pointer-events: auto;
+}
+
+main.modal-open label {
+	pointer-events: auto;
+}
+
+// for the +NEW FILE button
+main.modal-open .white-button {
+	pointer-events: none;
 }

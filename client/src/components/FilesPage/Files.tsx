@@ -1,25 +1,21 @@
 import './Files.scss';
+import '../../Spinner.scss';
 
+import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
-import FileCard from './FileCard';
 import FileCreationView from './FileCreationView';
-import IFile from '../../types/IFile';
+import FilePath from '../../types/FilePath';
+import IFile from './interfaces/IFile';
 import Modal from './Modal';
+import RouteParams from '../../types/RouteParams';
+import ShareFileView from './ShareFileView';
+import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-
-enum FilePath {
-	Owned = 'ownedFiles',
-	Shared = 'sharedFiles'
-}
-
-interface RouteParams {
-	ownedOrShared: FilePath;
-}
 
 export default function Files(): JSX.Element {
 	const [allFiles, setAllFiles] = useState({
@@ -29,10 +25,14 @@ export default function Files(): JSX.Element {
 	const [displayFiles, setDisplayFiles] = useState<Array<IFile>>([]);
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const [modal, setModal] = useState(false);
+	const [createFileModal, setCreateFileModal] = useState(false);
+	const [shareFileModal, setShareFileModal] = useState(false);
+	const [modalOpen, setModaOpen] = useState(false);
 	const [modalBackgroundState, setModalBackgroundState] = useState(
 		'not-dimmed'
 	);
+
+	const [currentFileToShare, setCurrentFileToShare] = useState<IFile>();
 
 	const urlParams = useParams<RouteParams>();
 	const fileViewPath = urlParams.ownedOrShared;
@@ -41,6 +41,30 @@ export default function Files(): JSX.Element {
 	const { userContext } = useAuth();
 
 	const uid = userContext?.firebaseUser?.uid;
+
+	const handleCreateFileModalOpen = () => {
+		setCreateFileModal(true);
+		setModaOpen(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleCreateFileModalClose = () => {
+		setCreateFileModal(false);
+		setModaOpen(false);
+		setModalBackgroundState('not-dimmed');
+	};
+
+	const handleShareFileModalOpen = () => {
+		setShareFileModal(true);
+		setModaOpen(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleShareFileModalClose = () => {
+		setShareFileModal(false);
+		setModaOpen(false);
+		setModalBackgroundState('not-dimmed');
+	};
 
 	const getAllFiles = async () => {
 		try {
@@ -92,40 +116,45 @@ export default function Files(): JSX.Element {
 			<FileCard
 				// eslint-disable-next-line
 				key={file._id}
-				// eslint-disable-next-line
-				fid={file._id}
+				file={file}
 				imageSource={`/logo/${file.extension}.png`}
 				name={file.name}
 				extension={file.extension}
+				handleShareModalOpen={handleShareFileModalOpen}
+				setCurrentFileToShare={setCurrentFileToShare}
 			/>
 		);
 	});
 
-	const recentFiles = displayFiles
+	const recentFiles = [...displayFiles]
 		.sort((file1, file2) => {
-			const date1 = new Date(file1.editedOn);
-			const date2 = new Date(file2.editedOn);
-			return date1.getTime() - date2.getTime();
+			const date1 = new Date(file1.lastEditedOn);
+			const date2 = new Date(file2.lastEditedOn);
+			return date2.getTime() - date1.getTime();
 		})
 		.slice(0, 3)
 		.map((file) => {
 			return (
-				<FileCard
+				<RecentFileCard
 					// eslint-disable-next-line
 					key={file._id}
 					imageSource={`/logo/${file.extension}.png`}
 					name={file.name}
 					extension={file.extension}
-					// eslint-disable-next-line
-					fid={file._id}
+					file={file}
+					lastEditedOn={file.lastEditedOn}
+					handleShareModalOpen={handleShareFileModalOpen}
+					setCurrentFileToShare={setCurrentFileToShare}
 				/>
 			);
 		});
+
 	const handleLogOut = async () => {
 		if (logout) {
 			await logout();
 		}
 	};
+
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		if (event.target.value === '') {
@@ -148,23 +177,11 @@ export default function Files(): JSX.Element {
 		}
 	};
 
-	const handleModalOpen = () => {
-		setModal(true);
-		setModalBackgroundState('dimmed');
-	};
-
-	const handleModalClose = () => {
-		setModal(false);
-		setModalBackgroundState('not-dimmed');
-	};
-
 	if (userContext === null) {
 		return <Redirect to="/" />;
 	}
 
-	return isLoading ? (
-		<p>Loading</p>
-	) : (
+	return (
 		<div className="page-wrapper">
 			<header className="files-header">
 				<div className="logo-and-title">
@@ -184,7 +201,7 @@ export default function Files(): JSX.Element {
 					LOG OUT
 				</button>
 			</header>
-			<main>
+			<main className={modalOpen ? 'modal-open' : ''}>
 				<div
 					className={`flex-container outer-file-container ${modalBackgroundState}`}
 				>
@@ -212,31 +229,66 @@ export default function Files(): JSX.Element {
 							</Link>
 						</ul>
 					</nav>
-					<div className="inner-file-container">
-						<div>
-							<h2>Recent Files</h2>
-							<div className="file-container">{recentFiles}</div>
-							<h2>Files</h2>
-							<button type="submit" onClick={handleModalOpen}>
-								Create File
-							</button>
-
-							<div className="file-container">{files}</div>
+					{isLoading ? (
+						<Spinner />
+					) : (
+						<div className="inner-file-container">
+							{fileViewPath !== 'sharedFiles' ? (
+								<div className="createFile-and-filter-container">
+									<button
+										className="white-button"
+										type="submit"
+										onClick={handleCreateFileModalOpen}
+									>
+										+ NEW FILE
+									</button>
+									<hr />
+								</div>
+							) : (
+								<></>
+							)}
+							{displayFiles.length === 0 ? (
+								<div className="empty-img-container">
+									<img alt="" src="../img/emptyFiles.png" />
+									<p>No Files Found!</p>
+								</div>
+							) : (
+								<div>
+									<h2>RECENT</h2>
+									<div className="file-container">{recentFiles}</div>
+									<h2>FILES</h2>
+									<div className="file-container">{files}</div>
+								</div>
+							)}
 						</div>
-					</div>
+					)}
 				</div>
-				<Modal show={modal}>
-					<FileCreationView
-						uid={uid}
-						refreshPage={getAllFiles}
-						handleModalClose={handleModalClose}
-					/>
-				</Modal>
+				{createFileModal ? (
+					<Modal show={createFileModal}>
+						<FileCreationView
+							uid={uid}
+							refreshPage={getAllFiles}
+							handleModalClose={handleCreateFileModalClose}
+						/>
+					</Modal>
+				) : (
+					<></>
+				)}
+				{shareFileModal ? (
+					<Modal show={shareFileModal}>
+						<ShareFileView
+							file={currentFileToShare}
+							refreshPage={getAllFiles}
+							handleModalClose={handleShareFileModalClose}
+						/>
+					</Modal>
+				) : (
+					<></>
+				)}
 			</main>
 			<footer>
 				<p>
-					&copy; CodeCollab 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao
-					Chen
+					&copy; SSCode 2021 by Khoa Luong, Thomas That, Nam Pham, and Hao Chen
 				</p>
 				<img alt="" src="../img/ischool-logo.png" aria-hidden="true" />
 			</footer>

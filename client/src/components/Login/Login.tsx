@@ -1,8 +1,10 @@
 import './Login.scss';
+import '../../Spinner.scss';
 
 import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
+import Spinner from '../../Spinner';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import firebase from 'firebase/app';
@@ -77,7 +79,7 @@ export function Login(): JSX.Element {
 	}
 
 	return isLoading ? (
-		<p>Loading</p>
+		<Spinner />
 	) : (
 		<form className="login-form" onSubmit={handleSubmit}>
 			<div className="header">Log Into Your Account</div>

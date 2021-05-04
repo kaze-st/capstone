@@ -54,6 +54,29 @@ export default (app: Router): void => {
 		FileController.shareFile
 	);
 
+	router.post(
+		'/share-file-multiple-receivers',
+		[
+			body('owner')
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('owner must be a non empty string'),
+			body('receivers')
+				.not()
+				.isEmpty()
+				.isArray()
+				.withMessage('receivers must be a non empty array'),
+			body('fid')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('fid must be a non empty string')
+		],
+		FileController.shareFileToMultipleUsers
+	);
+
 	router.get(
 		'/get-file',
 		[

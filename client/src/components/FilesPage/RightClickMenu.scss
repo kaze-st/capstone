@@ -1,0 +1,28 @@
+.right-click-menu {
+	background-color: white;
+	border: 1px solid black;
+	border-radius: 0.5rem;
+	color: black;
+	font-size: 1rem;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: flex-start;
+	width: 10rem;
+	height: 5rem;
+}
+
+.right-click-menu .menu-item {
+	padding: 0.5rem 1rem;
+	width: inherit;
+	cursor: pointer;
+}
+
+.right-click-menu .menu-item:hover {
+	background-color: gray;
+}
+
+.right-click-menu a {
+	width: 100%;
+}

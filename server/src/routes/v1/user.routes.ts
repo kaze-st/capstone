@@ -14,6 +14,12 @@ export default (app: Router): void => {
 				.isEmpty()
 				.isString()
 				.withMessage('uid must be a non empty string'),
+			body('email')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('uid must be a non empty string'),
 			body('name')
 				.not()
 				.isEmpty()
@@ -38,7 +44,32 @@ export default (app: Router): void => {
 				.isString()
 				.withMessage('uid must be a non empty string')
 		],
-		UserController.getUser
+		UserController.getUserByUID
+	);
+
+	router.get(
+		'/get-user-email',
+		[
+			query('email')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('uid must be a non empty string')
+		],
+		UserController.getUserWithoutFilesByEmail
+	);
+
+	// POST because fucking axios does not allow for GET request to have a request body
+	router.post(
+		'/get-users',
+		[
+			body('uids')
+				.exists()
+				.isArray()
+				.withMessage('uids must be an array that exist')
+		],
+		UserController.getAllUsersByIds
 	);
 
 	router.get(

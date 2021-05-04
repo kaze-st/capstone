@@ -5,4 +5,5 @@ export default interface IFile {
 	lastEditedOn: string;
 	owner: string;
 	extension: string;
+	sharedTo: Array<string>;
 }

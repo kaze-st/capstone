@@ -1,8 +1,10 @@
 import './Login.scss';
+import '../../Spinner.scss';
 
 import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
 
+import Spinner from '../../Spinner';
 import dotenv from 'dotenv';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -12,6 +14,8 @@ export default function Register(): JSX.Element {
 	const [newUser, setNewUser] = useState({
 		email: '',
 		password: '',
+		firstName: '',
+		lastName: '',
 		confirmPassword: ''
 	});
 
@@ -23,6 +27,16 @@ export default function Register(): JSX.Element {
 
 	const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setNewUser({ ...newUser, email: event.target.value });
+	};
+
+	const handleFirstNameChange = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setNewUser({ ...newUser, firstName: event.target.value });
+	};
+
+	const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setNewUser({ ...newUser, lastName: event.target.value });
 	};
 
 	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +61,7 @@ export default function Register(): JSX.Element {
 			setError('');
 			setLoading(true);
 			if (signUp) {
-				await signUp(newUser.email, newUser.password);
+				await signUp(newUser);
 			}
 		} catch {
 			setError('Failed to create an account');
@@ -59,7 +73,9 @@ export default function Register(): JSX.Element {
 		return <Redirect to="/files/ownedFiles" />;
 	}
 
-	return (
+	return loading ? (
+		<Spinner />
+	) : (
 		<form className="login-form" onSubmit={handleSubmit}>
 			<div className="header">Create your account</div>
 
@@ -71,6 +87,18 @@ export default function Register(): JSX.Element {
 					value={newUser.email}
 					placeholder="Email Address"
 					onChange={handleEmailChange}
+				/>
+				<input
+					type="text"
+					value={newUser.firstName}
+					placeholder="First Name"
+					onChange={handleFirstNameChange}
+				/>
+				<input
+					type="text"
+					value={newUser.lastName}
+					placeholder="Last Name"
+					onChange={handleLastNameChange}
 				/>
 				<input
 					type="password"

@@ -1,4 +1,5 @@
 import './CurrentDoc.scss';
+import '../../Spinner.scss';
 
 import * as Y from 'yjs';
 
@@ -8,6 +9,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import IFile from '../../types/IFile';
 import { MonacoBinding } from 'y-monaco';
+import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -70,8 +72,18 @@ export default function CurrentDoc(
 	};
 
 	if (file === null) {
-		return <p>Loading...</p>;
+		return <Spinner />;
 	}
+
+	// change this shit later we don't support txt
+	const extensions = {
+		py: 'python',
+		java: 'java',
+		rb: 'ruby',
+		go: 'go',
+		js: 'javascript',
+		cpp: 'cpp'
+	};
 
 	const displayedFileName = `${file.name}.${file.extension}`;
 	return (
@@ -88,7 +100,7 @@ export default function CurrentDoc(
 			</nav>
 			<Editor
 				height="calc(100vh - 23px - 80px)"
-				defaultLanguage="javascript"
+				defaultLanguage={extensions[file.extension]}
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
 			/>
