@@ -44,11 +44,11 @@ export function AuthProvider({ children }: Props): JSX.Element {
 	// not sure how to decouple firebase from this useState
 	const [userContext, setUserContext] = useState<UserContext | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [newUser, setNewUser] = useState<INewUser | null>();
+	const [newUser, setNewUser] = useState<INewUser | null>(null);
 
 	const signUp = (nu: INewUser): Promise<firebase.auth.UserCredential> => {
-		const result = auth.createUserWithEmailAndPassword(nu.email, nu.password);
 		setNewUser(nu);
+		const result = auth.createUserWithEmailAndPassword(nu.email, nu.password);
 		return result;
 	};
 
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: Props): JSX.Element {
 					`${url}/api/v1/user/get-user?uid=${user.uid}`
 				);
 
-				if (response.data.user === null) {
+				if (newUser !== null && response.data.user === null) {
 					await axios.post(`${url}/api/v1/user/create-user`, {
 						uid: user.uid,
 						email: user.email,
