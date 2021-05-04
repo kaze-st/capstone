@@ -3,6 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
+// eslint-disable-next-line
 const PrivateRoute = ({ component: Component, ...rest }: any): JSX.Element => {
 	const { userContext } = useAuth();
 

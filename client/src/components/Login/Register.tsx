@@ -3,10 +3,9 @@ import '../../Spinner.scss';
 
 import { Link, Redirect } from 'react-router-dom';
 import React, { useState } from 'react';
-import dotenv, { load } from 'dotenv';
 
 import Spinner from '../../Spinner';
-import axios from 'axios';
+import dotenv from 'dotenv';
 import { useAuth } from '../../contexts/AuthContext';
 
 dotenv.config();
@@ -62,14 +61,7 @@ export default function Register(): JSX.Element {
 			setError('');
 			setLoading(true);
 			if (signUp) {
-				const credentials = await signUp(newUser.email, newUser.password);
-				const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
-				await axios.post(`${url}/api/v1/user/create-user`, {
-					uid: credentials.user?.uid,
-					email: newUser.email,
-					name: newUser.firstName,
-					lastName: newUser.lastName
-				});
+				await signUp(newUser.email, newUser.password);
 			}
 		} catch {
 			setError('Failed to create an account');

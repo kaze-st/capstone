@@ -3,9 +3,9 @@ import './ExtensionsColor.scss';
 
 import CardRightClickMenu from './RightClickMenu';
 import { ContextMenuTrigger } from 'react-contextmenu';
+import IFile from './interfaces/IFile';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import IFile from './interfaces/IFile';
 
 interface IFileCardProp {
 	imageSource: string;

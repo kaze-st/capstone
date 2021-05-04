@@ -50,7 +50,7 @@ export default class UserController {
 		const user = await UserModel.findOne({ uid: uid });
 
 		if (user === null) {
-			res.status(400).jsonp({ message: 'User not found' });
+			res.status(200).jsonp({ user: null });
 			return;
 		}
 
