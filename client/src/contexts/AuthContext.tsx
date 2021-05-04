@@ -90,6 +90,7 @@ export function AuthProvider({ children }: Props): JSX.Element {
 				if (response.data.user === null) {
 					await axios.post(`${url}/api/v1/user/create-user`, {
 						uid: user.uid,
+						email: user.email,
 						name: 'firstName',
 						lastName: 'lastName'
 					});
