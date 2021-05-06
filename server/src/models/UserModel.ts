@@ -9,6 +9,8 @@ export interface IUser extends Document {
 	lastName: string;
 	ownedFiles: Array<ObjectId>;
 	sharedFiles: Array<ObjectId>;
+	ownedFolders: Array<ObjectId>;
+	sharedFolders: Array<ObjectId>;
 }
 
 class UserModel extends BaseModel<IUser> {
@@ -24,7 +26,9 @@ class UserModel extends BaseModel<IUser> {
 				name: { type: String, required: true },
 				lastName: { type: String, required: true },
 				ownedFiles: { type: [ObjectId], required: true },
-				sharedFiles: { type: [ObjectId], required: true }
+				sharedFiles: { type: [ObjectId], required: true },
+				ownedFolders: { type: [ObjectId], required: true },
+				sharedFolders: { type: [ObjectId], required: true }
 			},
 			{ collection: 'users' }
 		);
