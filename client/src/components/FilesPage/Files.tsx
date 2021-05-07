@@ -9,6 +9,7 @@ import FileCreationView from './FileCreationView';
 import FilePath from '../../types/FilePath';
 import IFile from './interfaces/IFile';
 import Modal from './Modal';
+import ProjectTreeView from '../ProjectView/ProjectTreeView';
 import RouteParams from '../../types/RouteParams';
 import ShareFileView from './ShareFileView';
 import Spinner from '../../Spinner';
@@ -263,6 +264,7 @@ export default function Files(): JSX.Element {
 						</div>
 					)}
 				</div>
+				<ProjectTreeView />
 				{createFileModal ? (
 					<Modal show={createFileModal}>
 						<FileCreationView
