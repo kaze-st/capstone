@@ -37,7 +37,7 @@ export default function CardRightClickMenu(
 				<Link to={`/file/${fid}`}>
 					<MenuItem className="menu-item">Open File</MenuItem>
 				</Link>
-				{fileViewPath === FilePath.Owned ? (
+				{fileViewPath === FilePath.OwnedFiles ? (
 					<MenuItem onClick={handleShare} className="menu-item">
 						Share File
 					</MenuItem>
