@@ -94,7 +94,7 @@ function createTree(root) {
 			childrenLeft -= 1;
 			const currChild = childrenQueue.dequeue();
 			const childKeyList = Object.keys(currChild).filter(
-				(key) => key !== 'content' && key !== 'name'
+				(key) => key !== 'content' && key !== 'name' && key !== 'extension'
 			);
 			const node: MapNode = {
 				module: currChild['name'],
@@ -127,10 +127,20 @@ export default function ProjectTreeView(): JSX.Element {
 
 	const textforFile = new Y.Text();
 	file1.set('content', textforFile);
-	// file1.set('extension', 'html');
+	file1.set('extension', 'html');
 	file1.set('name', 'index.html');
 
 	textforFile.insert(0, 'hfuewihfuiewhfiewhu');
+
+	const file2 = new Y.Map();
+	folder1.set('filecss', file2);
+
+	const textforFile2 = new Y.Text();
+	file2.set('content', textforFile);
+	file2.set('extension', 'css');
+	file2.set('name', 'index.css');
+
+	textforFile2.insert(0, 'wdwdwdwdwdw');
 	const [tree, setTree] = useState(createTree(folder1.toJSON()));
 	const addItem = (itemType, active) => {};
 
