@@ -1,5 +1,6 @@
 import './Files.scss';
 import '../../Spinner.scss';
+import 'react-ui-tree/dist/react-ui-tree.css';
 
 import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
@@ -229,6 +230,7 @@ export default function Files(): JSX.Element {
 								</li>
 							</Link>
 						</ul>
+						<ProjectTreeView />
 					</nav>
 					{isLoading ? (
 						<Spinner />
@@ -264,7 +266,6 @@ export default function Files(): JSX.Element {
 						</div>
 					)}
 				</div>
-				<ProjectTreeView />
 				{createFileModal ? (
 					<Modal show={createFileModal}>
 						<FileCreationView
