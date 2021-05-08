@@ -1,4 +1,4 @@
-export default interface IFolder {
+export default interface IProjectFolder {
 	_id: string;
 	name: string;
 	createdOn: string;

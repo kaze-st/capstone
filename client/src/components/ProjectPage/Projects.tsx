@@ -3,30 +3,44 @@ import '../../Spinner.scss';
 
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import IFolder from './interfaces/IFolder';
+import IProjectFolder from './interfaces/IProjectFolder';
 import Modal from '../Modal/Modal';
 import RouteParams from '../../types/RouteParams';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import NavBar from '../NavBar/NavBar';
+import ProjectCreationView from './ProjectCreationView';
+import FilePath from '../../types/FilePath';
+import ProjectCard from './ProjectCard';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
 export default function Folders(): JSX.Element {
-	const [displayFolders, setDisplayFolders] = useState<Array<IFolder>>([]);
+	const [allFolders, setAllFolders] = useState({
+		ownedFolders: Array<IProjectFolder>(),
+		sharedFolders: Array<IProjectFolder>()
+	});
+	const [displayFolders, setDisplayFolders] = useState<Array<IProjectFolder>>(
+		[]
+	);
 
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const [createFileModal, setCreateFileModal] = useState(false);
-	const [shareFileModal, setShareFileModal] = useState(false);
+	const [createFolderModal, setCreateFolderModal] = useState(false);
+	const [shareFolderModal, setSharedFolderModal] = useState(false);
 	const [modalOpen, setModaOpen] = useState(false);
 	const [modalBackgroundState, setModalBackgroundState] = useState(
 		'not-dimmed'
 	);
 
+	const [
+		currentProjectToShare,
+		setCurrentProjectToShare
+	] = useState<IProjectFolder>();
+
 	const urlParams = useParams<RouteParams>();
-	const fileViewPath = urlParams.ownedOrShared;
+	const folderViewPath = urlParams.ownedOrShared;
 
 	const { logout } = useAuth();
 	const { userContext } = useAuth();
@@ -34,30 +48,95 @@ export default function Folders(): JSX.Element {
 	const uid = userContext?.firebaseUser?.uid;
 
 	const handleCreateFileModalOpen = () => {
-		setCreateFileModal(true);
+		setCreateFolderModal(true);
 		setModaOpen(true);
 		setModalBackgroundState('dimmed');
 	};
 
-	const handleCreateFileModalClose = () => {
-		setCreateFileModal(false);
+	const handleCreateFolderModalClose = () => {
+		setCreateFolderModal(false);
 		setModaOpen(false);
 		setModalBackgroundState('not-dimmed');
 	};
 
-	const handleShareFileModalOpen = () => {
-		setShareFileModal(true);
+	const handleShareFolderModalOpen = () => {
+		setSharedFolderModal(true);
 		setModaOpen(true);
 		setModalBackgroundState('dimmed');
 	};
 
-	const handleShareFileModalClose = () => {
-		setShareFileModal(false);
+	const handleShareFolderModalClose = () => {
+		setSharedFolderModal(false);
 		setModaOpen(false);
 		setModalBackgroundState('not-dimmed');
 	};
 
-	const folders = [];
+	const getAllFolders = async () => {
+		try {
+			setIsLoading(true);
+			setError('');
+			const result = await axios.get(`${url}/api/v1/user/folders?uid=${uid}`);
+			const resData = result.data;
+			console.log(resData);
+			setAllFolders({
+				ownedFolders: resData.ownedFolders,
+				sharedFolders: resData.sharedFiles
+			});
+			if (folderViewPath === FilePath.OwnedProjects) {
+				setDisplayFolders(resData.ownedFolders);
+			} else if (folderViewPath === FilePath.SharedProjects) {
+				setDisplayFolders(resData.sharedFolders);
+			}
+		} catch {
+			setError(error);
+		}
+		setIsLoading(false);
+	};
+
+	useEffect(() => {
+		const getFolders = async () => {
+			try {
+				setIsLoading(true);
+				setError('');
+				const result = await axios.get(`${url}/api/v1/user/folders?uid=${uid}`);
+				const resData = result.data;
+				console.log(resData);
+				setAllFolders({
+					ownedFolders: resData.ownedFolders,
+					sharedFolders: resData.sharedFiles
+				});
+				if (folderViewPath === FilePath.OwnedProjects) {
+					setDisplayFolders(resData.ownedFolders);
+				} else if (folderViewPath === FilePath.SharedProjects) {
+					setDisplayFolders(resData.sharedFolders);
+				}
+			} catch {
+				setError(error);
+			}
+			setIsLoading(false);
+		};
+		getFolders();
+	}, [uid, folderViewPath, error]);
+
+	const projectFolders = displayFolders
+		.sort((folder1, folder2) => {
+			const date1 = new Date(folder1.lastEditedOn);
+			const date2 = new Date(folder2.lastEditedOn);
+			return date2.getTime() - date1.getTime();
+		})
+		.map((folder) => {
+			return (
+				<ProjectCard
+					// eslint-disable-next-line
+					key={folder._id}
+					name={folder.name}
+					project={folder}
+					lastEditedOn={folder.lastEditedOn}
+					handleShareModalOpen={handleShareFolderModalOpen}
+					setCurrentProjectToShare={setCurrentProjectToShare}
+				/>
+			);
+		});
 
 	useEffect(() => {
 		const getFiles = async () => {
@@ -72,7 +151,7 @@ export default function Folders(): JSX.Element {
 			setIsLoading(false);
 		};
 		getFiles();
-	}, [uid, fileViewPath, error]);
+	}, [uid, folderViewPath, error]);
 
 	const handleLogOut = async () => {
 		if (logout) {
@@ -108,12 +187,12 @@ export default function Folders(): JSX.Element {
 				<div
 					className={`flex-container outer-file-container ${modalBackgroundState}`}
 				>
-					<NavBar fileViewPath={fileViewPath} />
+					<NavBar fileViewPath={folderViewPath} />
 					{isLoading ? (
 						<Spinner />
 					) : (
 						<div className="inner-file-container">
-							{fileViewPath !== 'sharedFiles' ? (
+							{folderViewPath !== 'sharedFiles' ? (
 								<div className="createFile-and-filter-container">
 									<button
 										className="white-button"
@@ -137,24 +216,24 @@ export default function Folders(): JSX.Element {
 									{/* <h2>RECENT</h2>
 									<div className="file-container">{recentFiles}</div> */}
 									<h2>PROJECTS</h2>
-									<div className="file-container">{folders}</div>
+									<div className="file-container">{projectFolders}</div>
 								</div>
 							)}
 						</div>
 					)}
 				</div>
-				{/* {createFileModal ? (
-					<Modal show={createFileModal}>
-						<FileCreationView
+				{createFolderModal ? (
+					<Modal show={createFolderModal}>
+						<ProjectCreationView
 							uid={uid}
-							refreshPage={getAllFiles}
-							handleModalClose={handleCreateFileModalClose}
+							refreshPage={getAllFolders}
+							handleModalClose={handleCreateFolderModalClose}
 						/>
 					</Modal>
 				) : (
 					<></>
 				)}
-				{shareFileModal ? (
+				{/* {shareFileModal ? (
 					<Modal show={shareFileModal}>
 						<ShareFileView
 							file={currentFileToShare}

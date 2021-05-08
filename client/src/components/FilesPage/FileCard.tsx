@@ -1,7 +1,7 @@
 import './FileCard.scss';
 import './ExtensionsColor.scss';
 
-import CardRightClickMenu from './RightClickMenu';
+import FileCardRightClickMenu from '../RightClickMenu/FileRightClickMenu';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import IFile from './interfaces/IFile';
 import { Link } from 'react-router-dom';
@@ -44,7 +44,7 @@ export default function FileCard(props: IFileCardProp): JSX.Element {
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CardRightClickMenu
+			<FileCardRightClickMenu
 				file={file}
 				id={fid}
 				handleShareModalOpen={handleShareModalOpen}
@@ -86,7 +86,7 @@ export function RecentFileCard(
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<CardRightClickMenu
+			<FileCardRightClickMenu
 				id={uniqueID}
 				file={file}
 				handleShareModalOpen={handleShareModalOpen}

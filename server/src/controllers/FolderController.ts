@@ -25,7 +25,21 @@ export default class FolderController {
 		}
 
 		const doc = new Y.Doc();
-		doc.getMap('structure');
+		const ymap = doc.getMap('structure');
+		if (reqBody.hasStarterFiles) {
+			const htmlFile = new Y.Map();
+			ymap.set('html', htmlFile);
+			htmlFile.set('content', new Y.Text());
+
+			const cssFile = new Y.Map();
+			ymap.set('css', cssFile);
+			htmlFile.set('content', new Y.Text());
+
+			const jsFile = new Y.Map();
+			ymap.set('js', jsFile);
+			htmlFile.set('content', new Y.Text());
+		}
+
 		const newState = Y.encodeStateAsUpdateV2(doc);
 		const buffer = Buffer.from(newState);
 		const currTime = new Date();

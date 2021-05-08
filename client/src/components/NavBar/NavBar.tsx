@@ -26,13 +26,21 @@ export default function NavBar(props: { fileViewPath: string }): JSX.Element {
 					</li>
 				</Link>
 				<Link to="/projects/ownedProjects">
-					<li>
+					<li
+						className={
+							fileViewPath === FilePath.OwnedProjects ? 'active-nav' : ''
+						}
+					>
 						<img alt="" src="../img/ownedFiles.png" aria-hidden="true" />
 						<div>My Projects</div>
 					</li>
 				</Link>
 				<Link to="/projects/sharedProjects">
-					<li>
+					<li
+						className={
+							fileViewPath === FilePath.SharedProjects ? 'active-nav' : ''
+						}
+					>
 						<img alt="" src="../img/sharedFiles.png" aria-hidden="true" />
 						<div>Shared Projects</div>
 					</li>
