@@ -4,11 +4,11 @@ import { ContextMenu, MenuItem } from 'react-contextmenu';
 import { Link, useParams } from 'react-router-dom';
 
 import FilePath from '../../types/FilePath';
-import IFile from './interfaces/IFile';
+import IFile from '../FilesPage/interfaces/IFile';
 import React from 'react';
 import RouteParams from '../../types/RouteParams';
 
-interface ICardRightClickMenuProps {
+interface IFileCardRightClickMenuProps {
 	id: string;
 	file: IFile;
 	handleShareModalOpen: () => void;
@@ -17,8 +17,8 @@ interface ICardRightClickMenuProps {
 	>;
 }
 
-export default function CardRightClickMenu(
-	props: ICardRightClickMenuProps
+export default function FileCardRightClickMenu(
+	props: IFileCardRightClickMenuProps
 ): JSX.Element {
 	const { id, file, handleShareModalOpen, setCurrentFileToShare } = props;
 	// eslint-disable-next-line
@@ -37,7 +37,7 @@ export default function CardRightClickMenu(
 				<Link to={`/file/${fid}`}>
 					<MenuItem className="menu-item">Open File</MenuItem>
 				</Link>
-				{fileViewPath === FilePath.Owned ? (
+				{fileViewPath === FilePath.OwnedFiles ? (
 					<MenuItem onClick={handleShare} className="menu-item">
 						Share File
 					</MenuItem>

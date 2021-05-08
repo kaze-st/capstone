@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 
 import FolderModel from '@models/FolderModel';
 import UserModel from '@models/UserModel';
-import consola from 'consola';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
 
@@ -25,7 +24,21 @@ export default class FolderController {
 		}
 
 		const doc = new Y.Doc();
-		doc.getMap('structure');
+		const ymap = doc.getMap('structure');
+		if (reqBody.hasStarterFiles) {
+			const htmlFile = new Y.Map();
+			ymap.set('html', htmlFile);
+			htmlFile.set('content', new Y.Text());
+
+			const cssFile = new Y.Map();
+			ymap.set('css', cssFile);
+			htmlFile.set('content', new Y.Text());
+
+			const jsFile = new Y.Map();
+			ymap.set('js', jsFile);
+			htmlFile.set('content', new Y.Text());
+		}
+
 		const newState = Y.encodeStateAsUpdateV2(doc);
 		const buffer = Buffer.from(newState);
 		const currTime = new Date();
@@ -141,10 +154,8 @@ export default class FolderController {
 		req: Request,
 		res: Response
 	): Promise<void> {
-		consola.log(req.body);
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			consola.log(errors.array());
 			res.status(422).jsonp(errors.array());
 			return;
 		}

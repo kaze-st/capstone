@@ -1,6 +1,8 @@
 enum FilePath {
-	Owned = 'ownedFiles',
-	Shared = 'sharedFiles'
+	OwnedFiles = 'ownedFiles',
+	SharedFiles = 'sharedFiles',
+	OwnedProjects = 'ownedProjects',
+	SharedProjects = 'sharedProjects'
 }
 
 export default FilePath;

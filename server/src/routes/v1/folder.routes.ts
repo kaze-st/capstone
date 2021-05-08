@@ -18,7 +18,12 @@ export default (app: Router): void => {
 				.not()
 				.isEmpty()
 				.isString()
-				.withMessage('owner must be a non empty string')
+				.withMessage('owner must be a non empty string'),
+			body('hasStarterFiles')
+				.not()
+				.isEmpty()
+				.isBoolean()
+				.withMessage('hasStarterFiles must be a valid boolean')
 		],
 		FolderController.createFolder
 	);
