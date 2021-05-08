@@ -3,18 +3,19 @@ import '../../Spinner.scss';
 
 import { Link, Redirect, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+
+import FilePath from '../../types/FilePath';
 import IProjectFolder from './interfaces/IProjectFolder';
 import Modal from '../Modal/Modal';
+import NavBar from '../NavBar/NavBar';
+import ProjectCard from './ProjectCard';
+import ProjectCreationView from './ProjectCreationView';
 import RouteParams from '../../types/RouteParams';
+import ShareFileDialogue from '../Modal/ShareView';
+import SharingMode from '../Modal/SharingMode';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import NavBar from '../NavBar/NavBar';
-import ProjectCreationView from './ProjectCreationView';
-import FilePath from '../../types/FilePath';
-import ProjectCard from './ProjectCard';
-import SharingMode from '../Modal/SharingMode';
-import ShareFileDialogue from '../Modal/ShareView';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
@@ -165,7 +166,7 @@ export default function Folders(): JSX.Element {
 						<Spinner />
 					) : (
 						<div className="inner-file-container">
-							{folderViewPath !== 'sharedFiles' ? (
+							{folderViewPath !== 'sharedProjects' ? (
 								<div className="createFile-and-filter-container">
 									<button
 										className="white-button"
