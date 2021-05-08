@@ -106,8 +106,8 @@ export default class FolderController {
 			return;
 		}
 
-		const fid = String(reqBody.fid);
-		const folder = await FolderModel.findById(fid);
+		const pid = String(reqBody.pid);
+		const folder = await FolderModel.findById(pid);
 		if (folder === null) {
 			res.status(400).jsonp({ message: 'Folder not found' });
 			return;
@@ -181,8 +181,8 @@ export default class FolderController {
 			return;
 		}
 
-		const fid = String(reqBody.fid);
-		const folder = await FolderModel.findById(fid);
+		const pid = String(reqBody.pid);
+		const folder = await FolderModel.findById(pid);
 		if (folder === null) {
 			res.status(400).jsonp({ message: 'Folder not found' });
 			return;
@@ -234,8 +234,8 @@ export default class FolderController {
 			return;
 		}
 
-		const fid = String(req.query.fid);
-		const folder = await FolderModel.findById(fid);
+		const pid = String(req.query.pid);
+		const folder = await FolderModel.findById(pid);
 
 		if (folder === null) {
 			res.status(400).jsonp({ message: 'Folder not found' });

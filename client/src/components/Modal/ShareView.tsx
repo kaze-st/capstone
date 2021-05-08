@@ -155,22 +155,27 @@ export default function ShareFileDialog(props: IShareDialog): JSX.Element {
 				return collaborator.uid;
 			});
 
-			// eslint-disable-next-line
-			let fid = file?._id;
-			let sharingMultipleReceiverUrls = `${url}/api/v1/file/share-file-multiple-receivers`;
-			let owner = file?.owner;
-			if (sharingMode === SharingMode.Project) {
-				// eslint-disable-next-line
-				fid = projectFolder?._id;
-				sharingMultipleReceiverUrls = `${url}/api/v1/folder/share-folder-multiple-receivers`;
-				owner = projectFolder?.owner;
+			if (sharingMode === SharingMode.File) {
+				await axios.post(`${url}/api/v1/file/share-file-multiple-receivers`, {
+					owner: file?.owner,
+					receivers,
+					// eslint-disable-next-line
+					fid: file?._id
+				});
 			}
 
-			await axios.post(sharingMultipleReceiverUrls, {
-				owner,
-				receivers,
-				fid
-			});
+			if (sharingMode === SharingMode.Project) {
+				await axios.post(
+					`${url}/api/v1/folder/share-folder-multiple-receivers`,
+					{
+						owner: projectFolder?.owner,
+						receivers,
+						// eslint-disable-next-line
+						pid: projectFolder?._id
+					}
+				);
+			}
+
 			setPendingCollaborators([]);
 			handleModalClose(event);
 			refreshPage();

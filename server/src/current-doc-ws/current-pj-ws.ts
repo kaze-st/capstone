@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 import * as _ from 'lodash';
 
-import FileModel from '@models/FileModel';
+import FolderModel from '@models/FolderModel';
 import WebSocket from 'ws';
 import http from 'http';
 
@@ -13,25 +13,25 @@ export default (server: http.Server): void => {
 
 	utils.setPersistence({
 		bindState: async (documentName: string, doc: Y.Doc) => {
-			const debouncedSaveFile = _.debounce(async (update) => {
+			const debouncedSaveFolder = _.debounce(async (update) => {
 				Y.applyUpdate(doc, update);
 				const encodedState = Y.encodeStateAsUpdate(doc);
-				const file = await FileModel.findById(documentName);
+				const folder = await FolderModel.findById(documentName);
 
-				if (file) {
-					file.state = Buffer.from(encodedState);
-					file.lastEditedOn = new Date();
-					file.save();
+				if (folder) {
+					folder.state = Buffer.from(encodedState);
+					folder.lastEditedOn = new Date();
+					folder.save();
 				}
 			}, 5000);
 
 			// eslint-disable-next-line
 			doc.on('update', async (update: any) => {
-				debouncedSaveFile(update);
+				debouncedSaveFolder(update);
 			});
 
-			const file = await FileModel.findById(documentName);
-			const state = file?.state;
+			const folder = await FolderModel.findById(documentName);
+			const state = folder?.state;
 			if (!state) {
 				return;
 			}
@@ -41,12 +41,12 @@ export default (server: http.Server): void => {
 		},
 		writeState: async (string: string, doc: Y.Doc) => {
 			const encodedState = Y.encodeStateAsUpdate(doc);
-			const file = await FileModel.findById(string);
+			const folder = await FolderModel.findById(string);
 
-			if (file) {
-				file.state = Buffer.from(encodedState);
-				file.lastEditedOn = new Date();
-				file.save();
+			if (folder) {
+				folder.state = Buffer.from(encodedState);
+				folder.lastEditedOn = new Date();
+				folder.save();
 			}
 
 			return new Promise<void>((resolve) => {
