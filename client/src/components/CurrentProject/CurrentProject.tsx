@@ -72,11 +72,13 @@ export default function CurrentProject(
 		console.log('ws', wsurl);
 		structure.observeDeep((e) => {
 			console.log('strucurte', structure.toJSON());
+			console.log('event', e);
+
+			if (e[0].target instanceof Y.Map) {
+				setProject(ydoc.getMap('structure').toJSON());
+			}
 		});
 
-		structure.observe((e) => {
-			console.log('strucurte', structure.toJSON());
-		});
 		// eslint-disable-next-line
 		// const monacoBinding = new MonacoBinding(
 		// 	ytext,
