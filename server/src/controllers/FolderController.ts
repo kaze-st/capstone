@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 
 import FolderModel from '@models/FolderModel';
 import UserModel from '@models/UserModel';
-import consola from 'consola';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
 
@@ -155,10 +154,8 @@ export default class FolderController {
 		req: Request,
 		res: Response
 	): Promise<void> {
-		consola.log(req.body);
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			consola.log(errors.array());
 			res.status(422).jsonp(errors.array());
 			return;
 		}

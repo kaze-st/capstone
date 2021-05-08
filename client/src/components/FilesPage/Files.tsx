@@ -10,11 +10,12 @@ import FilePath from '../../types/FilePath';
 import IFile from './interfaces/IFile';
 import Modal from '../Modal/Modal';
 import RouteParams from '../../types/RouteParams';
-import ShareFileView from './ShareFileView';
+import ShareFileView from '../Modal/ShareView';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import NavBar from '../NavBar/NavBar';
+import SharingMode from '../Modal/SharingMode';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
@@ -255,6 +256,7 @@ export default function Files(): JSX.Element {
 				{shareFileModal ? (
 					<Modal show={shareFileModal}>
 						<ShareFileView
+							sharingMode={SharingMode.File}
 							file={currentFileToShare}
 							refreshPage={getAllFiles}
 							handleModalClose={handleShareFileModalClose}

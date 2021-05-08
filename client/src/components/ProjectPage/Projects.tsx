@@ -13,14 +13,12 @@ import NavBar from '../NavBar/NavBar';
 import ProjectCreationView from './ProjectCreationView';
 import FilePath from '../../types/FilePath';
 import ProjectCard from './ProjectCard';
+import SharingMode from '../Modal/SharingMode';
+import ShareFileDialogue from '../Modal/ShareView';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
 export default function Folders(): JSX.Element {
-	const [allFolders, setAllFolders] = useState({
-		ownedFolders: Array<IProjectFolder>(),
-		sharedFolders: Array<IProjectFolder>()
-	});
 	const [displayFolders, setDisplayFolders] = useState<Array<IProjectFolder>>(
 		[]
 	);
@@ -77,11 +75,6 @@ export default function Folders(): JSX.Element {
 			setError('');
 			const result = await axios.get(`${url}/api/v1/user/folders?uid=${uid}`);
 			const resData = result.data;
-			console.log(resData);
-			setAllFolders({
-				ownedFolders: resData.ownedFolders,
-				sharedFolders: resData.sharedFiles
-			});
 			if (folderViewPath === FilePath.OwnedProjects) {
 				setDisplayFolders(resData.ownedFolders);
 			} else if (folderViewPath === FilePath.SharedProjects) {
@@ -100,11 +93,6 @@ export default function Folders(): JSX.Element {
 				setError('');
 				const result = await axios.get(`${url}/api/v1/user/folders?uid=${uid}`);
 				const resData = result.data;
-				console.log(resData);
-				setAllFolders({
-					ownedFolders: resData.ownedFolders,
-					sharedFolders: resData.sharedFiles
-				});
 				if (folderViewPath === FilePath.OwnedProjects) {
 					setDisplayFolders(resData.ownedFolders);
 				} else if (folderViewPath === FilePath.SharedProjects) {
@@ -137,21 +125,6 @@ export default function Folders(): JSX.Element {
 				/>
 			);
 		});
-
-	useEffect(() => {
-		const getFiles = async () => {
-			try {
-				setIsLoading(true);
-				setError('');
-				const result = await axios.get(`${url}/api/v1/user/files?uid=${uid}`);
-				const resData = result.data;
-			} catch {
-				setError(error);
-			}
-			setIsLoading(false);
-		};
-		getFiles();
-	}, [uid, folderViewPath, error]);
 
 	const handleLogOut = async () => {
 		if (logout) {
@@ -233,17 +206,18 @@ export default function Folders(): JSX.Element {
 				) : (
 					<></>
 				)}
-				{/* {shareFileModal ? (
-					<Modal show={shareFileModal}>
-						<ShareFileView
-							file={currentFileToShare}
-							refreshPage={getAllFiles}
-							handleModalClose={handleShareFileModalClose}
+				{shareFolderModal ? (
+					<Modal show={shareFolderModal}>
+						<ShareFileDialogue
+							sharingMode={SharingMode.Project}
+							projectFolder={currentProjectToShare}
+							refreshPage={getAllFolders}
+							handleModalClose={handleShareFolderModalClose}
 						/>
 					</Modal>
 				) : (
 					<></>
-				)} */}
+				)}
 			</main>
 			<footer>
 				<p>

@@ -2,8 +2,10 @@ import './Collaborator.scss';
 
 import React, { useEffect, useState } from 'react';
 
-import IFile from './interfaces/IFile';
+import IFile from '../FilesPage/interfaces/IFile';
 import axios from 'axios';
+import SharingMode from './SharingMode';
+import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 /*
@@ -33,14 +35,24 @@ export function Collaborator(props: ICollaborator): JSX.Element {
 	);
 }
 
-interface IShareFileDialog {
-	file: IFile | undefined;
+interface IShareDialog {
+	sharingMode: SharingMode;
+	file?: IFile | undefined;
+	projectFolder?: IProjectFolder | undefined;
 	refreshPage: () => void;
 	handleModalClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
-	const { file, refreshPage, handleModalClose } = props;
+export default function ShareFileDialog(props: IShareDialog): JSX.Element {
+	const {
+		sharingMode,
+		file,
+		projectFolder,
+		refreshPage,
+		handleModalClose
+	} = props;
+
+	console.log(props);
 
 	const [error, setError] = useState('');
 	const [email, setEmail] = useState('');
@@ -55,10 +67,19 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 		const getCurrentCollaborators = async () => {
 			try {
 				setError('');
+
+				let uids = new Array<string>();
+				if (sharingMode === SharingMode.File) {
+					uids = file?.sharedTo as Array<string>;
+				} else if (sharingMode === SharingMode.Project) {
+					uids = projectFolder?.sharedTo as Array<string>;
+				}
+
 				const result = await axios.post(`${url}/api/v1/user/get-users`, {
-					uids: file?.sharedTo
+					uids
 				});
 				const resData = result.data;
+
 				const currCollaborators = resData.map((user) => {
 					return {
 						name: user.name,
@@ -73,9 +94,13 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 			}
 		};
 		getCurrentCollaborators();
-	}, [file]);
+	}, [file, projectFolder, sharingMode]);
 
-	if (file === undefined) {
+	if (sharingMode === SharingMode.File && file === undefined) {
+		return <></>;
+	}
+
+	if (sharingMode === SharingMode.Project && projectFolder === undefined) {
 		return <></>;
 	}
 
@@ -129,10 +154,20 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 			const receivers = pendingCollaborators.map((collaborator) => {
 				return collaborator.uid;
 			});
+
 			// eslint-disable-next-line
-			const fid = file._id;
-			await axios.post(`${url}/api/v1/file/share-file-multiple-receivers`, {
-				owner: file.owner,
+			let fid = file?._id;
+			let sharingMultipleReceiverUrls = `${url}/api/v1/file/share-file-multiple-receivers`;
+			let owner = file?.owner;
+			if (sharingMode === SharingMode.Project) {
+				// eslint-disable-next-line
+				fid = projectFolder?._id;
+				sharingMultipleReceiverUrls = `${url}/api/v1/folder/share-folder-multiple-receivers`;
+				owner = projectFolder?.owner;
+			}
+
+			await axios.post(sharingMultipleReceiverUrls, {
+				owner,
 				receivers,
 				fid
 			});
@@ -207,9 +242,16 @@ export default function ShareFileDialog(props: IShareFileDialog): JSX.Element {
 					className="blue-button"
 					onClick={handleAddAllPendingCollaborators}
 				>
-					Share File To Pending Collaborators
+					{sharingMode === SharingMode.File
+						? 'Share File To Pending Collaborators'
+						: 'Share Project To Pending Collaborators'}
 				</button>
 			</div>
 		</form>
 	);
 }
+
+ShareFileDialog.defaultProps = {
+	file: undefined,
+	projectFolder: undefined
+};

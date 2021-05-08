@@ -1,7 +1,7 @@
 import '../FilesPage/FileCard.scss';
 import '../FilesPage/ExtensionsColor.scss';
 
-import FolderCardRightClickMenu from '../RightClickMenu/FolderRightClickMenu';
+import ProjectFolderCardRightClickMenu from '../RightClickMenu/FolderRightClickMenu';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import IProjectFolder from './interfaces/IProjectFolder';
 import { Link } from 'react-router-dom';
@@ -43,7 +43,7 @@ export default function ProjectCard(props: IFileCardProp): JSX.Element {
 					</div>
 				</Link>
 			</ContextMenuTrigger>
-			<FolderCardRightClickMenu
+			<ProjectFolderCardRightClickMenu
 				projectFolder={project}
 				id={fid}
 				handleShareModalOpen={handleShareModalOpen}

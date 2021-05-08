@@ -17,7 +17,7 @@ interface IFolderCardRightClickMenuProps {
 	>;
 }
 
-export default function FolderCardRightClickMenu(
+export default function ProjectFolderCardRightClickMenu(
 	props: IFolderCardRightClickMenuProps
 ): JSX.Element {
 	const {

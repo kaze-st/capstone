@@ -150,7 +150,7 @@ export default class UserController {
 			_id: { $in: user.ownedFolders }
 		});
 
-		const sharedFolders = await FileModel.find({
+		const sharedFolders = await FolderModel.find({
 			_id: { $in: user.sharedFolders }
 		});
 
