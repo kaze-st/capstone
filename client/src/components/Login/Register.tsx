@@ -61,7 +61,7 @@ export default function Register(): JSX.Element {
 			setError('');
 			setLoading(true);
 			if (signUp) {
-				await signUp(newUser.email, newUser.password);
+				await signUp(newUser);
 			}
 		} catch {
 			setError('Failed to create an account');

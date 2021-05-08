@@ -1,7 +1,7 @@
-import FilePath from "./FilePath";
+import FilePath from './FilePath';
 
 interface RouteParams {
 	ownedOrShared: FilePath;
 }
 
-export default RouteParams
+export default RouteParams;

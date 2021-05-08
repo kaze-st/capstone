@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import UserContext from '../types/UserContext';
+import INewUser from '../types/INewUser';
 import { auth } from '../firebase-config';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -19,12 +20,7 @@ interface IAuthContext {
 				persistence?: firebase.auth.Auth.Persistence
 		  ) => Promise<firebase.auth.UserCredential>)
 		| null;
-	signUp:
-		| ((
-				email: string,
-				password: string
-		  ) => Promise<firebase.auth.UserCredential>)
-		| null;
+	signUp: ((newUser: INewUser) => Promise<firebase.auth.UserCredential>) | null;
 	logout: (() => Promise<void>) | null;
 }
 
@@ -48,12 +44,12 @@ export function AuthProvider({ children }: Props): JSX.Element {
 	// not sure how to decouple firebase from this useState
 	const [userContext, setUserContext] = useState<UserContext | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [newUser, setNewUser] = useState<INewUser | null>(null);
 
-	const signUp = (
-		email: string,
-		password: string
-	): Promise<firebase.auth.UserCredential> => {
-		return auth.createUserWithEmailAndPassword(email, password);
+	const signUp = (nu: INewUser): Promise<firebase.auth.UserCredential> => {
+		setNewUser(nu);
+		const result = auth.createUserWithEmailAndPassword(nu.email, nu.password);
+		return result;
 	};
 
 	const login = async (
@@ -87,12 +83,12 @@ export function AuthProvider({ children }: Props): JSX.Element {
 					`${url}/api/v1/user/get-user?uid=${user.uid}`
 				);
 
-				if (response.data.user === null) {
+				if (newUser !== null && response.data.user === null) {
 					await axios.post(`${url}/api/v1/user/create-user`, {
 						uid: user.uid,
 						email: user.email,
-						name: 'firstName',
-						lastName: 'lastName'
+						name: newUser == null ? '' : newUser.firstName,
+						lastName: newUser == null ? '' : newUser.lastName
 					});
 				}
 
@@ -108,7 +104,7 @@ export function AuthProvider({ children }: Props): JSX.Element {
 
 		// make sure to unsub whenever we unmount
 		return unsubscribe;
-	}, []);
+	}, [newUser]);
 
 	const contextValue: IAuthContext = {
 		userContext,

@@ -9,13 +9,19 @@ import React, { useEffect, useState } from 'react';
 import FileCreationView from './FileCreationView';
 import FilePath from '../../types/FilePath';
 import IFile from './interfaces/IFile';
+<<<<<<< HEAD
 import Modal from './Modal';
 import ProjectTreeView from '../ProjectView/ProjectTreeView';
+=======
+import Modal from '../Modal/Modal';
+>>>>>>> main
 import RouteParams from '../../types/RouteParams';
-import ShareFileView from './ShareFileView';
+import ShareFileView from '../Modal/ShareView';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
+import NavBar from '../NavBar/NavBar';
+import SharingMode from '../Modal/SharingMode';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
@@ -78,7 +84,7 @@ export default function Files(): JSX.Element {
 				ownedFiles: resData.ownedFiles,
 				sharedFiles: resData.sharedFiles
 			});
-			if (fileViewPath === FilePath.Shared) {
+			if (fileViewPath === FilePath.SharedFiles) {
 				setDisplayFiles(resData.sharedFiles);
 			} else {
 				setDisplayFiles(resData.ownedFiles);
@@ -100,7 +106,7 @@ export default function Files(): JSX.Element {
 					ownedFiles: resData.ownedFiles,
 					sharedFiles: resData.sharedFiles
 				});
-				if (fileViewPath === FilePath.Shared) {
+				if (fileViewPath === FilePath.SharedFiles) {
 					setDisplayFiles(resData.sharedFiles);
 				} else {
 					setDisplayFiles(resData.ownedFiles);
@@ -160,14 +166,14 @@ export default function Files(): JSX.Element {
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		if (event.target.value === '') {
-			if (fileViewPath === FilePath.Shared) {
+			if (fileViewPath === FilePath.SharedFiles) {
 				setDisplayFiles(allFiles.sharedFiles);
 			} else {
 				setDisplayFiles(allFiles.ownedFiles);
 			}
 		} else {
 			let filesToBeFiltered;
-			if (fileViewPath === FilePath.Shared) {
+			if (fileViewPath === FilePath.SharedFiles) {
 				filesToBeFiltered = allFiles.sharedFiles;
 			} else {
 				filesToBeFiltered = allFiles.ownedFiles;
@@ -207,31 +213,7 @@ export default function Files(): JSX.Element {
 				<div
 					className={`flex-container outer-file-container ${modalBackgroundState}`}
 				>
-					<nav className="files-nav">
-						<ul>
-							<Link to="/files/ownedFiles">
-								<li
-									className={
-										fileViewPath === FilePath.Owned ? 'active-nav' : ''
-									}
-								>
-									<img alt="" src="../img/ownedFiles.png" aria-hidden="true" />
-									<div>My Files</div>
-								</li>
-							</Link>
-							<Link to="/files/sharedFiles">
-								<li
-									className={
-										fileViewPath === FilePath.Shared ? 'active-nav' : ''
-									}
-								>
-									<img alt="" src="../img/sharedFiles.png" aria-hidden="true" />
-									<div>Shared Files</div>
-								</li>
-							</Link>
-						</ul>
-						<ProjectTreeView />
-					</nav>
+					<NavBar fileViewPath={fileViewPath} />
 					{isLoading ? (
 						<Spinner />
 					) : (
@@ -280,6 +262,7 @@ export default function Files(): JSX.Element {
 				{shareFileModal ? (
 					<Modal show={shareFileModal}>
 						<ShareFileView
+							sharingMode={SharingMode.File}
 							file={currentFileToShare}
 							refreshPage={getAllFiles}
 							handleModalClose={handleShareFileModalClose}

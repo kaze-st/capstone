@@ -85,5 +85,18 @@ export default (app: Router): void => {
 		UserController.getAllFiles
 	);
 
+	router.get(
+		'/folders',
+		[
+			query('uid')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('uid must be a non empty string')
+		],
+		UserController.getAllFolders
+	);
+
 	app.use('/user', router);
 };
