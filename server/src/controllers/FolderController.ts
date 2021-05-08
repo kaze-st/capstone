@@ -29,14 +29,17 @@ export default class FolderController {
 			const htmlFile = new Y.Map();
 			ymap.set('html', htmlFile);
 			htmlFile.set('content', new Y.Text());
+			htmlFile.set('name', 'index.html');
 
 			const cssFile = new Y.Map();
 			ymap.set('css', cssFile);
-			htmlFile.set('content', new Y.Text());
+			cssFile.set('content', new Y.Text());
+			cssFile.set('name', 'index.css');
 
 			const jsFile = new Y.Map();
 			ymap.set('js', jsFile);
-			htmlFile.set('content', new Y.Text());
+			jsFile.set('content', new Y.Text());
+			jsFile.set('name', 'index.js');
 		}
 
 		const newState = Y.encodeStateAsUpdateV2(doc);

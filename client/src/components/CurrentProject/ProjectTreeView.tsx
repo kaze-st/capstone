@@ -85,18 +85,20 @@ function createTree(root) {
 
 	const childrenQueue = new Queue<JSON>();
 	childrenQueue.enqueue(root);
+	let idCount = 0;
 	while (parentQueue.length > 0) {
+		idCount += 1;
 		const currParent = parentQueue.dequeue();
 		let childrenLeft = currParent.childrenCount;
 		while (childrenLeft > 0 && childrenQueue.length > 0) {
 			childrenLeft -= 1;
 			const currChild = childrenQueue.dequeue();
 			const childKeyList = Object.keys(currChild).filter(
-				(key) => key !== 'content' && key !== 'name' && key !== 'id'
+				(key) => key !== 'content' && key !== 'name'
 			);
 			const node: MapNode = {
 				module: currChild['name'],
-				id: currChild['id'],
+				id: idCount.toString(),
 				childrenCount: childKeyList.length,
 				leaf: currChild['content'] !== undefined,
 				collapsed: false,
@@ -122,12 +124,11 @@ export default function ProjectTreeView(): JSX.Element {
 	const file1 = new Y.Map();
 	folder1.set('filehtml', file1);
 	folder1.set('name', 'Project 1');
-	folder1.set('id', 0);
 
 	const textforFile = new Y.Text();
 	file1.set('content', textforFile);
+	// file1.set('extension', 'html');
 	file1.set('name', 'index.html');
-	file1.set('id', 1);
 
 	textforFile.insert(0, 'hfuewihfuiewhfiewhu');
 	const [tree, setTree] = useState(createTree(folder1.toJSON()));
@@ -168,12 +169,6 @@ export default function ProjectTreeView(): JSX.Element {
 				{renderFileFolderToolbar(isFolder, node.module)}
 			</ContextMenuTrigger>
 		);
-	};
-
-	const toggleCollapse = () => {
-		const newTree = tree;
-		newTree.collapsed = !newTree.collapsed;
-		setTree(newTree);
 	};
 	return (
 		<div>

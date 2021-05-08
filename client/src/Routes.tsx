@@ -1,6 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
 
 import CurrentDoc from './components/CurrentDoc/CurrentDoc';
+import CurrentProject from './components/CurrentProject/CurrentProject';
 import Files from './components/FilesPage/Files';
 import Folders from './components/ProjectPage/Projects';
 import LandingPage from './components/LandingPage/LandingPage';
@@ -24,6 +25,7 @@ export default function Routes(): JSX.Element {
 			<PrivateRoute exact path="/files/:ownedOrShared" component={Files} />
 			<PrivateRoute exact path="/file/:fid" component={CurrentDoc} />
 			<PrivateRoute exact path="/projects/:ownedOrShared" component={Folders} />
+			<PrivateRoute exact path="/project/:pid" component={CurrentProject} />
 		</Switch>
 	);
 }
