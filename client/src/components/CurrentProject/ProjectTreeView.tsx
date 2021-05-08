@@ -113,7 +113,7 @@ function createTree(root) {
 			});
 		}
 	}
-	return map;
+	return map.children !== undefined ? map.children[0] : map;
 }
 
 export default function ProjectTreeView(): JSX.Element {
@@ -188,7 +188,7 @@ export default function ProjectTreeView(): JSX.Element {
 				</StrollableContainer>
 			</div>
 
-			<ContextMenu id="FILE_CONTEXT_MENU">
+			<ContextMenu id="FILE_CONTEXT_MENU" className="right-click-menu">
 				{/* Add copy / cut later */}
 				{/* <MenuItem data={{ action: "copy" }} onClick={this.handleContextClick}>
             Copy
