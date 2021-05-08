@@ -9,19 +9,14 @@ import React, { useEffect, useState } from 'react';
 import FileCreationView from './FileCreationView';
 import FilePath from '../../types/FilePath';
 import IFile from './interfaces/IFile';
-<<<<<<< HEAD
-import Modal from './Modal';
-import ProjectTreeView from '../ProjectView/ProjectTreeView';
-=======
 import Modal from '../Modal/Modal';
->>>>>>> main
+import NavBar from '../NavBar/NavBar';
 import RouteParams from '../../types/RouteParams';
 import ShareFileView from '../Modal/ShareView';
+import SharingMode from '../Modal/SharingMode';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import NavBar from '../NavBar/NavBar';
-import SharingMode from '../Modal/SharingMode';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
