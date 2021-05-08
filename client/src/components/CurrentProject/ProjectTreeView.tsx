@@ -136,7 +136,7 @@ export default function ProjectTreeView(): JSX.Element {
 	folder1.set('filecss', file2);
 
 	const textforFile2 = new Y.Text();
-	file2.set('content', textforFile);
+	file2.set('content', textforFile2);
 	file2.set('extension', 'css');
 	file2.set('name', 'index.css');
 
@@ -196,11 +196,13 @@ export default function ProjectTreeView(): JSX.Element {
           <MenuItem divider /> */}
 				<MenuItem
 					data={{ action: 'rename' }} /* onClick={this.handleContextClick} */
+					className="menu-item"
 				>
 					Rename
 				</MenuItem>
 				<MenuItem
 					data={{ action: 'delete' }} /* onClick={this.handleContextClick} */
+					className="menu-item"
 				>
 					Delete
 				</MenuItem>
