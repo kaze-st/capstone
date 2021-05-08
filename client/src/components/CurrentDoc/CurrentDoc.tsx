@@ -60,8 +60,11 @@ export default function CurrentDoc(
 		editorRef.current = editor;
 		const ydoc = new Y.Doc();
 		const ytext = ydoc.getText('content');
-		provider.current = new WebsocketProvider(wsurl, match.params.fid, ydoc);
-
+		provider.current = new WebsocketProvider(
+			wsurl,
+			`${match.params.fid}:file`,
+			ydoc
+		);
 		// eslint-disable-next-line
 		const monacoBinding = new MonacoBinding(
 			ytext,

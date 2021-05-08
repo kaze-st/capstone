@@ -8,6 +8,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
 import IFile from '../../types/IFile';
+import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 import { MonacoBinding } from 'y-monaco';
 import ProjectTreeView from './ProjectTreeView';
 import Spinner from '../../Spinner';
@@ -29,28 +30,29 @@ export default function CurrentProject(
 	const editorRef = useRef<any>(null);
 	// eslint-disable-next-line
 	const provider = useRef<any>(null);
-	// const [project, setProject] = useState<I | null>(null);
+	const [project, setProject] = useState<IProjectFolder | null>(null);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { pid } = match.params;
+	console.log('pid', pid);
+	useEffect(() => {
+		axios
+			.get(`${url}/api/v1/folder/get-folder`, { params: { pid } })
+			.then((response) => {
+				console.log('response', response);
+				setProject(response.data);
+			});
+	}, [url, pid]);
 
-	// useEffect(() => {
-	// 	axios
-	// 		.get(`${url}/api/v1/file/get-file`, { params: { fid } })
-	// 		.then((response) => {
-	// 			// setProject(response.data);
-	// 		});
-	// }, [url, fid]);
-
-	// useEffect(() => {
-	// 	return () => {
-	// 		if (provider.current === null) {
-	// 			return;
-	// 		}
-	// 		provider.current.destroy();
-	// 	};
-	// });
+	useEffect(() => {
+		return () => {
+			if (provider.current === null) {
+				return;
+			}
+			provider.current.destroy();
+		};
+	});
 
 	if (wsurl === undefined || url === undefined) {
 		return <></>;
@@ -59,11 +61,23 @@ export default function CurrentProject(
 	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor: any): void => {
 		editorRef.current = editor;
-		// const ydoc = new Y.Doc();
-		// const ytext = ydoc.getText('content');
-		// provider.current = new WebsocketProvider(wsurl, match.params.pid, ydoc);
+		const ydoc = new Y.Doc();
+		provider.current = new WebsocketProvider(
+			wsurl,
+			`${match.params.pid}:folder`,
+			ydoc
+		);
 
-		// // eslint-disable-next-line
+		const structure = ydoc.getMap('structure');
+		console.log('ws', wsurl);
+		structure.observeDeep((e) => {
+			console.log('strucurte', structure.toJSON());
+		});
+
+		structure.observe((e) => {
+			console.log('strucurte', structure.toJSON());
+		});
+		// eslint-disable-next-line
 		// const monacoBinding = new MonacoBinding(
 		// 	ytext,
 		// 	/** @type {monaco.editor.ITextModel} */ editor.getModel(),

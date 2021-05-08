@@ -1,10 +1,10 @@
 import '../FilesPage/FileCard.scss';
 import '../FilesPage/ExtensionsColor.scss';
 
-import ProjectFolderCardRightClickMenu from '../RightClickMenu/FolderRightClickMenu';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import IProjectFolder from './interfaces/IProjectFolder';
 import { Link } from 'react-router-dom';
+import ProjectFolderCardRightClickMenu from '../RightClickMenu/FolderRightClickMenu';
 import React from 'react';
 
 interface IFileCardProp {
@@ -31,7 +31,7 @@ export default function ProjectCard(props: IFileCardProp): JSX.Element {
 	return (
 		<div>
 			<ContextMenuTrigger id={pid}>
-				<Link to={`/projects/${pid}`}>
+				<Link to={`/project/${pid}`}>
 					<div className="file-card recent-file">
 						<div className="file-card-img-container">
 							<img src="../img/folder.png" alt="folder" />

@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 
 import FolderModel from '@models/FolderModel';
 import UserModel from '@models/UserModel';
+import consola from 'consola';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
 
@@ -42,7 +43,8 @@ export default class FolderController {
 			jsFile.set('name', 'index.js');
 		}
 
-		const newState = Y.encodeStateAsUpdateV2(doc);
+		const newState = Y.encodeStateAsUpdate(doc);
+		consola.log('new', newState);
 		const buffer = Buffer.from(newState);
 		const currTime = new Date();
 		const newFolder = new FolderModel({

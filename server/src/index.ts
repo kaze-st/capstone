@@ -33,12 +33,5 @@ app.get('/ping', (_, res) => {
 	res.jsonp({ message: 'pong' });
 });
 
-const projectWSApp = express();
-
-const projectWSServer = projectWSApp.listen(PROJECT_WS_PORT, async function () {
-	consola.info('Project WS server is listening on port: ' + PROJECT_WS_PORT);
-});
-
 registerAPIRoutes(app);
 registerWS(server);
-registerPojectWS(projectWSServer);
