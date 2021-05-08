@@ -41,7 +41,7 @@ export default (app: Router): void => {
 				.isEmpty()
 				.isString()
 				.withMessage('receiver must be a non empty string'),
-			body('fid')
+			body('pid')
 				.exists()
 				.not()
 				.isEmpty()
@@ -64,7 +64,7 @@ export default (app: Router): void => {
 				.isEmpty()
 				.isArray()
 				.withMessage('receivers must be a non empty array'),
-			body('fid')
+			body('pid')
 				.exists()
 				.not()
 				.isEmpty()
@@ -77,7 +77,7 @@ export default (app: Router): void => {
 	router.get(
 		'/get-folder',
 		[
-			query('fid')
+			query('pid')
 				.exists()
 				.not()
 				.isEmpty()

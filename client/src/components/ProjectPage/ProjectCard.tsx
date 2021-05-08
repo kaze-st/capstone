@@ -26,12 +26,12 @@ export default function ProjectCard(props: IFileCardProp): JSX.Element {
 		setCurrentProjectToShare
 	} = props;
 	// eslint-disable-next-line
-	const fid = project._id;
+	const pid = project._id;
 	const date = new Date(lastEditedOn);
 	return (
 		<div>
-			<ContextMenuTrigger id={fid}>
-				<Link to={`/projects/${fid}`}>
+			<ContextMenuTrigger id={pid}>
+				<Link to={`/projects/${pid}`}>
 					<div className="file-card recent-file">
 						<div className="file-card-img-container">
 							<img src="../img/folder.png" alt="folder" />
@@ -45,7 +45,7 @@ export default function ProjectCard(props: IFileCardProp): JSX.Element {
 			</ContextMenuTrigger>
 			<ProjectFolderCardRightClickMenu
 				projectFolder={project}
-				id={fid}
+				id={pid}
 				handleShareModalOpen={handleShareModalOpen}
 				setCurrentProjectToShare={setCurrentProjectToShare}
 			/>
