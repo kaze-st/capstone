@@ -31,16 +31,30 @@ export default class FolderController {
 			ymap.set('html', htmlFile);
 			htmlFile.set('content', new Y.Text());
 			htmlFile.set('name', 'index.html');
+			htmlFile.set('isFolder', false);
 
 			const cssFile = new Y.Map();
 			ymap.set('css', cssFile);
 			cssFile.set('content', new Y.Text());
 			cssFile.set('name', 'index.css');
+			cssFile.set('isFolder', false);
 
 			const jsFile = new Y.Map();
 			ymap.set('js', jsFile);
 			jsFile.set('content', new Y.Text());
 			jsFile.set('name', 'index.js');
+			jsFile.set('isFolder', false);
+
+			const testFolder = new Y.Map();
+			ymap.set('testFolder', testFolder);
+			testFolder.set('name', 'testFolder');
+			testFolder.set('isFolder', true);
+
+			const fileInsideTestFolder = new Y.Map();
+			testFolder.set('fileInsideFolder', fileInsideTestFolder);
+			fileInsideTestFolder.set('content', new Y.Text());
+			fileInsideTestFolder.set('name', 'testFile.test');
+			fileInsideTestFolder.set('isFolder', false);
 		}
 
 		const newState = Y.encodeStateAsUpdate(doc);
