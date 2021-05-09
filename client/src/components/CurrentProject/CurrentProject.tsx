@@ -15,6 +15,7 @@ import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import FolderTree from '../FolderTree/Tree';
 
 dotenv.config();
 
@@ -31,7 +32,10 @@ export default function CurrentProject(
 	// eslint-disable-next-line
 	const provider = useRef<any>(null);
 	const [project, setProject] = useState<Y.Map<unknown> | null>(null);
-	const [projectStructure, setProjectStructure] = useState<any | null>(null);
+	const [
+		projectStructure,
+		setProjectStructure
+	] = useState<Y.Map<unknown> | null>(null);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
@@ -107,7 +111,8 @@ export default function CurrentProject(
 					<li className="display-name">{displayedProjectName}</li>
 				</ul>
 			</nav>
-			{projectStructure && <ProjectTreeView project={projectStructure} />}
+			{/* {projectStructure && <ProjectTreeView project={projectStructure} />} */}
+			{projectStructure && <FolderTree project={projectStructure} />}
 			<Editor
 				height="calc(100vh - 23px - 80px)"
 				// defaultLanguage={extensions[project.extension]}

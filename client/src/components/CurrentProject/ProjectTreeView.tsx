@@ -80,7 +80,6 @@ interface IProjectStructure {
 	idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
 	};
-	misc: number;
 }
 
 function createTree(project) {
@@ -142,7 +141,7 @@ function createTree(project) {
 	}
 	const tree =
 		rootNode.children !== undefined ? rootNode.children[0] : rootNode;
-	const result: IProjectStructure = { tree, idToNodeMap, misc: 0 };
+	const result: IProjectStructure = { tree, idToNodeMap };
 	return result;
 }
 
@@ -159,7 +158,6 @@ export default function ProjectTreeView(props: IProps): JSX.Element {
 		if (itemType === AddItemType.File) {
 			console.log('file');
 			const newFile = new Y.Map();
-			const nextId = projectStructure.misc + 1;
 			const fileName = `file ${Math.random()}`;
 			currentFolder.set(fileName, newFile);
 			newFile.set('content', new Y.Text());
