@@ -30,7 +30,7 @@ export default function CurrentProject(
 	const editorRef = useRef<any>(null);
 	// eslint-disable-next-line
 	const provider = useRef<any>(null);
-	const [project, setProject] = useState<IProjectFolder | null>(null);
+	const [project, setProject] = useState<Y.Map<unknown> | null>(null);
 	const [projectStructure, setProjectStructure] = useState<any | null>(null);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
@@ -53,7 +53,7 @@ export default function CurrentProject(
 			}
 			provider.current.destroy();
 		};
-	});
+	}, []);
 
 	if (wsurl === undefined || url === undefined) {
 		return <></>;
@@ -76,7 +76,7 @@ export default function CurrentProject(
 			console.log('event', e);
 
 			if (e[0].target instanceof Y.Map) {
-				setProjectStructure(ydoc.getMap('structure').toJSON());
+				setProjectStructure(ydoc.getMap('structure'));
 			}
 		});
 
