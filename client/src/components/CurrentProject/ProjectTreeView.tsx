@@ -26,6 +26,10 @@ interface MapNode {
 	children: MapNode[] | undefined;
 }
 
+interface IProps {
+	project: any;
+}
+
 const LightScrollbar = styled.div`
 	width: 10px;
 	background-color: #fff;
@@ -116,7 +120,9 @@ function createTree(root) {
 	return map.children !== undefined ? map.children[0] : map;
 }
 
-export default function ProjectTreeView(): JSX.Element {
+export default function ProjectTreeView(props: IProps): JSX.Element {
+	const { project } = props;
+
 	const ydoc = new Y.Doc();
 
 	const folder1 = ydoc.getMap('structure');
@@ -141,7 +147,7 @@ export default function ProjectTreeView(): JSX.Element {
 	file2.set('name', 'index.css');
 
 	textforFile2.insert(0, 'wdwdwdwdwdw');
-	const [tree, setTree] = useState(createTree(folder1.toJSON()));
+	const [tree, setTree] = useState(createTree(project));
 	const addItem = (itemType, active) => {};
 
 	const handleContextClick = (event) => {};

@@ -31,6 +31,7 @@ export default function CurrentProject(
 	// eslint-disable-next-line
 	const provider = useRef<any>(null);
 	const [project, setProject] = useState<IProjectFolder | null>(null);
+	const [projectStructure, setProjectStructure] = useState<any | null>(null);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
@@ -75,7 +76,7 @@ export default function CurrentProject(
 			console.log('event', e);
 
 			if (e[0].target instanceof Y.Map) {
-				setProject(ydoc.getMap('structure').toJSON());
+				setProjectStructure(ydoc.getMap('structure').toJSON());
 			}
 		});
 
@@ -89,7 +90,8 @@ export default function CurrentProject(
 	};
 
 	// if (project === null) {
-	// 	return <Spinner />;
+	// 	// return <Spinner />;
+	// 	return <div>Wsup??</div>;
 	// }
 
 	const displayedProjectName = `My Project`;
@@ -105,7 +107,7 @@ export default function CurrentProject(
 					<li className="display-name">{displayedProjectName}</li>
 				</ul>
 			</nav>
-			<ProjectTreeView />
+			{projectStructure && <ProjectTreeView project={projectStructure} />}
 			<Editor
 				height="calc(100vh - 23px - 80px)"
 				// defaultLanguage={extensions[project.extension]}
