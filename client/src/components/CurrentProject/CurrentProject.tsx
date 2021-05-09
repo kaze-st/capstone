@@ -7,6 +7,7 @@ import Editor, { OnMount } from '@monaco-editor/react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Footer } from '../LandingPage/LandingPage';
 import IFile from '../../types/IFile';
 import { MonacoBinding } from 'y-monaco';
 import ProjectTreeView from './ProjectTreeView';
@@ -78,8 +79,8 @@ export default function CurrentProject(
 
 	const displayedProjectName = `My Project`;
 	return (
-		<>
-			<nav className="editor-nav">
+		<div className="page-wrapper">
+			<header className="editor-nav">
 				<ul className="editor-nav-links">
 					<li>
 						<button className="white-button" type="button">
@@ -88,14 +89,22 @@ export default function CurrentProject(
 					</li>
 					<li className="display-name">{displayedProjectName}</li>
 				</ul>
-			</nav>
-			<ProjectTreeView />
-			<Editor
-				height="calc(100vh - 23px - 80px)"
-				// defaultLanguage={extensions[project.extension]}
-				onMount={handleEditorDidMount}
-				theme="vs-dark"
-			/>
-		</>
+			</header>
+			<main>
+				<div className="flex-container outer-file-container">
+					<ProjectTreeView />
+					<div className="prj-editor-container">
+						<Editor
+							// defaultLanguage={extensions[project.extension]}
+							height="51rem"
+							onMount={handleEditorDidMount}
+							theme="vs-dark"
+							loading={<Spinner />}
+						/>
+					</div>
+				</div>
+			</main>
+			<Footer />
+		</div>
 	);
 }

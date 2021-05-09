@@ -100,6 +100,7 @@ export default function CurrentDoc(
 			</nav>
 			<Editor
 				height="calc(100vh - 23px - 80px)"
+				loading={<Spinner />}
 				defaultLanguage={extensions[file.extension]}
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
