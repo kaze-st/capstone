@@ -28,6 +28,7 @@ interface MapNode {
 
 interface IProps {
 	project: any;
+	onFileClick: (e) => void;
 }
 
 const LightScrollbar = styled.div`
@@ -121,40 +122,41 @@ function createTree(root) {
 }
 
 export default function ProjectTreeView(props: IProps): JSX.Element {
-	const { project } = props;
+	const { project, onFileClick } = props;
 
-	const ydoc = new Y.Doc();
+	// const ydoc = new Y.Doc();
 
-	const folder1 = ydoc.getMap('structure');
+	// const folder1 = ydoc.getMap('structure');
 
-	const file1 = new Y.Map();
-	folder1.set('filehtml', file1);
-	folder1.set('name', 'Project 1');
+	// const file1 = new Y.Map();
+	// folder1.set('filehtml', file1);
+	// folder1.set('name', 'Project 1');
 
-	const textforFile = new Y.Text();
-	file1.set('content', textforFile);
-	file1.set('extension', 'html');
-	file1.set('name', 'index.html');
+	// const textforFile = new Y.Text();
+	// file1.set('content', textforFile);
+	// file1.set('extension', 'html');
+	// file1.set('name', 'index.html');
 
-	textforFile.insert(0, 'hfuewihfuiewhfiewhu');
+	// textforFile.insert(0, 'hfuewihfuiewhfiewhu');
 
-	const file2 = new Y.Map();
-	folder1.set('filecss', file2);
+	// const file2 = new Y.Map();
+	// folder1.set('filecss', file2);
 
-	const textforFile2 = new Y.Text();
-	file2.set('content', textforFile2);
-	file2.set('extension', 'css');
-	file2.set('name', 'index.css');
+	// const textforFile2 = new Y.Text();
+	// file2.set('content', textforFile2);
+	// file2.set('extension', 'css');
+	// file2.set('name', 'index.css');
 
-	textforFile2.insert(0, 'wdwdwdwdwdw');
+	// textforFile2.insert(0, 'wdwdwdwdwdw');
 	const [tree, setTree] = useState(createTree(project));
 	const addItem = (itemType, active) => {};
 
 	const handleContextClick = (event) => {};
 	const renderNode = (node) => {
+		console.log('helloNode', node);
 		const renderFileFolderToolbar = (isFolder, caption) => (
 			<Toolbar>
-				<FloatLeft>
+				<FloatLeft onClick={onFileClick}>
 					<Icon icon={isFolder ? folder : file} />
 					{caption}
 				</FloatLeft>

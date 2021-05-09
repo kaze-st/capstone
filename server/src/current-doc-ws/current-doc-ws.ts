@@ -84,14 +84,15 @@ export default (server: http.Server): void => {
 			}
 			const encodedState: Uint8Array = new Uint8Array(state);
 
-			consola.log('state?', encodedState);
+			// consola.log('state?', encodedState);
 
 			const res = Y.applyUpdate(doc, encodedState);
 
-			consola.log('structure?', doc.getMap('structure').toJSON());
+			// consola.log('structure?', doc.getMap('structure').toJSON());
 			return res;
 		},
 		writeState: async (string: string, doc: Y.Doc) => {
+			consola.log('closed');
 			const [name, type] = string.split(':');
 			const encodedState = Y.encodeStateAsUpdate(doc);
 			const result =
