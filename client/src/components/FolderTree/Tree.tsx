@@ -43,7 +43,35 @@ function createTree(
 		const newFile = new Y.Map();
 		currentFolder.set(fileName, newFile);
 		newFile.set('content', new Y.Text());
-		newFile.set('name', `${fileName}.gg`);
+		newFile.set('name', fileName);
+		newFile.set('isFolder', false);
+	};
+
+	const addFolder = (folderId) => {
+		currId[0] += 1;
+		const folderName = `folder ${currId[0]}`;
+		const currentFolder = idToNodeMap[folderId];
+		const newFolder = new Y.Map();
+		currentFolder.set(folderName, newFolder);
+		newFolder.set('name', folderName);
+		newFolder.set('isFolder', true);
+		console.log(currentFolder);
+	};
+
+	const removeItem = (nodeId) => {
+		const item = idToNodeMap[nodeId];
+		// if (item.get('isFolder') !== true) {
+		// 	// console.log(file)
+
+		// 	}
+		// } else {
+		// 	// console.log(folder)
+		// }
+		const parent = item.parent as Y.Map<unknown>;
+		const itemName = item.get('name') as string;
+		if (parent.has(itemName)) {
+			parent.delete(itemName);
+		}
 	};
 
 	const itemKeys = Array.from(project.keys());
@@ -65,7 +93,7 @@ function createTree(
 						id={fileKey}
 						nodeId={currId[0]}
 						isFolder={false}
-						handleAddFile={addFile}
+						handleRemoveItem={removeItem}
 					/>
 				</div>
 			);
@@ -87,6 +115,8 @@ function createTree(
 						nodeId={folderId}
 						isFolder
 						handleAddFile={addFile}
+						handleAddFolder={addFolder}
+						handleRemoveItem={removeItem}
 					/>
 				</div>
 			);
@@ -100,7 +130,6 @@ function createTree(
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
 	const { project } = props;
-	console.log('LMAO', project);
 
 	const idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
@@ -113,11 +142,10 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 	const addFileRoot = () => {
 		const fileName = `file ${Math.random()}`;
 		const currentFolder = idToNodeMap[0];
-		console.log(currentFolder);
 		const newFile = new Y.Map();
 		currentFolder.set(fileName, newFile);
 		newFile.set('content', new Y.Text());
-		newFile.set('name', `${fileName}.gg`);
+		newFile.set('name', fileName);
 	};
 
 	return (

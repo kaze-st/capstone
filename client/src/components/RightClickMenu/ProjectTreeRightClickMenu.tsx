@@ -6,17 +6,39 @@ interface IProjectTreeRightClickMenuProps {
 	id: string;
 	nodeId: number;
 	isFolder: boolean;
-	handleAddFile: (id: number) => void;
+	handleAddFile?: (id: number) => void;
+	handleAddFolder?: (id: number) => void;
+	handleRemoveItem?: (id: number) => void;
 }
 
 export default function ProjectTreeCardRightClickMenu(
 	props: IProjectTreeRightClickMenuProps
 ): JSX.Element {
-	const { id, nodeId, isFolder, handleAddFile } = props;
+	const {
+		id,
+		nodeId,
+		isFolder,
+		handleAddFile,
+		handleAddFolder,
+		handleRemoveItem
+	} = props;
 
 	const addFileById = () => {
-		console.log('adding file to', nodeId);
-		handleAddFile(nodeId);
+		if (handleAddFile !== undefined) {
+			handleAddFile(nodeId);
+		}
+	};
+
+	const addFolderById = () => {
+		if (handleAddFolder !== undefined) {
+			handleAddFolder(nodeId);
+		}
+	};
+
+	const removeItemById = () => {
+		if (handleRemoveItem !== undefined) {
+			handleRemoveItem(nodeId);
+		}
 	};
 
 	const classNameIsFolder = isFolder ? 'big-right-click-menu' : '';
@@ -42,6 +64,7 @@ export default function ProjectTreeCardRightClickMenu(
 							action: 'add-folder'
 						}}
 						className="menu-item"
+						onClick={addFolderById}
 					>
 						New Folder
 					</MenuItem>
@@ -51,10 +74,20 @@ export default function ProjectTreeCardRightClickMenu(
 				<MenuItem data={{ action: 'rename' }} className="menu-item">
 					Rename
 				</MenuItem>
-				<MenuItem data={{ action: 'delete' }} className="menu-item">
+				<MenuItem
+					data={{ action: 'delete' }}
+					className="menu-item"
+					onClick={removeItemById}
+				>
 					Delete
 				</MenuItem>
 			</ContextMenu>
 		</div>
 	);
 }
+
+ProjectTreeCardRightClickMenu.defaultProps = {
+	handleAddFile: undefined,
+	handleAddFolder: undefined,
+	handleRemoveItem: undefined
+};
