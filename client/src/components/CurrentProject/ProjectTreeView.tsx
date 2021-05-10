@@ -212,7 +212,7 @@ export default function ProjectTreeView(props: IProps): JSX.Element {
 	};
 
 	return (
-		<div>
+		<nav className="prj-tree-nav">
 			<div className="tree">
 				<StrollableContainer draggable bar={LightScrollbar}>
 					<Tree
@@ -237,6 +237,6 @@ export default function ProjectTreeView(props: IProps): JSX.Element {
 					Delete
 				</MenuItem>
 			</ContextMenu>
-		</div>
+		</nav>
 	);
 }
