@@ -26,21 +26,13 @@ interface ITreeProps {
 	project: Y.Map<unknown>;
 }
 
-interface IProjectStructure {
-	tree: JSX.Element[];
-	idToNodeMap: {
-		[id: number]: Y.Map<unknown>;
-	};
-	currId: [number];
-}
-
 function createTree(
 	project: Y.Map<unknown>,
 	idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
 	},
 	currId: [number]
-) {
+): JSX.Element[] {
 	const nodes: JSX.Element[] = [];
 
 	const addFile = (folderId) => {
@@ -83,7 +75,7 @@ function createTree(
 			const folderId = currId[0] + 1;
 			const folderKey = `treeItem:${folderId}`;
 			currId[0] += 1;
-			const children = createTree(curr, idToNodeMap, currId).tree;
+			const children = createTree(curr, idToNodeMap, currId);
 			const folder = (
 				<div key={folderKey}>
 					<ContextMenuTrigger id={folderKey} holdToDisplay={-1}>
@@ -102,12 +94,12 @@ function createTree(
 		}
 	});
 
-	const result: IProjectStructure = { tree: nodes, idToNodeMap, currId };
-	return result;
+	return nodes;
 }
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
 	const { project } = props;
+	console.log('LMAO', project);
 
 	const idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
@@ -115,25 +107,22 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	idToNodeMap[0] = project;
 
-	const [projectStructure, setProjectStructure] = useState<IProjectStructure>(
-		createTree(project, idToNodeMap, [0])
-	);
+	const tree = createTree(project, idToNodeMap, [0]);
 
 	return (
 		<nav className="prj-tree-nav">
 			<div className="tree">
-				{/* <ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
-
+				<ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
+					<StrollableContainer draggable bar={LightScrollbar}>
+						<StyledTree>{tree}</StyledTree>
+					</StrollableContainer>
 				</ContextMenuTrigger>
 				<ProjectTreeCardRightClickMenu
 					id="folder-tree-root"
+					nodeId={0}
 					isFolder
-					handleAddFile={addFile}
-				/> */}
-
-				<StrollableContainer draggable bar={LightScrollbar}>
-					<StyledTree>{projectStructure.tree}</StyledTree>
-				</StrollableContainer>
+					handleAddFile={(i: number) => {}}
+				/>
 			</div>
 		</nav>
 	);

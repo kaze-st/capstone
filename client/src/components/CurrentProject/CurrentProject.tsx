@@ -5,7 +5,7 @@ import * as Y from 'yjs';
 
 import Editor, { OnMount } from '@monaco-editor/react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Footer } from '../LandingPage/LandingPage';
 import IFile from '../../types/IFile';
@@ -37,6 +37,9 @@ export default function CurrentProject(
 		projectStructure,
 		setProjectStructure
 	] = useState<Y.Map<unknown> | null>(null);
+
+	const [, updateState] = React.useState();
+	const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
@@ -80,8 +83,13 @@ export default function CurrentProject(
 			console.log('strucurte', structure.toJSON());
 			console.log('event', e);
 
-			if (e[0].target instanceof Y.Map || e[0].target instanceof Y.YMapEvent) {
+			console.log('0', e[0].target instanceof Y.Map);
+			console.log('1', e[0].target instanceof Y.YMapEvent);
+
+			if (e[0].target instanceof Y.Map) {
 				setProjectStructure(ydoc.getMap('structure'));
+				console.log('here');
+				forceUpdate();
 			}
 		});
 
