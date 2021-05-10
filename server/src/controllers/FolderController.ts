@@ -33,6 +33,7 @@ export default class FolderController {
 			htmlFile.set('content', new Y.Text());
 			htmlFile.set('name', htmlFileName);
 			htmlFile.set('isFolder', false);
+			htmlFile.set('path', '/' + htmlFileName);
 
 			const cssFile = new Y.Map();
 			const cssFileName = 'styles.css';
@@ -40,6 +41,7 @@ export default class FolderController {
 			cssFile.set('content', new Y.Text());
 			cssFile.set('name', cssFileName);
 			cssFile.set('isFolder', false);
+			cssFile.set('path', '/' + cssFileName);
 
 			const jsFile = new Y.Map();
 			const jsFileName = 'script.js';
@@ -47,17 +49,20 @@ export default class FolderController {
 			jsFile.set('content', new Y.Text());
 			jsFile.set('name', jsFileName);
 			jsFile.set('isFolder', false);
+			jsFile.set('path', '/' + jsFileName);
 
 			const testFolder = new Y.Map();
 			ymap.set('testFolder', testFolder);
 			testFolder.set('name', 'testFolder');
 			testFolder.set('isFolder', true);
+			testFolder.set('path', '/testFolder/');
 
 			const fileInsideTestFolder = new Y.Map();
-			testFolder.set('testFile.test', fileInsideTestFolder);
+			testFolder.set('testFile', fileInsideTestFolder);
 			fileInsideTestFolder.set('content', new Y.Text());
-			fileInsideTestFolder.set('name', 'testFile.test');
+			fileInsideTestFolder.set('name', 'testFile');
 			fileInsideTestFolder.set('isFolder', false);
+			fileInsideTestFolder.set('path', '/testFolder/testFile');
 		}
 
 		const newState = Y.encodeStateAsUpdate(doc);

@@ -45,6 +45,9 @@ function createTree(
 		newFile.set('content', new Y.Text());
 		newFile.set('name', fileName);
 		newFile.set('isFolder', false);
+
+		const currentFolderPath = currentFolder.get('path') as string;
+		newFile.set('path', currentFolderPath + fileName);
 	};
 
 	const addFolder = (folderId) => {
@@ -55,18 +58,22 @@ function createTree(
 		currentFolder.set(folderName, newFolder);
 		newFolder.set('name', folderName);
 		newFolder.set('isFolder', true);
-		console.log(currentFolder);
+
+		const currentFolderPath = currentFolder.get('path') as string;
+		newFolder.set('path', `${currentFolderPath + folderName}/`);
 	};
 
 	const removeItem = (nodeId) => {
 		const item = idToNodeMap[nodeId];
-		// if (item.get('isFolder') !== true) {
-		// 	// console.log(file)
+		const parent = item.parent as Y.Map<unknown>;
+		const itemName = item.get('name') as string;
+		if (parent.has(itemName)) {
+			parent.delete(itemName);
+		}
+	};
 
-		// 	}
-		// } else {
-		// 	// console.log(folder)
-		// }
+	const renameItem = (nodeId) => {
+		const item = idToNodeMap[nodeId];
 		const parent = item.parent as Y.Map<unknown>;
 		const itemName = item.get('name') as string;
 		if (parent.has(itemName)) {
@@ -130,6 +137,7 @@ function createTree(
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
 	const { project } = props;
+	console.log('lmao', project);
 
 	const idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
