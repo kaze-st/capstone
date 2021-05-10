@@ -41,46 +41,64 @@ export default function ProjectTreeCardRightClickMenu(
 		}
 	};
 
-	const classNameIsFolder = isFolder ? 'big-right-click-menu' : '';
+	function isRootNode(): boolean {
+		return nodeId === 0 || nodeId === 1;
+	}
+
+	let classNameIsFolder = isFolder ? 'big-right-click-menu' : '';
+	if (isRootNode()) {
+		classNameIsFolder = 'root-right-click-menu';
+	}
+
+	const addFileMenuItem = isFolder ? (
+		<MenuItem
+			data={{
+				action: 'add-file'
+			}}
+			className="menu-item"
+			onClick={addFileById}
+		>
+			New File
+		</MenuItem>
+	) : (
+		<></>
+	);
+
+	const addFolderMenuItem = isFolder ? (
+		<MenuItem
+			data={{
+				action: 'add-folder'
+			}}
+			className="menu-item"
+			onClick={addFolderById}
+		>
+			New Folder
+		</MenuItem>
+	) : (
+		<></>
+	);
+
+	const deleteItemMenuItem = isRootNode() ? (
+		<></>
+	) : (
+		<MenuItem
+			data={{ action: 'delete' }}
+			className="menu-item"
+			onClick={removeItemById}
+		>
+			Delete
+		</MenuItem>
+	);
+
 	return (
 		<div>
 			<ContextMenu id={id} className={`right-click-menu ${classNameIsFolder}`}>
-				{isFolder ? (
-					<MenuItem
-						data={{
-							action: 'add-file'
-						}}
-						className="menu-item"
-						onClick={addFileById}
-					>
-						New File
-					</MenuItem>
-				) : (
-					<></>
-				)}
-				{isFolder ? (
-					<MenuItem
-						data={{
-							action: 'add-folder'
-						}}
-						className="menu-item"
-						onClick={addFolderById}
-					>
-						New Folder
-					</MenuItem>
-				) : (
-					<></>
-				)}
+				{addFileMenuItem}
+				{addFolderMenuItem}
 				<MenuItem data={{ action: 'rename' }} className="menu-item">
 					Rename
 				</MenuItem>
-				<MenuItem
-					data={{ action: 'delete' }}
-					className="menu-item"
-					onClick={removeItemById}
-				>
-					Delete
-				</MenuItem>
+				{deleteItemMenuItem}
 			</ContextMenu>
 		</div>
 	);

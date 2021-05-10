@@ -17,10 +17,21 @@ interface ITreeFileProps {
 	onFileClick: () => void;
 }
 
+function getExtensionFromFileName(name: string) {
+	let extension = '';
+	if (name !== null && name !== undefined) {
+		const extensionArr = name.split('.');
+		if (extensionArr.length > 0) {
+			extension = extensionArr[extensionArr.length - 1];
+		}
+	}
+	return extension;
+}
+
 export default function File(props: ITreeFileProps): JSX.Element {
 	const { name, onFileClick } = props;
-	const extensionArr = name.split('.');
-	const extension = extensionArr[extensionArr.length - 1];
+
+	const extension = getExtensionFromFileName(name);
 
 	return (
 		<StyledFile
