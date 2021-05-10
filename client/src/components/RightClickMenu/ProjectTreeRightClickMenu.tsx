@@ -15,6 +15,7 @@ export default function ProjectTreeCardRightClickMenu(
 	const { id, nodeId, isFolder, handleAddFile } = props;
 
 	const addFileById = () => {
+		console.log('adding file to', nodeId);
 		handleAddFile(nodeId);
 	};
 

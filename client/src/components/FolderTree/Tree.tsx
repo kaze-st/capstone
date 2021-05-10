@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React, { useState } from 'react';
 
 import { StrollableContainer } from 'react-stroller';
@@ -109,21 +110,33 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	const tree = createTree(project, idToNodeMap, [0]);
 
+	const addFileRoot = () => {
+		const fileName = `file ${Math.random()}`;
+		const currentFolder = idToNodeMap[0];
+		console.log(currentFolder);
+		const newFile = new Y.Map();
+		currentFolder.set(fileName, newFile);
+		newFile.set('content', new Y.Text());
+		newFile.set('name', `${fileName}.gg`);
+	};
+
 	return (
 		<nav className="prj-tree-nav">
-			<div className="tree">
-				<ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
+			<ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
+				<div className="tree">
 					<StrollableContainer draggable bar={LightScrollbar}>
 						<StyledTree>{tree}</StyledTree>
 					</StrollableContainer>
-				</ContextMenuTrigger>
-				<ProjectTreeCardRightClickMenu
-					id="folder-tree-root"
-					nodeId={0}
-					isFolder
-					handleAddFile={(i: number) => {}}
-				/>
-			</div>
+				</div>
+			</ContextMenuTrigger>
+
+			<ProjectTreeCardRightClickMenu
+				id="folder-tree-root"
+				nodeId={0}
+				isFolder
+				handleAddFile={addFileRoot}
+			/>
+			<button onClick={addFileRoot}>ADD FILE TO ROOT</button>
 		</nav>
 	);
 }
