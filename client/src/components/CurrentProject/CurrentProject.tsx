@@ -5,8 +5,10 @@ import * as Y from 'yjs';
 
 import Editor, { OnMount } from '@monaco-editor/react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
+import FolderTree from '../FolderTree/Tree';
+import { Footer } from '../LandingPage/LandingPage';
 import IFile from '../../types/IFile';
 import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 import { MonacoBinding } from 'y-monaco';
@@ -31,12 +33,19 @@ export default function CurrentProject(
 	// eslint-disable-next-line
 	const provider = useRef<any>(null);
 	const monacoRef = useRef<any>(null);
-	const [project, setProject] = useState<IProjectFolder | null>(null);
-	const [projectStructure, setProjectStructure] = useState<any | null>(null);
+
 	const [test, setTest] = useState<Y.Doc | null>(null);
 	const monacoBinding = useRef<any>(null);
 	const structureRef = useRef<any>(null);
 	const iframeRef = useRef<any>(null);
+	const [project, setProject] = useState<Y.Map<unknown> | null>(null);
+	const [
+		projectStructure,
+		setProjectStructure
+	] = useState<Y.Map<unknown> | null>(null);
+
+	const [, updateState] = React.useState();
+	const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
@@ -87,9 +96,10 @@ export default function CurrentProject(
 			console.log('strucurte', structure.toJSON());
 			console.log('event', e);
 
-			if (e[0].target instanceof Y.Map) {
-				setProjectStructure(ydoc.getMap('structure').toJSON());
+			console.log('0', e[0].target instanceof Y.Map);
+			console.log('1', e[0].target instanceof Y.YMapEvent);
 
+			if (e[0].target instanceof Y.Map) {
 				// const ydoc2 = new Y.Doc();
 
 				// const folder1 = ydoc2.getMap('structure');
@@ -115,6 +125,9 @@ export default function CurrentProject(
 
 				// textforFile2.insert(0, 'wdwdwdwdwdw');
 				setTest(ydoc);
+				setProjectStructure(ydoc.getMap('structure'));
+				console.log('here');
+				forceUpdate();
 			}
 		});
 
@@ -233,26 +246,34 @@ export default function CurrentProject(
 					</button>
 				</div>
 			)}
-			<nav className="editor-nav">
-				<ul className="editor-nav-links">
-					<li>
-						<button className="white-button" type="button">
-							<Link to="/projects/ownedProjects">Go Back to Projects</Link>
-						</button>
-					</li>
-					<li className="display-name">{displayedProjectName}</li>
-				</ul>
-			</nav>
-			{projectStructure && (
-				<ProjectTreeView project={projectStructure} onFileClick={onFileClick} />
-			)}
-			<Editor
-				height="calc(100vh - 23px - 80px)"
-				// defaultLanguage={extensions[project.extension]}
-				onMount={handleEditorDidMount}
-				theme="vs-dark"
-			/>
 
+			<div className="page-wrapper">
+				<header className="editor-nav">
+					<ul className="editor-nav-links">
+						<li>
+							<button className="white-button" type="button">
+								<Link to="/projects/ownedProjects">Go Back to Projects</Link>
+							</button>
+						</li>
+						<li className="display-name">{displayedProjectName}</li>
+					</ul>
+				</header>
+				<main>
+					<div className="flex-container outer-file-container">
+						{projectStructure && <FolderTree project={projectStructure} />}
+						<div className="prj-editor-container">
+							<Editor
+								// defaultLanguage={extensions[project.extension]}
+								height="51rem"
+								onMount={handleEditorDidMount}
+								theme="vs-dark"
+								loading={<Spinner />}
+							/>
+						</div>
+					</div>
+				</main>
+				<Footer />
+			</div>
 			<section className="result">
 				<iframe
 					title="result"

@@ -25,5 +25,23 @@
 
 .iframe {
 	width: 100%;
+}
+
+.prj-tree-nav {
+	flex-basis: 12.5rem;
+	padding: 1rem 0.5rem;
+	margin-right: 2rem;
+	height: 100%;
+	background-color: #21252b;
+}
+
+.prj-editor-container {
+	flex: 1;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.prj-tree-nav .tree {
 	height: 100%;
 }

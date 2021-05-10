@@ -5,6 +5,7 @@ import * as Y from 'yjs';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import React, { Fragment, useState } from 'react';
 
+import AddItemType from './AddItemType';
 import Icon from 'react-icons-kit';
 import { Queue } from 'queue-typescript';
 import { StrollableContainer } from 'react-stroller';
@@ -15,20 +16,21 @@ import { file } from 'react-icons-kit/feather/file';
 import { filePlus } from 'react-icons-kit/feather/filePlus';
 import { folder } from 'react-icons-kit/feather/folder';
 import { folderPlus } from 'react-icons-kit/feather/folderPlus';
+import { randomInt } from 'crypto';
 import styled from 'styled-components';
 
 interface MapNode {
-	module: string;
+	module: unknown;
 	id: string;
 	childrenCount: number;
 	leaf: boolean;
 	collapsed: boolean;
 	children: MapNode[] | undefined;
+	path: Y.Map<unknown>;
 }
 
 interface IProps {
 	project: any;
-	onFileClick: (e) => void;
 }
 
 const LightScrollbar = styled.div`
@@ -73,108 +75,129 @@ function collect(props) {
 	return props;
 }
 
-function deleteFromTree(o, id) {}
+interface IProjectStructure {
+	tree: MapNode;
+	idToNodeMap: {
+		[id: number]: Y.Map<unknown>;
+	};
+}
 
-function createTree(root) {
-	const map: MapNode = {
+function createTree(project) {
+	const idToNodeMap: {
+		[id: number]: Y.Map<unknown>;
+	} = {};
+
+	const rootNode: MapNode = {
 		module: 'bogey',
 		id: 'bogey',
 		childrenCount: 1,
 		leaf: false,
 		collapsed: false,
-		children: []
+		children: [],
+		path: new Y.Map()
 	};
 
 	const parentQueue = new Queue<MapNode>();
-	parentQueue.enqueue(map);
+	parentQueue.enqueue(rootNode);
 
-	const childrenQueue = new Queue<JSON>();
-	childrenQueue.enqueue(root);
-	let idCount = 0;
+	const childrenQueue = new Queue<Y.Map<unknown>>();
+	childrenQueue.enqueue(project);
+	let id = 0;
 	while (parentQueue.length > 0) {
-		idCount += 1;
 		const currParent = parentQueue.dequeue();
 		let childrenLeft = currParent.childrenCount;
+		const parentId = id;
 		while (childrenLeft > 0 && childrenQueue.length > 0) {
+			id += 1;
 			childrenLeft -= 1;
 			const currChild = childrenQueue.dequeue();
-			const childKeyList = Object.keys(currChild).filter(
-				(key) => key !== 'content' && key !== 'name' && key !== 'extension'
+			const childKeyList = Array.from(currChild.keys()).filter(
+				(key) =>
+					key !== 'content' &&
+					key !== 'name' &&
+					key !== 'extension' &&
+					key !== 'path'
 			);
 			const node: MapNode = {
-				module: currChild['name'],
-				id: idCount.toString(),
+				module: currChild.get('name'),
+				id: id.toString(),
 				childrenCount: childKeyList.length,
-				leaf: currChild['content'] !== undefined,
+				leaf: currChild.get('content') !== undefined,
 				collapsed: false,
-				children: currChild['content'] !== undefined ? undefined : []
+				children: currChild.get('content') !== undefined ? undefined : [],
+				path: currChild
 			};
+			idToNodeMap[id] = node.path;
+
 			if (currParent.children !== undefined) {
 				currParent.children.push(node);
 			}
 			parentQueue.enqueue(node);
 			childKeyList.forEach((key) => {
-				childrenQueue.enqueue(currChild[key]);
+				const val = currChild.get(key) as Y.Map<unknown>;
+				childrenQueue.enqueue(val);
 			});
 		}
 	}
-	return map.children !== undefined ? map.children[0] : map;
+	const tree =
+		rootNode.children !== undefined ? rootNode.children[0] : rootNode;
+	const result: IProjectStructure = { tree, idToNodeMap };
+	return result;
 }
 
 export default function ProjectTreeView(props: IProps): JSX.Element {
-	const { project, onFileClick } = props;
+	const { project } = props;
+	console.log('abc');
+	// ymap => 3 ymap
 
-	// const ydoc = new Y.Doc();
+	const [projectStructure, setProjectStructure] = useState(createTree(project));
 
-	// const folder1 = ydoc.getMap('structure');
+	const addItem = (itemType, node) => {
+		console.log(itemType, node);
+		const currentFolder = projectStructure.idToNodeMap[node.id];
+		if (itemType === AddItemType.File) {
+			console.log('file');
+			const newFile = new Y.Map();
+			const fileName = `file ${Math.random()}`;
+			currentFolder.set(fileName, newFile);
+			newFile.set('content', new Y.Text());
+			newFile.set('name', `${fileName}.gg`);
 
-	// const file1 = new Y.Map();
-	// folder1.set('filehtml', file1);
-	// folder1.set('name', 'Project 1');
+			console.log(project);
+			setProjectStructure(createTree(project));
 
-	// const textforFile = new Y.Text();
-	// file1.set('content', textforFile);
-	// file1.set('extension', 'html');
-	// file1.set('name', 'index.html');
+			// currentFolder.set('html', file);
+			// htmlFile.set('content', new Y.Text());
+			// htmlFile.set('name', 'index.html');
+		} else if (itemType === AddItemType.Project) {
+			console.log('proj');
+		}
+	};
 
-	// textforFile.insert(0, 'hfuewihfuiewhfiewhu');
-
-	// const file2 = new Y.Map();
-	// folder1.set('filecss', file2);
-
-	// const textforFile2 = new Y.Text();
-	// file2.set('content', textforFile2);
-	// file2.set('extension', 'css');
-	// file2.set('name', 'index.css');
-
-	// textforFile2.insert(0, 'wdwdwdwdwdw');
-	const [tree, setTree] = useState(createTree(project));
-	const addItem = (itemType, active) => {};
-
-	const handleContextClick = (event) => {};
 	const renderNode = (node) => {
 		console.log('helloNode', node);
 		const renderFileFolderToolbar = (isFolder, caption) => (
 			<Toolbar>
-				<FloatLeft onClick={onFileClick}>
+				<FloatLeft>
 					<Icon icon={isFolder ? folder : file} />
 					{caption}
 				</FloatLeft>
 				<ToolbarFileFolder>
 					{isFolder && (
 						<>
-							<Icon icon={folderPlus} onClick={() => addItem('folder', node)} />
-							<Icon icon={filePlus} onClick={() => addItem('file', node)} />
+							<Icon
+								icon={folderPlus}
+								onClick={() => addItem(AddItemType.Project, node)}
+							/>
+							<Icon
+								icon={filePlus}
+								onClick={() => addItem(AddItemType.File, node)}
+							/>
 						</>
 					)}
 				</ToolbarFileFolder>
 			</Toolbar>
 		);
-
-		/* const attributes = {
-      "data-count": 0,
-      className: "example-multiple-targets well"
-    }; */
 
 		const isFolder = node.children !== undefined;
 		return (
@@ -188,20 +211,20 @@ export default function ProjectTreeView(props: IProps): JSX.Element {
 			</ContextMenuTrigger>
 		);
 	};
+
 	return (
-		<div>
+		<nav className="prj-tree-nav">
 			<div className="tree">
 				<StrollableContainer draggable bar={LightScrollbar}>
-					<Tree paddingLeft={20} tree={tree} renderNode={renderNode} />
+					<Tree
+						paddingLeft={20}
+						tree={projectStructure.tree}
+						renderNode={renderNode}
+					/>
 				</StrollableContainer>
 			</div>
 
 			<ContextMenu id="FILE_CONTEXT_MENU" className="right-click-menu">
-				{/* Add copy / cut later */}
-				{/* <MenuItem data={{ action: "copy" }} onClick={this.handleContextClick}>
-            Copy
-          </MenuItem>
-          <MenuItem divider /> */}
 				<MenuItem
 					data={{ action: 'rename' }} /* onClick={this.handleContextClick} */
 					className="menu-item"
@@ -215,6 +238,6 @@ export default function ProjectTreeView(props: IProps): JSX.Element {
 					Delete
 				</MenuItem>
 			</ContextMenu>
-		</div>
+		</nav>
 	);
 }
