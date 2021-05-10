@@ -146,6 +146,8 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	const tree = createTree(project, idToNodeMap, [0]);
 
+	console.log(idToNodeMap);
+
 	// const addFileRoot = () => {
 	// 	const fileName = `file ${Math.random()}`;
 	// 	const currentFolder = idToNodeMap[0];
