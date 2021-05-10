@@ -36,6 +36,7 @@ export default function CurrentProject(
 	const [test, setTest] = useState<Y.Doc | null>(null);
 	const monacoBinding = useRef<any>(null);
 	const structureRef = useRef<any>(null);
+	const iframeRef = useRef<any>(null);
 
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
@@ -159,6 +160,45 @@ export default function CurrentProject(
 			provider.current.awareness
 		);
 	};
+
+	const runCode = () => {
+		if (test === null) {
+			return;
+		}
+		const structure = test.getMap('structure');
+		const html = structure.get('html').get('content').toString();
+		const css = structure.get('css').get('content').toString();
+		const js = structure.get('js').get('content').toString();
+
+		const iframe = iframeRef.current;
+		const document = iframe.contentDocument;
+		const documentContents = `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Document</title>
+            <style>
+              ${css}
+            </style>
+          </head>
+          <body>
+            ${html}
+    
+            <script type="text/javascript">
+              ${js}
+            </script>
+          </body>
+          </html>
+        `;
+
+		document.open();
+		document.write(documentContents);
+		document.close();
+	};
+
 	return (
 		<>
 			{test && (
@@ -188,6 +228,9 @@ export default function CurrentProject(
 					>
 						JS
 					</button>
+					<button type="button" onClick={runCode}>
+						Run Code
+					</button>
 				</div>
 			)}
 			<nav className="editor-nav">
@@ -209,6 +252,16 @@ export default function CurrentProject(
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
 			/>
+
+			<section className="result">
+				<iframe
+					title="result"
+					className="iframe"
+					ref={(iframe) => {
+						iframeRef.current = iframe;
+					}}
+				/>
+			</section>
 		</>
 	);
 }
