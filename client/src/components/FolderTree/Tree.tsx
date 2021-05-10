@@ -137,7 +137,6 @@ function createTree(
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
 	const { project } = props;
-	console.log('lmao', project);
 
 	const idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
@@ -147,14 +146,14 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	const tree = createTree(project, idToNodeMap, [0]);
 
-	const addFileRoot = () => {
-		const fileName = `file ${Math.random()}`;
-		const currentFolder = idToNodeMap[0];
-		const newFile = new Y.Map();
-		currentFolder.set(fileName, newFile);
-		newFile.set('content', new Y.Text());
-		newFile.set('name', fileName);
-	};
+	// const addFileRoot = () => {
+	// 	const fileName = `file ${Math.random()}`;
+	// 	const currentFolder = idToNodeMap[0];
+	// 	const newFile = new Y.Map();
+	// 	currentFolder.set(fileName, newFile);
+	// 	newFile.set('content', new Y.Text());
+	// 	newFile.set('name', fileName);
+	// };
 
 	return (
 		<nav className="prj-tree-nav">
@@ -166,13 +165,13 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 				</div>
 			</ContextMenuTrigger>
 
-			<ProjectTreeCardRightClickMenu
+			{/* <ProjectTreeCardRightClickMenu
 				id="folder-tree-root"
 				nodeId={0}
 				isFolder
 				handleAddFile={addFileRoot}
-			/>
-			<button onClick={addFileRoot}>ADD FILE TO ROOT</button>
+			/> */}
+			{/* <button onClick={addFileRoot}>ADD FILE TO ROOT</button> */}
 		</nav>
 	);
 }

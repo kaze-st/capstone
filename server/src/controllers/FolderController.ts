@@ -27,9 +27,15 @@ export default class FolderController {
 		const doc = new Y.Doc();
 		const ymap = doc.getMap('structure');
 		if (reqBody.hasStarterFiles) {
+			const root = new Y.Map();
+			ymap.set('/', root);
+			root.set('name', '/');
+			root.set('isFolder', true);
+			root.set('path', '/');
+
 			const htmlFile = new Y.Map();
 			const htmlFileName = 'index.html';
-			ymap.set(htmlFileName, htmlFile);
+			root.set(htmlFileName, htmlFile);
 			htmlFile.set('content', new Y.Text());
 			htmlFile.set('name', htmlFileName);
 			htmlFile.set('isFolder', false);
@@ -37,7 +43,7 @@ export default class FolderController {
 
 			const cssFile = new Y.Map();
 			const cssFileName = 'styles.css';
-			ymap.set(cssFileName, cssFile);
+			root.set(cssFileName, cssFile);
 			cssFile.set('content', new Y.Text());
 			cssFile.set('name', cssFileName);
 			cssFile.set('isFolder', false);
@@ -45,14 +51,14 @@ export default class FolderController {
 
 			const jsFile = new Y.Map();
 			const jsFileName = 'script.js';
-			ymap.set(jsFileName, jsFile);
+			root.set(jsFileName, jsFile);
 			jsFile.set('content', new Y.Text());
 			jsFile.set('name', jsFileName);
 			jsFile.set('isFolder', false);
 			jsFile.set('path', '/' + jsFileName);
 
 			const testFolder = new Y.Map();
-			ymap.set('testFolder', testFolder);
+			root.set('testFolder', testFolder);
 			testFolder.set('name', 'testFolder');
 			testFolder.set('isFolder', true);
 			testFolder.set('path', '/testFolder/');

@@ -19,6 +19,17 @@ const StyledFolder = styled.div`
 		}
 	}
 `;
+
+const StyledFolderRoot = styled.div`
+	.folder--label {
+		display: flex;
+		align-items: center;
+		span {
+			margin-left: 5px;
+		}
+	}
+`;
+
 const Collapsible = styled.div`
 	/* set the height depending on isOpen prop */
 	height: ${(p) => (p.isOpen ? 'auto' : '0')};
@@ -40,7 +51,17 @@ export default function Folder(props: IFolderProps): JSX.Element {
 		setIsOpen(!isOpen);
 	};
 
-	return (
+	const rootFolder = (
+		<StyledFolderRoot>
+			<div className="folder--label" onClick={handleToggle}>
+				<AiOutlineFolder />
+				<span>{name}</span>
+			</div>
+			<Collapsible isOpen>{children}</Collapsible>
+		</StyledFolderRoot>
+	);
+
+	const normalFolder = (
 		<StyledFolder>
 			<div className="folder--label" onClick={handleToggle}>
 				<AiOutlineFolder />
@@ -49,4 +70,6 @@ export default function Folder(props: IFolderProps): JSX.Element {
 			<Collapsible isOpen={isOpen}>{children}</Collapsible>
 		</StyledFolder>
 	);
+
+	return name === '/' ? rootFolder : normalFolder;
 }
