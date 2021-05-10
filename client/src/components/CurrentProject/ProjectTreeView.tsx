@@ -31,7 +31,6 @@ interface MapNode {
 
 interface IProps {
 	project: any;
-	onFileClick: (file: Y.Map<any>) => void;
 }
 
 const LightScrollbar = styled.div`

@@ -159,7 +159,7 @@ export default function CurrentProject(
 			monacoBinding.current.destroy();
 		}
 		const editor = editorRef.current;
-		const path = `urn:${file.get('path').substring(1)}`;
+		const path = `urn:${file.get('path')}`;
 		console.log('monaco', monacoRef.current.editor.getModel('amy j cunt'));
 		if (monacoRef.current.editor.getModel(path) === null)
 			monacoRef.current.editor.createModel(ytext.toString(), undefined, path);
