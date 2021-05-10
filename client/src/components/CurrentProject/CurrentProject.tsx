@@ -147,21 +147,22 @@ export default function CurrentProject(
 
 	const displayedProjectName = `My Project`;
 
-	const onFileClick = (e) => {
-		console.log('Hii', e);
-	};
+	// const onFileClick = (e) => {
+	// 	console.log('Hii', e);
+	// };
 
-	const onClickFile = (file: Y.Map<any>) => {
+	const onFileClick = (file: Y.Map<any>) => {
+		console.log(file.toJSON());
 		const ytext = file.get('content');
 
 		if (monacoBinding.current !== null) {
 			monacoBinding.current.destroy();
 		}
 		const editor = editorRef.current;
-		const path = `urn:${file.get('name')}`;
+		const path = `urn:${file.get('path').substring(1)}`;
 		console.log('monaco', monacoRef.current.editor.getModel('amy j cunt'));
 		if (monacoRef.current.editor.getModel(path) === null)
-			monacoRef.current.editor.createModel(ytext.toString(), 'html', path);
+			monacoRef.current.editor.createModel(ytext.toString(), undefined, path);
 
 		editor.setModel(monacoRef.current.editor.getModel(path));
 
@@ -219,7 +220,7 @@ export default function CurrentProject(
 					<button
 						type="button"
 						onClick={() => {
-							onClickFile(test.getMap('structure').get('css'));
+							onFileClick(test.getMap('structure').get('css'));
 						}}
 					>
 						CSS
@@ -227,7 +228,7 @@ export default function CurrentProject(
 					<button
 						type="button"
 						onClick={() => {
-							onClickFile(test.getMap('structure').get('html'));
+							onFileClick(test.getMap('structure').get('html'));
 						}}
 					>
 						HTML
@@ -236,7 +237,7 @@ export default function CurrentProject(
 					<button
 						type="button"
 						onClick={() => {
-							onClickFile(test.getMap('structure').get('js'));
+							onFileClick(test.getMap('structure').get('js'));
 						}}
 					>
 						JS
@@ -260,7 +261,12 @@ export default function CurrentProject(
 				</header>
 				<main>
 					<div className="flex-container outer-file-container">
-						{projectStructure && <FolderTree project={projectStructure} />}
+						{projectStructure && (
+							<FolderTree
+								project={projectStructure}
+								onFileClick={onFileClick}
+							/>
+						)}
 						<div className="prj-editor-container">
 							<Editor
 								// defaultLanguage={extensions[project.extension]}

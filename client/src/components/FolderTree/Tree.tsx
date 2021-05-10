@@ -1,15 +1,14 @@
+import * as Y from 'yjs';
+
 /* eslint-disable react/button-has-type */
 import React, { useState } from 'react';
 
-import { StrollableContainer } from 'react-stroller';
 import { ContextMenuTrigger } from 'react-contextmenu';
-
-import styled from 'styled-components';
-import Folder from './Folder';
 import File from './File';
-import * as Y from 'yjs';
-
+import Folder from './Folder';
 import ProjectTreeCardRightClickMenu from '../RightClickMenu/ProjectTreeRightClickMenu';
+import { StrollableContainer } from 'react-stroller';
+import styled from 'styled-components';
 
 const StyledTree = styled.div`
 	line-height: 1.5;
@@ -25,6 +24,7 @@ const LightScrollbar = styled.div`
 
 interface ITreeProps {
 	project: Y.Map<unknown>;
+	onFileClick: (file: Y.Map<unknown>) => void;
 }
 
 function createTree(
@@ -32,7 +32,8 @@ function createTree(
 	idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
 	},
-	currId: [number]
+	currId: [number],
+	onFileClick: (file: Y.Map<unknown>) => void
 ): JSX.Element[] {
 	const nodes: JSX.Element[] = [];
 
@@ -94,7 +95,12 @@ function createTree(
 			const file = (
 				<div key={fileKey}>
 					<ContextMenuTrigger id={fileKey} holdToDisplay={-1}>
-						<File name={curr.get('name') as string} />
+						<File
+							name={curr.get('name') as string}
+							onFileClick={() => {
+								onFileClick(curr);
+							}}
+						/>
 					</ContextMenuTrigger>
 					<ProjectTreeCardRightClickMenu
 						id={fileKey}
@@ -111,7 +117,7 @@ function createTree(
 			const folderId = currId[0] + 1;
 			const folderKey = `treeItem:${folderId}`;
 			currId[0] += 1;
-			const children = createTree(curr, idToNodeMap, currId);
+			const children = createTree(curr, idToNodeMap, currId, onFileClick);
 			const folder = (
 				<div key={folderKey}>
 					<ContextMenuTrigger id={folderKey} holdToDisplay={-1}>
@@ -136,7 +142,7 @@ function createTree(
 }
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
-	const { project } = props;
+	const { project, onFileClick } = props;
 
 	const idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
@@ -144,7 +150,7 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	idToNodeMap[0] = project;
 
-	const tree = createTree(project, idToNodeMap, [0]);
+	const tree = createTree(project, idToNodeMap, [0], onFileClick);
 
 	// const addFileRoot = () => {
 	// 	const fileName = `file ${Math.random()}`;
