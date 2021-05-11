@@ -1,5 +1,5 @@
 import './RightClickMenu.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 interface IProjectTreeRightClickMenuProps {
@@ -9,6 +9,7 @@ interface IProjectTreeRightClickMenuProps {
 	handleAddFile?: (id: number) => void;
 	handleAddFolder?: (id: number) => void;
 	handleRemoveItem?: (id: number) => void;
+	handleRenameItem?: (id: number, name: string) => void;
 }
 
 export default function ProjectTreeCardRightClickMenu(
@@ -20,8 +21,12 @@ export default function ProjectTreeCardRightClickMenu(
 		isFolder,
 		handleAddFile,
 		handleAddFolder,
-		handleRemoveItem
+		handleRemoveItem,
+		handleRenameItem
 	} = props;
+
+	const rand = Date.now().toString();
+	const [newName, setNewName] = useState(rand);
 
 	const addFileById = () => {
 		if (handleAddFile !== undefined) {
@@ -38,6 +43,12 @@ export default function ProjectTreeCardRightClickMenu(
 	const removeItemById = () => {
 		if (handleRemoveItem !== undefined) {
 			handleRemoveItem(nodeId);
+		}
+	};
+
+	const renameItemById = () => {
+		if (handleRenameItem !== undefined) {
+			handleRenameItem(nodeId, newName);
 		}
 	};
 
@@ -78,6 +89,18 @@ export default function ProjectTreeCardRightClickMenu(
 		<></>
 	);
 
+	const renameItemMenuItem = isRootNode() ? (
+		<></>
+	) : (
+		<MenuItem
+			data={{ action: 'rename' }}
+			className="menu-item"
+			onClick={renameItemById}
+		>
+			Rename
+		</MenuItem>
+	);
+
 	const deleteItemMenuItem = isRootNode() ? (
 		<></>
 	) : (
@@ -95,9 +118,7 @@ export default function ProjectTreeCardRightClickMenu(
 			<ContextMenu id={id} className={`right-click-menu ${classNameIsFolder}`}>
 				{addFileMenuItem}
 				{addFolderMenuItem}
-				<MenuItem data={{ action: 'rename' }} className="menu-item">
-					Rename
-				</MenuItem>
+				{renameItemMenuItem}
 				{deleteItemMenuItem}
 			</ContextMenu>
 		</div>
@@ -107,5 +128,6 @@ export default function ProjectTreeCardRightClickMenu(
 ProjectTreeCardRightClickMenu.defaultProps = {
 	handleAddFile: undefined,
 	handleAddFolder: undefined,
-	handleRemoveItem: undefined
+	handleRemoveItem: undefined,
+	handleRenameItem: undefined
 };
