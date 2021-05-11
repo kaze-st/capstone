@@ -2,14 +2,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React, { useState } from 'react';
+
 import { AiOutlineFolder } from 'react-icons/ai';
-import Icon from 'react-icons-kit';
 import styled from 'styled-components';
-import { filePlus } from 'react-icons-kit/feather/filePlus';
-import { folderPlus } from 'react-icons-kit/feather/folderPlus';
 
 const StyledFolder = styled.div`
-	padding-left: 20px;
+	margin-left: 20px;
 
 	.folder--label {
 		display: flex;
@@ -53,7 +51,7 @@ export default function Folder(props: IFolderProps): JSX.Element {
 
 	const rootFolder = (
 		<StyledFolderRoot>
-			<div className="folder--label" onClick={handleToggle}>
+			<div className="tree-element folder--label" onClick={handleToggle}>
 				<AiOutlineFolder />
 				<span>{name}</span>
 			</div>
@@ -63,7 +61,7 @@ export default function Folder(props: IFolderProps): JSX.Element {
 
 	const normalFolder = (
 		<StyledFolder>
-			<div className="folder--label" onClick={handleToggle}>
+			<div className="tree-element folder--label" onClick={handleToggle}>
 				<AiOutlineFolder />
 				<span>{name}</span>
 			</div>

@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledFile = styled.div`
-	padding-left: 20px;
+	margin-left: 20px;
 	display: flex;
 	align-items: center;
 	span {
@@ -34,14 +34,16 @@ export default function File(props: ITreeFileProps): JSX.Element {
 	const extension = getExtensionFromFileName(name);
 
 	return (
-		<StyledFile
-			onClick={() => {
-				onFileClick();
-			}}
-		>
-			{/* render the extension or fallback to generic file icon  */}
-			{FILE_ICONS[extension] || <AiOutlineFile />}
-			<span>{name}</span>
-		</StyledFile>
+		<div className="tree-line tree-element">
+			<StyledFile
+				onClick={() => {
+					onFileClick();
+				}}
+			>
+				{/* render the extension or fallback to generic file icon  */}
+				{FILE_ICONS[extension] || <AiOutlineFile />}
+				<span>{name}</span>
+			</StyledFile>
+		</div>
 	);
 }

@@ -1,14 +1,14 @@
 import * as Y from 'yjs';
 
-/* eslint-disable react/button-has-type */
-import React, { useState } from 'react';
-
 import { ContextMenuTrigger } from 'react-contextmenu';
 import File from './File';
 import Folder from './Folder';
 import ProjectTreeCardRightClickMenu from '../RightClickMenu/ProjectTreeRightClickMenu';
+import React from 'react';
 import { StrollableContainer } from 'react-stroller';
 import styled from 'styled-components';
+
+/* eslint-disable react/button-has-type */
 
 const StyledTree = styled.div`
 	line-height: 1.5;
@@ -154,15 +154,6 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	console.log(idToNodeMap);
 
-	// const addFileRoot = () => {
-	// 	const fileName = `file ${Math.random()}`;
-	// 	const currentFolder = idToNodeMap[0];
-	// 	const newFile = new Y.Map();
-	// 	currentFolder.set(fileName, newFile);
-	// 	newFile.set('content', new Y.Text());
-	// 	newFile.set('name', fileName);
-	// };
-
 	return (
 		<nav className="prj-tree-nav">
 			<ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
@@ -172,14 +163,6 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 					</StrollableContainer>
 				</div>
 			</ContextMenuTrigger>
-
-			{/* <ProjectTreeCardRightClickMenu
-				id="folder-tree-root"
-				nodeId={0}
-				isFolder
-				handleAddFile={addFileRoot}
-			/> */}
-			{/* <button onClick={addFileRoot}>ADD FILE TO ROOT</button> */}
 		</nav>
 	);
 }
