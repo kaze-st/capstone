@@ -156,7 +156,6 @@ export default function ProjectTreeView(props: IProps): JSX.Element {
 		console.log(itemType, node);
 		const currentFolder = projectStructure.idToNodeMap[node.id];
 		if (itemType === AddItemType.File) {
-			console.log('file');
 			const newFile = new Y.Map();
 			const fileName = `file ${Math.random()}`;
 			currentFolder.set(fileName, newFile);

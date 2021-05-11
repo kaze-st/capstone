@@ -38,15 +38,16 @@ export default function CurrentProject(
 	const monacoBinding = useRef<any>(null);
 	const structureRef = useRef<any>(null);
 	const iframeRef = useRef<any>(null);
+	const currentFileRef = useRef<any>(null);
+	const onUpdateFileFunc = useRef<any>(null);
 	const [project, setProject] = useState<Y.Map<unknown> | null>(null);
 	const [
 		projectStructure,
 		setProjectStructure
 	] = useState<Y.Map<unknown> | null>(null);
 
-	const [, updateState] = React.useState();
-	const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
-
+	const [, forceUpdate] = useReducer((x) => x + 1, 0);
+	const [currentFile, setCurrentFile] = useState<Y.Map<any> | null>(null);
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { pid } = match.params;
@@ -62,20 +63,41 @@ export default function CurrentProject(
 
 	useEffect(() => {
 		return () => {
-			console.log('destroy');
 			if (provider.current !== null) {
+				console.log('destroy provider');
+
 				provider.current.destroy();
 			}
 
 			if (monacoBinding.current !== null) {
+				console.log('destroy monacoBinding');
 				monacoBinding.current.destroy();
 			}
+
+			if (monacoRef.current !== null) {
+				console.log('destroy monaco models');
+				monacoRef.current.editor.getModels().forEach((model) => {
+					model.dispose();
+					console.log('disposed');
+				});
+			}
+
+			// if (structureRef.current !== null && onUpdateFileFunc.current !== null) {
+			// 	console.log('Func disposed');
+			// 	// structureRef.current.unobserve(onUpdateFileFunc.current);
+			// }
 		};
 	}, []);
+
+	useEffect(() => {});
 
 	if (wsurl === undefined || url === undefined) {
 		return <></>;
 	}
+
+	const getCurrentFile = () => {
+		return currentFile;
+	};
 
 	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor, monaco): void => {
@@ -92,52 +114,53 @@ export default function CurrentProject(
 		console.log('ws', wsurl);
 		structureRef.current = structure;
 
-		structure.observeDeep((e) => {
+		// onUpdateFileFunc.current = (events) => {
+		// 	console.log('strucurte', structure.toJSON());
+		// 	console.log('event', events);
+
+		// 	events.forEach((event) => {
+		// 		const { target } = event;
+		// 		if (target instanceof Y.Map) {
+		// 			console.log('deleted debug', currentFile);
+
+		// 			if (currentFile?.keys().next().done) {
+		// 				console.log('deleted the file');
+		// 				setCurrentFile(null);
+		// 			}
+
+		// 			setTest(ydoc);
+		// 			setProjectStructure(ydoc.getMap('structure'));
+		// 			console.log('here, map', event.target.toJSON());
+		// 			forceUpdate();
+		// 		}
+		// 	});
+		// };
+		structure.observeDeep((events) => {
 			console.log('strucurte', structure.toJSON());
-			console.log('event', e);
+			console.log('event', events);
 
-			console.log('0', e[0].target instanceof Y.Map);
-			console.log('1', e[0].target instanceof Y.YMapEvent);
+			console.log('deleted debug 2', currentFileRef.current);
+			events.forEach((event) => {
+				const { target } = event;
+				if (target instanceof Y.Map) {
+					console.log('deleted debug', getCurrentFile());
 
-			if (e[0].target instanceof Y.Map) {
-				// const ydoc2 = new Y.Doc();
+					if (
+						currentFileRef.current &&
+						currentFileRef.current.keys().next().done
+					) {
+						console.log('deleted the file');
+						currentFileRef.current = null;
+						setCurrentFile(null);
+					}
 
-				// const folder1 = ydoc2.getMap('structure');
-
-				// const file1 = new Y.Map();
-				// folder1.set('filehtml', file1);
-				// folder1.set('name', 'Project 1');
-
-				// const textforFile = new Y.Text();
-				// file1.set('content', textforFile);
-				// file1.set('extension', 'html');
-				// file1.set('name', 'index.html');
-
-				// textforFile.insert(0, 'hfuewihfuiewhfiewhu');
-
-				// const file2 = new Y.Map();
-				// folder1.set('filecss', file2);
-
-				// const textforFile2 = new Y.Text();
-				// file2.set('content', textforFile2);
-				// file2.set('extension', 'css');
-				// file2.set('name', 'index.css');
-
-				// textforFile2.insert(0, 'wdwdwdwdwdw');
-				setTest(ydoc);
-				setProjectStructure(ydoc.getMap('structure'));
-				console.log('here');
-				forceUpdate();
-			}
+					setTest(ydoc);
+					setProjectStructure(ydoc.getMap('structure'));
+					console.log('here, map', event.target.toJSON());
+					forceUpdate();
+				}
+			});
 		});
-
-		// eslint-disable-next-line
-		// const monacoBinding = new MonacoBinding(
-		// 	ytext,
-		// 	/** @type {monaco.editor.ITextModel} */ editor.getModel(),
-		// 	new Set([editor]),
-		// 	provider.current.awareness
-		// );
 	};
 
 	// if (project === null) {
@@ -147,15 +170,14 @@ export default function CurrentProject(
 
 	const displayedProjectName = `My Project`;
 
-	// const onFileClick = (e) => {
-	// 	console.log('Hii', e);
-	// };
-
 	const onFileClick = (file: Y.Map<any>) => {
 		console.log(file.toJSON());
+		setCurrentFile(file);
+		currentFileRef.current = file;
 		const ytext = file.get('content');
 
 		if (monacoBinding.current !== null) {
+			console.log('monacoDestroyed', monacoBinding.current.destroy);
 			monacoBinding.current.destroy();
 		}
 		const editor = editorRef.current;
@@ -175,6 +197,7 @@ export default function CurrentProject(
 		);
 	};
 
+	console.log('currentFile', currentFile?.toJSON());
 	const runCode = () => {
 		if (test === null) {
 			return;
@@ -242,7 +265,12 @@ export default function CurrentProject(
 					>
 						JS
 					</button>
-					<button type="button" onClick={runCode}>
+					<button
+						type="button"
+						onClick={() => {
+							console.log(currentFile);
+						}}
+					>
 						Run Code
 					</button>
 				</div>
@@ -267,7 +295,7 @@ export default function CurrentProject(
 								onFileClick={onFileClick}
 							/>
 						)}
-						<div className="prj-editor-container">
+						<div className={`prj-editor-container${!currentFile && ' hidden'}`}>
 							<Editor
 								// defaultLanguage={extensions[project.extension]}
 								height="51rem"
