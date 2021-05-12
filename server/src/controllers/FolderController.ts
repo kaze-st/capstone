@@ -26,13 +26,12 @@ export default class FolderController {
 
 		const doc = new Y.Doc();
 		const ymap = doc.getMap('structure');
+		const root = new Y.Map();
+		ymap.set('/', root);
+		root.set('name', '/');
+		root.set('isFolder', true);
+		root.set('path', '/');
 		if (reqBody.hasStarterFiles) {
-			const root = new Y.Map();
-			ymap.set('/', root);
-			root.set('name', '/');
-			root.set('isFolder', true);
-			root.set('path', '/');
-
 			const htmlFile = new Y.Map();
 			const htmlFileName = 'index.html';
 			root.set(htmlFileName, htmlFile);
