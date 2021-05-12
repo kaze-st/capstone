@@ -22,3 +22,38 @@
 	background-color: black;
 	z-index: 5;
 }
+
+.prj-tree-nav {
+	flex-basis: 12.5rem;
+	padding: 1rem 0.5rem;
+	height: 100%;
+	background-color: #21252b;
+}
+
+.prj-editor-container {
+	flex: 1;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.prj-tree-nav .tree {
+	height: 100%;
+}
+
+.tree-element {
+	cursor: pointer;
+	display: flex;
+	hr {
+		flex: 1;
+		margin: 0;
+	}
+}
+
+.tree-element:hover, .tree-element-selected {
+	background-color: gray;
+}
+
+.tree-line {
+	border-left: 1px solid white;
+}
