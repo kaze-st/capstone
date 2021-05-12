@@ -37,15 +37,16 @@ export default function CurrentProject(
 	const monacoBinding = useRef<any>(null);
 	const structureRef = useRef<any>(null);
 	const iframeRef = useRef<any>(null);
+	const currentFileRef = useRef<any>(null);
+	const onUpdateFileFunc = useRef<any>(null);
 	const [project, setProject] = useState<IProjectFolder | null>(null);
 	const [
 		projectStructure,
 		setProjectStructure
 	] = useState<Y.Map<unknown> | null>(null);
 
-	const [, updateState] = React.useState();
-	const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
-
+	const [, forceUpdate] = useReducer((x) => x + 1, 0);
+	const [currentFile, setCurrentFile] = useState<Y.Map<any> | null>(null);
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { pid } = match.params;
@@ -60,18 +61,40 @@ export default function CurrentProject(
 	useEffect(() => {
 		return () => {
 			if (provider.current !== null) {
+				console.log('destroy provider');
+
 				provider.current.destroy();
 			}
 
 			if (monacoBinding.current !== null) {
+				console.log('destroy monacoBinding');
 				monacoBinding.current.destroy();
 			}
+
+			if (monacoRef.current !== null) {
+				console.log('destroy monaco models');
+				monacoRef.current.editor.getModels().forEach((model) => {
+					model.dispose();
+					console.log('disposed');
+				});
+			}
+
+			// if (structureRef.current !== null && onUpdateFileFunc.current !== null) {
+			// 	console.log('Func disposed');
+			// 	// structureRef.current.unobserve(onUpdateFileFunc.current);
+			// }
 		};
 	}, []);
+
+	useEffect(() => {});
 
 	if (wsurl === undefined || url === undefined) {
 		return <></>;
 	}
+
+	const getCurrentFile = () => {
+		return currentFile;
+	};
 
 	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor, monaco): void => {
@@ -86,24 +109,31 @@ export default function CurrentProject(
 
 		const structure = ydoc.getMap('structure');
 		structureRef.current = structure;
+		structure.observeDeep((events) => {
+			events.forEach((event) => {
+				const { target } = event;
+				if (target instanceof Y.Map) {
+					if (
+						currentFileRef.current &&
+						currentFileRef.current.keys().next().done
+					) {
+						currentFileRef.current = null;
+						setCurrentFile(null);
+					}
 
-		structure.observeDeep((e) => {
-			if (e[0].target instanceof Y.Map) {
-				setTest(ydoc);
-				setProjectStructure(ydoc.getMap('structure'));
-				forceUpdate();
-			}
+					setTest(ydoc);
+					setProjectStructure(ydoc.getMap('structure'));
+					forceUpdate();
+				}
+			});
 		});
 	};
-
-	// if (project === null) {
-	// 	// return <Spinner />;
-	// 	return <div>Wsup??</div>;
-	// }
 
 	const displayedProjectName = project === null ? 'My Project' : project.name;
 
 	const onFileClick = (file: Y.Map<any>) => {
+		setCurrentFile(file);
+		currentFileRef.current = file;
 		const ytext = file.get('content');
 
 		if (monacoBinding.current !== null) {
@@ -167,40 +197,21 @@ export default function CurrentProject(
 		downloadProject(projectStructure, displayedProjectName);
 	};
 
+	const isPlayground =
+		projectStructure !== null &&
+		(projectStructure?.get('isPlayground') as boolean);
+
 	return (
 		<>
 			<div className="page-wrapper">
 				<header className="editor-nav">
 					{test && (
 						<div>
-							<button
-								type="button"
-								onClick={() => {
-									onFileClick(test.getMap('structure').get('style.css'));
-								}}
-							>
-								CSS
-							</button>
-							<button
-								type="button"
-								onClick={() => {
-									onFileClick(test.getMap('structure').get('index.html'));
-								}}
-							>
-								HTML
-							</button>
-
-							<button
-								type="button"
-								onClick={() => {
-									onFileClick(test.getMap('structure').get('script.js'));
-								}}
-							>
-								JS
-							</button>
-							<button type="button" onClick={runCode}>
-								Run Code
-							</button>
+							{isPlayground && (
+								<button type="button" onClick={runCode}>
+									Run Code
+								</button>
+							)}
 							<button type="button" onClick={handleDownload}>
 								Download
 							</button>
@@ -223,10 +234,10 @@ export default function CurrentProject(
 								onFileClick={onFileClick}
 							/>
 						)}
-						<div className="prj-editor-container">
+						<div className={`prj-editor-container${!currentFile && ' hidden'}`}>
 							<Editor
 								// defaultLanguage={extensions[project.extension]}
-								width="99.9%"
+								width="100%"
 								onMount={handleEditorDidMount}
 								theme="vs-dark"
 								loading={<Spinner />}
