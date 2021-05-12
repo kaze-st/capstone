@@ -61,21 +61,16 @@ export default function CurrentProject(
 	useEffect(() => {
 		return () => {
 			if (provider.current !== null) {
-				console.log('destroy provider');
-
 				provider.current.destroy();
 			}
 
 			if (monacoBinding.current !== null) {
-				console.log('destroy monacoBinding');
 				monacoBinding.current.destroy();
 			}
 
 			if (monacoRef.current !== null) {
-				console.log('destroy monaco models');
 				monacoRef.current.editor.getModels().forEach((model) => {
 					model.dispose();
-					console.log('disposed');
 				});
 			}
 
@@ -92,9 +87,9 @@ export default function CurrentProject(
 		return <></>;
 	}
 
-	const getCurrentFile = () => {
-		return currentFile;
-	};
+	// const getCurrentFile = () => {
+	// 	return currentFile;
+	// };
 
 	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor, monaco): void => {
@@ -160,9 +155,10 @@ export default function CurrentProject(
 			return;
 		}
 		const structure = test.getMap('structure');
-		const html = structure.get('index.html').get('content').toString();
-		const css = structure.get('style.css').get('content').toString();
-		const js = structure.get('script.js').get('content').toString();
+		const root = structure.get('/');
+		const html = root.get('index.html').get('content').toString();
+		const css = root.get('style.css').get('content').toString();
+		const js = root.get('script.js').get('content').toString();
 
 		const iframe = iframeRef.current;
 		const document = iframe.contentDocument;
