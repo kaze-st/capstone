@@ -9,10 +9,10 @@ import Folder from './Folder';
 import ProjectTreeCardRightClickMenu from '../RightClickMenu/ProjectTreeRightClickMenu';
 import { StrollableContainer } from 'react-stroller';
 import styled from 'styled-components';
-import TempFile from './TempFile';
+import TempInput from './TempFileFolder';
 
 import './FolderTree.scss';
-import FolderTreeProvider from './NodeMapContext';
+import FolderTreeProvider, { useFolderTree } from './FolderTreeContext';
 
 const StyledTree = styled.div`
 	line-height: 1.5;
@@ -36,13 +36,8 @@ function addFileToTree(
 	idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
 	},
-	idToTempFile: {
-		[id: number]: JSX.Element;
-	},
 	currId: [number]
 ) {
-	const tempFile = idToTempFile[folderId];
-
 	currId[0] += 1;
 	const fileName = `file ${currId[0]}`;
 	const currentFolder = idToNodeMap[folderId];
@@ -94,21 +89,10 @@ function createTree(
 	idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
 	},
-	idToTempFile: {
-		[id: number]: JSX.Element;
-	},
 	currId: [number],
 	onFileClick: (file: Y.Map<unknown>) => void,
 	setIsBlur: React.Dispatch<React.SetStateAction<boolean>>
 ): JSX.Element[] {
-	const addFile = (folderId) => {
-		addFileToTree(folderId, idToNodeMap, idToTempFile, currId);
-	};
-
-	const addFolder = (folderId) => {
-		addFolderToTree(folderId, idToNodeMap, currId);
-	};
-
 	const removeItem = (nodeId) => {
 		removeItemFromTree(nodeId, idToNodeMap);
 	};
@@ -138,11 +122,11 @@ function createTree(
 	const itemKeys = Array.from(project.keys());
 	const currNodeId = currId[0];
 
-	const tempFile = <TempFile setIsBlur={setIsBlur} />;
-	console.log('currNodeId', currNodeId);
+	const tempInput = (
+		<TempInput parentFolderId={currNodeId} setIsBlur={setIsBlur} />
+	);
 	if (currNodeId !== 0) {
-		nodes.push(tempFile);
-		idToTempFile[currNodeId] = tempFile;
+		nodes.push(tempInput);
 	}
 
 	itemKeys.forEach((key) => {
@@ -183,7 +167,6 @@ function createTree(
 			const children = createTree(
 				curr,
 				idToNodeMap,
-				idToTempFile,
 				currId,
 				onFileClick,
 				setIsBlur
@@ -197,8 +180,6 @@ function createTree(
 						id={folderKey}
 						nodeId={folderId}
 						isFolder
-						handleAddFile={addFile}
-						handleAddFolder={addFolder}
 						handleRemoveItem={removeItem}
 						handleRenameItem={renameItem}
 					/>
@@ -217,25 +198,13 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	const [isBlur, setIsBlur] = useState(false);
 
-	const idToNodeMap: {
-		[id: number]: Y.Map<unknown>;
-	} = {};
+	// const idToNodeMap: {
+	// 	[id: number]: Y.Map<unknown>;
+	// } = {};
 
-	const idToTempFile: {
-		[id: number]: JSX.Element;
-	} = {};
+	const { idToNodeMap } = useFolderTree();
 
-	const tree = createTree(
-		project,
-		idToNodeMap,
-		idToTempFile,
-		[0],
-		onFileClick,
-		setIsBlur
-	);
-
-	console.log(project.toJSON());
-	console.log(idToNodeMap);
+	const tree = createTree(project, idToNodeMap, [0], onFileClick, setIsBlur);
 
 	const blurNavClassName = isBlur ? 'blurred' : '';
 	return (
@@ -255,3 +224,12 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 FolderTree.File = File;
 FolderTree.Folder = Folder;
+
+/*
+	<right click>
+		folder 
+			tempFile
+	</rc>
+	file
+
+*/

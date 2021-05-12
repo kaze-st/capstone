@@ -1,13 +1,12 @@
 import './RightClickMenu.scss';
 import React, { useState } from 'react';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
+import { useFolderTree } from '../FolderTree/FolderTreeContext';
 
 interface IProjectTreeRightClickMenuProps {
 	id: string;
 	nodeId: number;
 	isFolder: boolean;
-	handleAddFile?: (id: number) => void;
-	handleAddFolder?: (id: number) => void;
 	handleRemoveItem?: (id: number) => void;
 	handleRenameItem?: (id: number, name: string) => void;
 }
@@ -15,28 +14,19 @@ interface IProjectTreeRightClickMenuProps {
 export default function ProjectTreeCardRightClickMenu(
 	props: IProjectTreeRightClickMenuProps
 ): JSX.Element {
-	const {
-		id,
-		nodeId,
-		isFolder,
-		handleAddFile,
-		handleAddFolder,
-		handleRemoveItem,
-		handleRenameItem
-	} = props;
+	const { id, nodeId, isFolder, handleRemoveItem, handleRenameItem } = props;
 
-	const rand = Date.now().toString();
-	const [newName, setNewName] = useState(rand);
+	const { setCurrDisplayedTempInput } = useFolderTree();
 
 	const addFileById = () => {
-		if (handleAddFile !== undefined) {
-			handleAddFile(nodeId);
+		if (setCurrDisplayedTempInput !== undefined) {
+			setCurrDisplayedTempInput({ parentFolderId: nodeId, isFolder: false });
 		}
 	};
 
 	const addFolderById = () => {
-		if (handleAddFolder !== undefined) {
-			handleAddFolder(nodeId);
+		if (setCurrDisplayedTempInput !== undefined) {
+			setCurrDisplayedTempInput({ parentFolderId: nodeId, isFolder: true });
 		}
 	};
 
@@ -48,7 +38,7 @@ export default function ProjectTreeCardRightClickMenu(
 
 	const renameItemById = () => {
 		if (handleRenameItem !== undefined) {
-			handleRenameItem(nodeId, newName);
+			handleRenameItem(nodeId, '');
 		}
 	};
 
@@ -126,8 +116,6 @@ export default function ProjectTreeCardRightClickMenu(
 }
 
 ProjectTreeCardRightClickMenu.defaultProps = {
-	handleAddFile: undefined,
-	handleAddFolder: undefined,
 	handleRemoveItem: undefined,
 	handleRenameItem: undefined
 };

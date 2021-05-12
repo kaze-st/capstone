@@ -96,34 +96,7 @@ export default function CurrentProject(
 			console.log('strucurte', structure.toJSON());
 			console.log('event', e);
 
-			console.log('0', e[0].target instanceof Y.Map);
-			console.log('1', e[0].target instanceof Y.YMapEvent);
-
 			if (e[0].target instanceof Y.Map) {
-				// const ydoc2 = new Y.Doc();
-
-				// const folder1 = ydoc2.getMap('structure');
-
-				// const file1 = new Y.Map();
-				// folder1.set('filehtml', file1);
-				// folder1.set('name', 'Project 1');
-
-				// const textforFile = new Y.Text();
-				// file1.set('content', textforFile);
-				// file1.set('extension', 'html');
-				// file1.set('name', 'index.html');
-
-				// textforFile.insert(0, 'hfuewihfuiewhfiewhu');
-
-				// const file2 = new Y.Map();
-				// folder1.set('filecss', file2);
-
-				// const textforFile2 = new Y.Text();
-				// file2.set('content', textforFile2);
-				// file2.set('extension', 'css');
-				// file2.set('name', 'index.css');
-
-				// textforFile2.insert(0, 'wdwdwdwdwdw');
 				setTest(ydoc);
 				setProjectStructure(ydoc.getMap('structure'));
 				console.log('here');

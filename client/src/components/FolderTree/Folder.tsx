@@ -7,6 +7,7 @@ import Icon from 'react-icons-kit';
 import styled from 'styled-components';
 import { filePlus } from 'react-icons-kit/feather/filePlus';
 import { folderPlus } from 'react-icons-kit/feather/folderPlus';
+import { useFolderTree } from './FolderTreeContext';
 
 const StyledFolder = styled.div`
 	padding-left: 20px;
