@@ -23,6 +23,7 @@ export default function CurrentDoc(
 	props: RouteComponentProps<MatchParams>
 ): JSX.Element {
 	const { match } = props;
+	const [content, setContent] = useState('');
 
 	// eslint-disable-next-line
 	const editorRef = useRef<any>(null);
@@ -72,6 +73,22 @@ export default function CurrentDoc(
 			new Set([editor]),
 			provider.current.awareness
 		);
+
+		ytext.observe((e) => {
+			if (e.target instanceof Y.Text) {
+				setContent(ytext.toJSON());
+			}
+		});
+	};
+
+	const handleDownload = () => {
+		const downloadFile = new Blob([content], { type: 'text/plain' });
+		const downloadURL = URL.createObjectURL(downloadFile);
+		const element = document.createElement('a');
+		element.href = downloadURL;
+		element.download = `${file?.name}.${file?.extension}`;
+		document.body.appendChild(element);
+		element.click();
 	};
 
 	if (file === null) {
@@ -96,6 +113,13 @@ export default function CurrentDoc(
 					<li>
 						<button className="white-button" type="button">
 							<Link to="/files/ownedFiles">Go Back to Files</Link>
+						</button>
+						<button
+							className="white-button"
+							type="button"
+							onClick={handleDownload}
+						>
+							Download
 						</button>
 					</li>
 					<li className="display-name">{displayedFileName}</li>

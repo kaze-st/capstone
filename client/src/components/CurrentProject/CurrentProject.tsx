@@ -14,6 +14,8 @@ import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import downloadProject from './DownloadProject';
+import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 
 dotenv.config();
 
@@ -35,7 +37,7 @@ export default function CurrentProject(
 	const monacoBinding = useRef<any>(null);
 	const structureRef = useRef<any>(null);
 	const iframeRef = useRef<any>(null);
-	const [project, setProject] = useState<Y.Map<unknown> | null>(null);
+	const [project, setProject] = useState<IProjectFolder | null>(null);
 	const [
 		projectStructure,
 		setProjectStructure
@@ -99,7 +101,7 @@ export default function CurrentProject(
 	// 	return <div>Wsup??</div>;
 	// }
 
-	const displayedProjectName = 'My Project';
+	const displayedProjectName = project === null ? 'My Project' : project.name;
 
 	const onFileClick = (file: Y.Map<any>) => {
 		const ytext = file.get('content');
@@ -161,6 +163,10 @@ export default function CurrentProject(
 		document.close();
 	};
 
+	const handleDownload = () => {
+		downloadProject(projectStructure, displayedProjectName);
+	};
+
 	return (
 		<>
 			<div className="page-wrapper">
@@ -194,6 +200,9 @@ export default function CurrentProject(
 							</button>
 							<button type="button" onClick={runCode}>
 								Run Code
+							</button>
+							<button type="button" onClick={handleDownload}>
+								Download
 							</button>
 						</div>
 					)}
