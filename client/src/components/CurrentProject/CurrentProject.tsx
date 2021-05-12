@@ -99,7 +99,7 @@ export default function CurrentProject(
 	// 	return <div>Wsup??</div>;
 	// }
 
-	const displayedProjectName = `My Project`;
+	const displayedProjectName = 'My Project';
 
 	const onFileClick = (file: Y.Map<any>) => {
 		const ytext = file.get('content');
@@ -128,9 +128,9 @@ export default function CurrentProject(
 			return;
 		}
 		const structure = test.getMap('structure');
-		const html = structure.get('html').get('content').toString();
-		const css = structure.get('css').get('content').toString();
-		const js = structure.get('js').get('content').toString();
+		const html = structure.get('index.html').get('content').toString();
+		const css = structure.get('style.css').get('content').toString();
+		const js = structure.get('script.js').get('content').toString();
 
 		const iframe = iframeRef.current;
 		const document = iframe.contentDocument;
@@ -170,7 +170,7 @@ export default function CurrentProject(
 							<button
 								type="button"
 								onClick={() => {
-									onFileClick(test.getMap('structure').get('css'));
+									onFileClick(test.getMap('structure').get('style.css'));
 								}}
 							>
 								CSS
@@ -178,7 +178,7 @@ export default function CurrentProject(
 							<button
 								type="button"
 								onClick={() => {
-									onFileClick(test.getMap('structure').get('html'));
+									onFileClick(test.getMap('structure').get('index.html'));
 								}}
 							>
 								HTML
@@ -187,7 +187,7 @@ export default function CurrentProject(
 							<button
 								type="button"
 								onClick={() => {
-									onFileClick(test.getMap('structure').get('js'));
+									onFileClick(test.getMap('structure').get('script.js'));
 								}}
 							>
 								JS

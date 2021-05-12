@@ -95,20 +95,18 @@ export default function File(props: ITreeFileProps): JSX.Element {
 			}`}
 			onClick={() => {
 				if (setSelectedFileId !== undefined) setSelectedFileId(id);
+				onFileClick();
 			}}
 			role="button"
 			onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
 				if (event.key === KeyEvent.Enter && setSelectedFileId !== undefined) {
 					setSelectedFileId(id);
+					onFileClick();
 				}
 			}}
 			tabIndex={0}
 		>
-			<StyledFile
-				onClick={() => {
-					onFileClick();
-				}}
-			>
+			<StyledFile>
 				{/* render the extension or fallback to generic file icon  */}
 				{FILE_ICONS[extension] || <AiOutlineFile />}
 				<span className={isInputHidden ? '' : 'hidden'}>{name}</span>

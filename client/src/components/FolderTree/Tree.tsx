@@ -32,45 +32,6 @@ interface ITreeProps {
 	onFileClick: (file: Y.Map<unknown>) => void;
 }
 
-function addFileToTree(
-	folderId: string,
-	idToNodeMap: {
-		[id: number]: Y.Map<unknown>;
-	},
-	currId: [number]
-) {
-	currId[0] += 1;
-	const fileName = `file ${currId[0]}`;
-	const currentFolder = idToNodeMap[folderId];
-	const newFile = new Y.Map();
-	currentFolder.set(fileName, newFile);
-	newFile.set('content', new Y.Text());
-	newFile.set('name', fileName);
-	newFile.set('isFolder', false);
-
-	const currentFolderPath = currentFolder.get('path') as string;
-	newFile.set('path', currentFolderPath + fileName);
-}
-
-function addFolderToTree(
-	folderId: string,
-	idToNodeMap: {
-		[id: number]: Y.Map<unknown>;
-	},
-	currId: [number]
-) {
-	currId[0] += 1;
-	const folderName = `folder ${currId[0]}`;
-	const currentFolder = idToNodeMap[folderId];
-	const newFolder = new Y.Map();
-	currentFolder.set(folderName, newFolder);
-	newFolder.set('name', folderName);
-	newFolder.set('isFolder', true);
-
-	const currentFolderPath = currentFolder.get('path') as string;
-	newFolder.set('path', `${currentFolderPath + folderName}/`);
-}
-
 function removeItemFromTree(
 	nodeId: string,
 	idToNodeMap: {
@@ -92,30 +53,11 @@ function createTree(
 	},
 	currId: [number],
 	onFileClick: (file: Y.Map<unknown>) => void,
-	setIsBlur: React.Dispatch<React.SetStateAction<boolean>>
+	setIsBlur: React.Dispatch<React.SetStateAction<boolean>>,
+	isPlayground: boolean
 ): JSX.Element[] {
 	const removeItem = (nodeId) => {
 		removeItemFromTree(nodeId, idToNodeMap);
-	};
-
-	const renameItem = (nodeId, newName: string) => {
-		const item = idToNodeMap[nodeId];
-		const parent = item.parent as Y.Map<unknown>;
-		const itemName = item.get('name') as string;
-		if (itemName === newName) {
-			return;
-		}
-		if (parent.has(itemName)) {
-			const temp = item.clone() as Y.Map<unknown>;
-			temp.set('name', newName);
-			let newPath = parent.get('path') + newName;
-			if (item.get('isFolder') === true) {
-				newPath += '/';
-			}
-			temp.set('path', newPath);
-			parent.set(newName, temp);
-			parent.delete(itemName);
-		}
 	};
 
 	const nodes: JSX.Element[] = [];
@@ -143,7 +85,18 @@ function createTree(
 			// FILE
 			currId[0] += 1;
 			const fileKey = `treeItem:${currId[0]}`;
-			const file = (
+			// IF IT'S A PLAYGROUND DISABLE RIGHTCLICK MENU
+			const file = isPlayground ? (
+				<File
+					key={fileKey}
+					id={currId[0]}
+					name={curr.get('name') as string}
+					onFileClick={() => {
+						onFileClick(curr);
+					}}
+					setIsBlur={setIsBlur}
+				/>
+			) : (
 				<div key={fileKey}>
 					<ContextMenuTrigger id={fileKey} holdToDisplay={-1}>
 						<File
@@ -175,9 +128,19 @@ function createTree(
 				idToNodeMap,
 				currId,
 				onFileClick,
-				setIsBlur
+				setIsBlur,
+				isPlayground
 			);
-			const folder = (
+			const folder = isPlayground ? (
+				<Folder
+					key={folderKey}
+					id={folderId}
+					name={curr.get('name') as string}
+					setIsBlur={setIsBlur}
+				>
+					{children}
+				</Folder>
+			) : (
 				<div key={folderKey}>
 					<ContextMenuTrigger id={folderKey} holdToDisplay={-1}>
 						<Folder
@@ -206,12 +169,20 @@ function createTree(
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
 	const { project, onFileClick } = props;
+	const isPlayground = project.get('isPlayground') as boolean;
 
 	const [isBlur, setIsBlur] = useState(false);
 
 	const { idToNodeMap } = useFolderTree();
 
-	const tree = createTree(project, idToNodeMap, [0], onFileClick, setIsBlur);
+	const tree = createTree(
+		project,
+		idToNodeMap,
+		[0],
+		onFileClick,
+		setIsBlur,
+		isPlayground
+	);
 
 	const blurNavClassName = isBlur ? 'blurred' : '';
 	return (

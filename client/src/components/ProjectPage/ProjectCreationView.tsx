@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import '../FilesPage/FileCreation.scss';
 
 import React, { useState } from 'react';
@@ -14,7 +16,7 @@ export default function FolderCreationDialogue(
 ): JSX.Element {
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const { uid, refreshPage, handleModalClose } = props;
-	const [hasStarterFiles, setHasStarterFiles] = useState(true);
+	const [hasStarterFiles, setHasStarterFiles] = useState(false);
 
 	const [newFolder, setNewFolder] = useState({
 		name: ''
@@ -27,6 +29,10 @@ export default function FolderCreationDialogue(
 
 	const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
+		if (newFolder.name === '') {
+			setError('Project has to have a name!');
+			return;
+		}
 		try {
 			await axios.post(`${url}/api/v1/folder/create-folder`, {
 				name: newFolder.name,
@@ -43,7 +49,6 @@ export default function FolderCreationDialogue(
 
 	return (
 		<form>
-			{error && <div>Error: {error}</div>}
 			<div className="card-creation-container">
 				<button
 					type="button"
@@ -52,6 +57,7 @@ export default function FolderCreationDialogue(
 				>
 					Close
 				</button>
+				{error && <div>Error: {error}</div>}
 				<div className="card-creation-label">Project Name:</div>
 				<input
 					type="text"
@@ -69,7 +75,13 @@ export default function FolderCreationDialogue(
 								setHasStarterFiles(!hasStarterFiles);
 							}}
 						/>
-						Initialize with starter files
+						<span
+							onClick={() => {
+								setHasStarterFiles(!hasStarterFiles);
+							}}
+						>
+							Initialize as a playground
+						</span>
 					</label>
 				</div>
 				<button
