@@ -27,7 +27,7 @@ export default function ProjectFolderCardRightClickMenu(
 		setCurrentProjectToShare
 	} = props;
 	// eslint-disable-next-line
-	const fid = projectFolder._id;
+	const pid = projectFolder._id;
 	const urlParams = useParams<RouteParams>();
 	const projectViewPath = urlParams.ownedOrShared;
 
@@ -39,7 +39,7 @@ export default function ProjectFolderCardRightClickMenu(
 	return (
 		<div>
 			<ContextMenu id={id} className="right-click-menu">
-				<Link to={`/projects/${fid}`}>
+				<Link to={`/project/${pid}`}>
 					<MenuItem className="menu-item">Open Project</MenuItem>
 				</Link>
 				{projectViewPath === FilePath.OwnedProjects ? (

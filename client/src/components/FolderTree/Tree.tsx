@@ -209,10 +209,6 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 	const [isBlur, setIsBlur] = useState(false);
 
-	// const idToNodeMap: {
-	// 	[id: number]: Y.Map<unknown>;
-	// } = {};
-
 	const { idToNodeMap } = useFolderTree();
 
 	const tree = createTree(project, idToNodeMap, [0], onFileClick, setIsBlur);
@@ -235,12 +231,3 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 
 FolderTree.File = File;
 FolderTree.Folder = Folder;
-
-/*
-	<right click>
-		folder 
-			tempFile
-	</rc>
-	file
-
-*/

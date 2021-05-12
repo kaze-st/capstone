@@ -39,6 +39,9 @@ interface IFolderTreeContext {
 		| React.Dispatch<React.SetStateAction<ICurrRenamedFile>>
 		| undefined;
 
+	selectedFileId: number;
+	setSelectedFileId: React.Dispatch<React.SetStateAction<number>> | undefined;
+
 	idToNodeMap: {
 		[id: number]: Y.Map<unknown>;
 	};
@@ -65,6 +68,9 @@ const TreeContext = React.createContext<IFolderTreeContext>({
 		newName: ''
 	},
 	setCurrRenamingFile: undefined,
+
+	selectedFileId: -1,
+	setSelectedFileId: undefined,
 
 	idToNodeMap: {},
 	addFileToTree: null,
@@ -95,6 +101,7 @@ export default function FolderTreeProvider(
 		id: -1,
 		newName: ''
 	});
+	const [selectedFileId, setSelectedFileId] = useState(-1);
 
 	const { idToNodeMap } = useFolderTree();
 
@@ -172,6 +179,8 @@ export default function FolderTreeProvider(
 		setCurrDisplayedTempInput,
 		currRenamingFile,
 		setCurrRenamingFile,
+		selectedFileId,
+		setSelectedFileId,
 		idToNodeMap,
 		addFileToTree,
 		addFolderToTree,

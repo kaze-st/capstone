@@ -36,7 +36,13 @@ function getExtensionFromFileName(name: string) {
 export default function File(props: ITreeFileProps): JSX.Element {
 	const { id, name, onFileClick, setIsBlur } = props;
 	const [isFocus, setIsFocus] = useState(false);
-	const { currRenamingFile, setCurrRenamingFile, renameItem } = useFolderTree();
+	const {
+		currRenamingFile,
+		setCurrRenamingFile,
+		renameItem,
+		selectedFileId,
+		setSelectedFileId
+	} = useFolderTree();
 
 	const extension = getExtensionFromFileName(name);
 
@@ -83,7 +89,21 @@ export default function File(props: ITreeFileProps): JSX.Element {
 	}, [isInputHidden]);
 
 	return (
-		<div className="tree-line tree-element">
+		<div
+			className={`tree-line tree-element ${
+				selectedFileId === id ? 'tree-element-selected' : ''
+			}`}
+			onClick={() => {
+				if (setSelectedFileId !== undefined) setSelectedFileId(id);
+			}}
+			role="button"
+			onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
+				if (event.key === KeyEvent.Enter && setSelectedFileId !== undefined) {
+					setSelectedFileId(id);
+				}
+			}}
+			tabIndex={0}
+		>
 			<StyledFile
 				onClick={() => {
 					onFileClick();
