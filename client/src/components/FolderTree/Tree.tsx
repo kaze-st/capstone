@@ -1,6 +1,8 @@
+import './FolderTree.scss';
+
 import * as Y from 'yjs';
 
-/* eslint-disable react/button-has-type */
+import FolderTreeProvider, { useFolderTree } from './FolderTreeContext';
 import React, { useState } from 'react';
 
 import { ContextMenuTrigger } from 'react-contextmenu';
@@ -8,11 +10,10 @@ import File from './File';
 import Folder from './Folder';
 import ProjectTreeCardRightClickMenu from '../RightClickMenu/ProjectTreeRightClickMenu';
 import { StrollableContainer } from 'react-stroller';
-import styled from 'styled-components';
 import TempInput from './TempInput';
+import styled from 'styled-components';
 
-import './FolderTree.scss';
-import FolderTreeProvider, { useFolderTree } from './FolderTreeContext';
+/* eslint-disable react/button-has-type */
 
 const StyledTree = styled.div`
 	line-height: 1.5;

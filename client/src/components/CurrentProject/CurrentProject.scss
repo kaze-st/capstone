@@ -21,6 +21,7 @@
 	top: 0;
 	right: 0;
 	bottom: 0;
+	height: 100%;
 }
 
 .iframe {
@@ -30,7 +31,6 @@
 .prj-tree-nav {
 	flex-basis: 12.5rem;
 	padding: 1rem 0.5rem;
-	margin-right: 2rem;
 	height: 100%;
 	background-color: #21252b;
 }
@@ -44,4 +44,16 @@
 
 .prj-tree-nav .tree {
 	height: 100%;
+}
+
+.tree-element {
+	cursor: pointer;
+}
+
+.tree-element:hover {
+	background-color: gray;
+}
+
+.tree-line {
+	border-left: 1px solid white;
 }

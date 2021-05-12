@@ -1,12 +1,13 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 import { AiOutlineFile } from 'react-icons/ai';
 import FILE_ICONS from './FileIcon';
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import { Key as KeyEvent } from 'ts-key-enum';
+import styled from 'styled-components';
 import { useFolderTree } from './FolderTreeContext';
 
 const StyledFile = styled.div`
-	padding-left: 20px;
+	margin-left: 20px;
 	display: flex;
 	align-items: center;
 	span {
@@ -82,28 +83,30 @@ export default function File(props: ITreeFileProps): JSX.Element {
 	}, [isInputHidden]);
 
 	return (
-		<StyledFile
-			onClick={() => {
-				onFileClick();
-			}}
-		>
-			{/* render the extension or fallback to generic file icon  */}
-			{FILE_ICONS[extension] || <AiOutlineFile />}
-			<span className={isInputHidden ? '' : 'hidden'}>{name}</span>
+		<div className="tree-line tree-element">
+			<StyledFile
+				onClick={() => {
+					onFileClick();
+				}}
+			>
+				{/* render the extension or fallback to generic file icon  */}
+				{FILE_ICONS[extension] || <AiOutlineFile />}
+				<span className={isInputHidden ? '' : 'hidden'}>{name}</span>
 
-			<input
-				className={`temp-input ${isInputFocused} ${
-					isInputHidden ? 'hidden' : ''
-				}`}
-				type="text"
-				value={currRenamingFile.newName}
-				placeholder="New File Name"
-				onChange={handleRenamedNameChange}
-				onFocus={handleFocus}
-				onBlur={handleClickAway}
-				onKeyDown={handleKeyDown}
-				ref={inputRef}
-			/>
-		</StyledFile>
+				<input
+					className={`temp-input ${isInputFocused} ${
+						isInputHidden ? 'hidden' : ''
+					}`}
+					type="text"
+					value={currRenamingFile.newName}
+					placeholder="New File Name"
+					onChange={handleRenamedNameChange}
+					onFocus={handleFocus}
+					onBlur={handleClickAway}
+					onKeyDown={handleKeyDown}
+					ref={inputRef}
+				/>
+			</StyledFile>
+		</div>
 	);
 }

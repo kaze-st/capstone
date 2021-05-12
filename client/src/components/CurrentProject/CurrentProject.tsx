@@ -9,10 +9,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import FolderTree from '../FolderTree/Tree';
 import { Footer } from '../LandingPage/LandingPage';
-import IFile from '../../types/IFile';
-import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 import { MonacoBinding } from 'y-monaco';
-import ProjectTreeView from './ProjectTreeView';
 import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
@@ -95,14 +92,6 @@ export default function CurrentProject(
 				forceUpdate();
 			}
 		});
-
-		// eslint-disable-next-line
-		// const monacoBinding = new MonacoBinding(
-		// 	ytext,
-		// 	/** @type {monaco.editor.ITextModel} */ editor.getModel(),
-		// 	new Set([editor]),
-		// 	provider.current.awareness
-		// );
 	};
 
 	// if (project === null) {
@@ -174,41 +163,40 @@ export default function CurrentProject(
 
 	return (
 		<>
-			{test && (
-				<div>
-					<button
-						type="button"
-						onClick={() => {
-							onFileClick(test.getMap('structure').get('css'));
-						}}
-					>
-						CSS
-					</button>
-					<button
-						type="button"
-						onClick={() => {
-							onFileClick(test.getMap('structure').get('html'));
-						}}
-					>
-						HTML
-					</button>
-
-					<button
-						type="button"
-						onClick={() => {
-							onFileClick(test.getMap('structure').get('js'));
-						}}
-					>
-						JS
-					</button>
-					<button type="button" onClick={runCode}>
-						Run Code
-					</button>
-				</div>
-			)}
-
 			<div className="page-wrapper">
 				<header className="editor-nav">
+					{test && (
+						<div>
+							<button
+								type="button"
+								onClick={() => {
+									onFileClick(test.getMap('structure').get('css'));
+								}}
+							>
+								CSS
+							</button>
+							<button
+								type="button"
+								onClick={() => {
+									onFileClick(test.getMap('structure').get('html'));
+								}}
+							>
+								HTML
+							</button>
+
+							<button
+								type="button"
+								onClick={() => {
+									onFileClick(test.getMap('structure').get('js'));
+								}}
+							>
+								JS
+							</button>
+							<button type="button" onClick={runCode}>
+								Run Code
+							</button>
+						</div>
+					)}
 					<ul className="editor-nav-links">
 						<li>
 							<button className="white-button" type="button">
@@ -229,25 +217,25 @@ export default function CurrentProject(
 						<div className="prj-editor-container">
 							<Editor
 								// defaultLanguage={extensions[project.extension]}
-								height="51rem"
+								width="99.9%"
 								onMount={handleEditorDidMount}
 								theme="vs-dark"
 								loading={<Spinner />}
 							/>
 						</div>
+						<section className="result">
+							<iframe
+								title="result"
+								className="iframe"
+								ref={(iframe) => {
+									iframeRef.current = iframe;
+								}}
+							/>
+						</section>
 					</div>
 				</main>
 				<Footer />
 			</div>
-			<section className="result">
-				<iframe
-					title="result"
-					className="iframe"
-					ref={(iframe) => {
-						iframeRef.current = iframe;
-					}}
-				/>
-			</section>
 		</>
 	);
 }

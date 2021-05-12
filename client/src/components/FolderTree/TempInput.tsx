@@ -1,9 +1,11 @@
+import './FolderTree.scss';
+
 import { AiOutlineFile, AiOutlineFolder } from 'react-icons/ai';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import './FolderTree.scss';
-import { useFolderTree } from './FolderTreeContext';
+
 import { Key as KeyEvent } from 'ts-key-enum';
+import styled from 'styled-components';
+import { useFolderTree } from './FolderTreeContext';
 
 const StyledFile = styled.div`
 	padding-left: 20px;

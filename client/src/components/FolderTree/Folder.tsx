@@ -2,13 +2,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React, { useEffect, useRef, useState } from 'react';
+
 import { AiOutlineFolder } from 'react-icons/ai';
+import { Key as KeyEvent } from 'ts-key-enum';
 import styled from 'styled-components';
 import { useFolderTree } from './FolderTreeContext';
-import { Key as KeyEvent } from 'ts-key-enum';
 
 const StyledFolder = styled.div`
-	padding-left: 20px;
+	margin-left: 20px;
 
 	.folder--label {
 		display: flex;
@@ -107,7 +108,7 @@ export default function Folder(props: IFolderProps): JSX.Element {
 
 	const rootFolder = (
 		<StyledFolderRoot>
-			<div className="folder--label" onClick={handleToggle}>
+			<div className="tree-element folder--label" onClick={handleToggle}>
 				<AiOutlineFolder />
 				<span>{name}</span>
 			</div>
@@ -121,7 +122,7 @@ export default function Folder(props: IFolderProps): JSX.Element {
 
 	const normalFolder = (
 		<StyledFolder>
-			<div className="folder--label" onClick={handleToggle}>
+			<div className="tree-element folder--label" onClick={handleToggle}>
 				<AiOutlineFolder />
 				<span className={isInputHidden ? '' : 'hidden'}>{name}</span>
 				<input
