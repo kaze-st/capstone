@@ -15,13 +15,28 @@ interface ICurrDisplayedTempInput {
 	isFolder: boolean;
 }
 
+interface ICurrRenamedFile {
+	id: number;
+	newName: string;
+}
+
 interface IFolderTreeContext {
-	tempInputName: string;
-	setTempInputName: React.Dispatch<React.SetStateAction<string>> | undefined;
+	tempInputState: {
+		tempInputName: string;
+		isSetting: boolean;
+	};
+	setTempInputState:
+		| React.Dispatch<React.SetStateAction<ITempInput>>
+		| undefined;
 
 	currDisplayedTempInput: ICurrDisplayedTempInput;
 	setCurrDisplayedTempInput:
 		| React.Dispatch<React.SetStateAction<ICurrDisplayedTempInput>>
+		| undefined;
+
+	currRenamingFile: ICurrRenamedFile;
+	setCurrRenamingFile:
+		| React.Dispatch<React.SetStateAction<ICurrRenamedFile>>
 		| undefined;
 
 	idToNodeMap: {
@@ -29,11 +44,15 @@ interface IFolderTreeContext {
 	};
 	addFileToTree: ((folderId: number) => void) | null;
 	addFolderToTree: ((folderId: number) => void) | null;
+	renameItem: ((nodeId: number) => void) | null;
 }
 
 const TreeContext = React.createContext<IFolderTreeContext>({
-	tempInputName: '',
-	setTempInputName: undefined,
+	tempInputState: {
+		tempInputName: '',
+		isSetting: false
+	},
+	setTempInputState: undefined,
 
 	currDisplayedTempInput: {
 		parentFolderId: -1,
@@ -41,9 +60,16 @@ const TreeContext = React.createContext<IFolderTreeContext>({
 	},
 	setCurrDisplayedTempInput: undefined,
 
+	currRenamingFile: {
+		id: -1,
+		newName: ''
+	},
+	setCurrRenamingFile: undefined,
+
 	idToNodeMap: {},
 	addFileToTree: null,
-	addFolderToTree: null
+	addFolderToTree: null,
+	renameItem: null
 });
 
 export function useFolderTree(): IFolderTreeContext {
@@ -54,21 +80,31 @@ export default function FolderTreeProvider(
 	props: ITreeProviderProps
 ): JSX.Element {
 	const { children } = props;
-	const [tempInputName, setTempInputName] = useState('');
-	const [currDisplayedTempInput, setCurrDisplayedTempInput] = useState({
+	const [tempInputState, setTempInputState] = useState<ITempInput>({
+		tempInputName: '',
+		isSetting: false
+	});
+	const [
+		currDisplayedTempInput,
+		setCurrDisplayedTempInput
+	] = useState<ICurrDisplayedTempInput>({
 		parentFolderId: -1,
 		isFolder: false
+	});
+	const [currRenamingFile, setCurrRenamingFile] = useState<ICurrRenamedFile>({
+		id: -1,
+		newName: ''
 	});
 
 	const { idToNodeMap } = useFolderTree();
 
 	const addFileToTree = (folderId: number) => {
-		let newName = tempInputName;
+		let newName = tempInputState.tempInputName;
 		const currentFolder = idToNodeMap[folderId];
 		let counter = 1;
 		while (currentFolder.has(newName)) {
 			// name already exist, add keep going until we don't have dup
-			newName = `${tempInputName} (${counter})`;
+			newName = `${tempInputState.tempInputName} (${counter})`;
 			counter += 1;
 		}
 
@@ -83,12 +119,12 @@ export default function FolderTreeProvider(
 	};
 
 	function addFolderToTree(folderId: number) {
-		let newName = tempInputName;
+		let newName = tempInputState.tempInputName;
 		const currentFolder = idToNodeMap[folderId];
 		let counter = 1;
 		while (currentFolder.has(newName)) {
 			// name already exist, add keep going until we don't have dup
-			newName = `${tempInputName} (${counter})`;
+			newName = `${tempInputState.tempInputName} (${counter})`;
 			counter += 1;
 		}
 
@@ -101,14 +137,38 @@ export default function FolderTreeProvider(
 		newFolder.set('path', `${currentFolderPath + newName}/`);
 	}
 
+	const renameItem = (nodeId: number) => {
+		const { newName } = currRenamingFile;
+		const item = idToNodeMap[nodeId];
+		const parent = item.parent as Y.Map<unknown>;
+		const itemName = item.get('name') as string;
+		if (itemName === newName) {
+			return;
+		}
+		if (parent.has(itemName)) {
+			const temp = item.clone() as Y.Map<unknown>;
+			temp.set('name', newName);
+			let newPath = parent.get('path') + newName;
+			if (item.get('isFolder') === true) {
+				newPath += '/';
+			}
+			temp.set('path', newPath);
+			parent.set(newName, temp);
+			parent.delete(itemName);
+		}
+	};
+
 	const contextValue: IFolderTreeContext = {
-		tempInputName,
-		setTempInputName,
+		tempInputState,
+		setTempInputState,
 		currDisplayedTempInput,
 		setCurrDisplayedTempInput,
+		currRenamingFile,
+		setCurrRenamingFile,
 		idToNodeMap,
 		addFileToTree,
-		addFolderToTree
+		addFolderToTree,
+		renameItem
 	};
 
 	return (

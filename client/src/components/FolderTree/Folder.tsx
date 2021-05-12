@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineFolder } from 'react-icons/ai';
-import Icon from 'react-icons-kit';
 import styled from 'styled-components';
-import { filePlus } from 'react-icons-kit/feather/filePlus';
-import { folderPlus } from 'react-icons-kit/feather/folderPlus';
 import { useFolderTree } from './FolderTreeContext';
+import { Key as KeyEvent } from 'ts-key-enum';
 
 const StyledFolder = styled.div`
 	padding-left: 20px;
@@ -39,18 +37,73 @@ const Collapsible = styled.div`
 `;
 
 interface IFolderProps {
+	id: number;
 	name: string;
 	children: React.ReactNode;
+	setIsBlur: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Folder(props: IFolderProps): JSX.Element {
-	const { name, children } = props;
+	const { id, name, children, setIsBlur } = props;
+	const [isFocus, setIsFocus] = useState(false);
+	const {
+		currRenamingFile,
+		setCurrRenamingFile,
+		renameItem,
+		tempInputState
+	} = useFolderTree();
+
 	const [isOpen, setIsOpen] = useState(true);
 
 	const handleToggle = (e) => {
 		e.preventDefault();
 		setIsOpen(!isOpen);
 	};
+
+	const handleFocus = () => {
+		setIsBlur(true);
+		setIsFocus(true);
+		if (setCurrRenamingFile !== undefined)
+			setCurrRenamingFile({ ...currRenamingFile, newName: name });
+	};
+
+	const handleClickAway = () => {
+		setIsBlur(false);
+		setIsFocus(false);
+		if (setCurrRenamingFile !== undefined)
+			setCurrRenamingFile({ ...currRenamingFile, id: -1, newName: name });
+	};
+
+	const handleRenamedNameChange = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		if (setCurrRenamingFile !== undefined)
+			setCurrRenamingFile({
+				...currRenamingFile,
+				newName: event.target.value
+			});
+	};
+
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === KeyEvent.Enter) {
+			if (renameItem !== null) renameItem(id);
+			handleClickAway();
+		}
+	};
+
+	const isInputFocused = isFocus ? 'focused' : '';
+
+	const isInputHidden = id !== currRenamingFile.id ? 'hidden' : '';
+
+	// FOR AUTO FOCUS
+	const inputRef = useRef<HTMLInputElement>(null);
+	useEffect(() => {
+		if (!isInputHidden) {
+			if (inputRef !== null && inputRef.current !== null) {
+				inputRef.current.focus();
+			}
+		}
+	}, [isInputHidden]);
 
 	const rootFolder = (
 		<StyledFolderRoot>
@@ -62,11 +115,28 @@ export default function Folder(props: IFolderProps): JSX.Element {
 		</StyledFolderRoot>
 	);
 
+	if (!isOpen && tempInputState.isSetting) {
+		setIsOpen(true);
+	}
+
 	const normalFolder = (
 		<StyledFolder>
 			<div className="folder--label" onClick={handleToggle}>
 				<AiOutlineFolder />
-				<span>{name}</span>
+				<span className={isInputHidden ? '' : 'hidden'}>{name}</span>
+				<input
+					className={`temp-input ${isInputFocused} ${
+						isInputHidden ? 'hidden' : ''
+					}`}
+					type="text"
+					value={currRenamingFile.newName}
+					placeholder="New File Name"
+					onChange={handleRenamedNameChange}
+					onFocus={handleFocus}
+					onBlur={handleClickAway}
+					onKeyDown={handleKeyDown}
+					ref={inputRef}
+				/>
 			</div>
 			<Collapsible isOpen={isOpen}>{children}</Collapsible>
 		</StyledFolder>

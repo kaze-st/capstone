@@ -9,7 +9,7 @@ import Folder from './Folder';
 import ProjectTreeCardRightClickMenu from '../RightClickMenu/ProjectTreeRightClickMenu';
 import { StrollableContainer } from 'react-stroller';
 import styled from 'styled-components';
-import TempInput from './TempFileFolder';
+import TempInput from './TempInput';
 
 import './FolderTree.scss';
 import FolderTreeProvider, { useFolderTree } from './FolderTreeContext';
@@ -123,7 +123,11 @@ function createTree(
 	const currNodeId = currId[0];
 
 	const tempInput = (
-		<TempInput parentFolderId={currNodeId} setIsBlur={setIsBlur} />
+		<TempInput
+			key={`temp-file-of-folder:${currNodeId}`}
+			parentFolderId={currNodeId}
+			setIsBlur={setIsBlur}
+		/>
 	);
 	if (currNodeId !== 0) {
 		nodes.push(tempInput);
@@ -142,10 +146,12 @@ function createTree(
 				<div key={fileKey}>
 					<ContextMenuTrigger id={fileKey} holdToDisplay={-1}>
 						<File
+							id={currId[0]}
 							name={curr.get('name') as string}
 							onFileClick={() => {
 								onFileClick(curr);
 							}}
+							setIsBlur={setIsBlur}
 						/>
 					</ContextMenuTrigger>
 					<ProjectTreeCardRightClickMenu
@@ -153,7 +159,6 @@ function createTree(
 						nodeId={currId[0]}
 						isFolder={false}
 						handleRemoveItem={removeItem}
-						handleRenameItem={renameItem}
 					/>
 				</div>
 			);
@@ -174,14 +179,19 @@ function createTree(
 			const folder = (
 				<div key={folderKey}>
 					<ContextMenuTrigger id={folderKey} holdToDisplay={-1}>
-						<Folder name={curr.get('name') as string}>{children}</Folder>
+						<Folder
+							id={folderId}
+							name={curr.get('name') as string}
+							setIsBlur={setIsBlur}
+						>
+							{children}
+						</Folder>
 					</ContextMenuTrigger>
 					<ProjectTreeCardRightClickMenu
 						id={folderKey}
 						nodeId={folderId}
 						isFolder
 						handleRemoveItem={removeItem}
-						handleRenameItem={renameItem}
 					/>
 				</div>
 			);

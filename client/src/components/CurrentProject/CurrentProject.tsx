@@ -50,19 +50,16 @@ export default function CurrentProject(
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { pid } = match.params;
-	console.log('pid', pid);
 	useEffect(() => {
 		axios
 			.get(`${url}/api/v1/folder/get-folder`, { params: { pid } })
 			.then((response) => {
-				console.log('response', response);
 				setProject(response.data);
 			});
 	}, [url, pid]);
 
 	useEffect(() => {
 		return () => {
-			console.log('destroy');
 			if (provider.current !== null) {
 				provider.current.destroy();
 			}
@@ -89,17 +86,12 @@ export default function CurrentProject(
 		);
 
 		const structure = ydoc.getMap('structure');
-		console.log('ws', wsurl);
 		structureRef.current = structure;
 
 		structure.observeDeep((e) => {
-			console.log('strucurte', structure.toJSON());
-			console.log('event', e);
-
 			if (e[0].target instanceof Y.Map) {
 				setTest(ydoc);
 				setProjectStructure(ydoc.getMap('structure'));
-				console.log('here');
 				forceUpdate();
 			}
 		});
@@ -120,12 +112,7 @@ export default function CurrentProject(
 
 	const displayedProjectName = `My Project`;
 
-	// const onFileClick = (e) => {
-	// 	console.log('Hii', e);
-	// };
-
 	const onFileClick = (file: Y.Map<any>) => {
-		console.log(file.toJSON());
 		const ytext = file.get('content');
 
 		if (monacoBinding.current !== null) {
@@ -133,7 +120,6 @@ export default function CurrentProject(
 		}
 		const editor = editorRef.current;
 		const path = `urn:${file.get('path')}`;
-		console.log('monaco', monacoRef.current.editor.getModel('amy j cunt'));
 		if (monacoRef.current.editor.getModel(path) === null)
 			monacoRef.current.editor.createModel(ytext.toString(), undefined, path);
 

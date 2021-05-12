@@ -14,17 +14,17 @@ const StyledFile = styled.div`
 	}
 `;
 
-interface ITempFileProps {
+interface ITempInputProps {
 	parentFolderId: number;
 	setIsBlur: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function TempInput(props: ITempFileProps): JSX.Element {
+export default function TempInput(props: ITempInputProps): JSX.Element {
 	const { parentFolderId, setIsBlur } = props;
 
 	const {
-		tempInputName,
-		setTempInputName,
+		tempInputState,
+		setTempInputState,
 		addFileToTree,
 		addFolderToTree,
 		currDisplayedTempInput,
@@ -34,8 +34,29 @@ export default function TempInput(props: ITempFileProps): JSX.Element {
 	const [isFocus, setIsFocus] = useState(false);
 
 	const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (setTempInputName !== undefined) {
-			setTempInputName(event.target.value);
+		if (setTempInputState !== undefined) {
+			setTempInputState({
+				...tempInputState,
+				tempInputName: event.target.value,
+				isSetting: true
+			});
+		}
+	};
+
+	const resetCurrentlyDisplayedTempInput = () => {
+		if (setTempInputState !== undefined) {
+			setTempInputState({
+				...tempInputState,
+				tempInputName: '',
+				isSetting: false
+			});
+		}
+		if (setCurrDisplayedTempInput !== undefined) {
+			setCurrDisplayedTempInput({
+				...currDisplayedTempInput,
+				parentFolderId: -1,
+				isFolder: false
+			});
 		}
 	};
 
@@ -47,18 +68,7 @@ export default function TempInput(props: ITempFileProps): JSX.Element {
 	const handleClickAway = () => {
 		setIsBlur(false);
 		setIsFocus(false);
-
-		// reset default state of the context
-		if (setTempInputName !== undefined) {
-			setTempInputName('');
-		}
-		if (setCurrDisplayedTempInput !== undefined) {
-			setCurrDisplayedTempInput({
-				...currDisplayedTempInput,
-				parentFolderId: -1,
-				isFolder: false
-			});
-		}
+		resetCurrentlyDisplayedTempInput();
 	};
 
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -74,7 +84,6 @@ export default function TempInput(props: ITempFileProps): JSX.Element {
 	};
 
 	const isInputFocused = isFocus ? 'focused' : '';
-	const key = `temp-file-of-folder:${parentFolderId}:created:`;
 
 	const isHidden =
 		currDisplayedTempInput.parentFolderId !== parentFolderId ? 'hidden' : '';
@@ -95,13 +104,13 @@ export default function TempInput(props: ITempFileProps): JSX.Element {
 	}, [isHidden]);
 
 	return (
-		<div key={key} className={isHidden}>
+		<div className={isHidden}>
 			<StyledFile>
 				{icon}
 				<input
-					className={`temp-file-input ${isInputFocused}`}
+					className={`temp-input ${isInputFocused}`}
 					type="text"
-					value={tempInputName}
+					value={tempInputState.tempInputName}
 					placeholder={
 						currDisplayedTempInput.isFolder
 							? 'New Folder Name'

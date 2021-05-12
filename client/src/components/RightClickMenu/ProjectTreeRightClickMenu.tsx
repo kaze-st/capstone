@@ -8,24 +8,37 @@ interface IProjectTreeRightClickMenuProps {
 	nodeId: number;
 	isFolder: boolean;
 	handleRemoveItem?: (id: number) => void;
-	handleRenameItem?: (id: number, name: string) => void;
 }
 
 export default function ProjectTreeCardRightClickMenu(
 	props: IProjectTreeRightClickMenuProps
 ): JSX.Element {
-	const { id, nodeId, isFolder, handleRemoveItem, handleRenameItem } = props;
+	const { id, nodeId, isFolder, handleRemoveItem } = props;
 
-	const { setCurrDisplayedTempInput } = useFolderTree();
+	const {
+		setCurrDisplayedTempInput,
+		tempInputState,
+		setTempInputState,
+		currRenamingFile,
+		setCurrRenamingFile
+	} = useFolderTree();
 
 	const addFileById = () => {
-		if (setCurrDisplayedTempInput !== undefined) {
+		if (
+			setCurrDisplayedTempInput !== undefined &&
+			setTempInputState !== undefined
+		) {
+			setTempInputState({ ...tempInputState, isSetting: true });
 			setCurrDisplayedTempInput({ parentFolderId: nodeId, isFolder: false });
 		}
 	};
 
 	const addFolderById = () => {
-		if (setCurrDisplayedTempInput !== undefined) {
+		if (
+			setCurrDisplayedTempInput !== undefined &&
+			setTempInputState !== undefined
+		) {
+			setTempInputState({ ...tempInputState, isSetting: true });
 			setCurrDisplayedTempInput({ parentFolderId: nodeId, isFolder: true });
 		}
 	};
@@ -37,8 +50,8 @@ export default function ProjectTreeCardRightClickMenu(
 	};
 
 	const renameItemById = () => {
-		if (handleRenameItem !== undefined) {
-			handleRenameItem(nodeId, '');
+		if (setCurrRenamingFile !== undefined) {
+			setCurrRenamingFile({ ...currRenamingFile, id: nodeId });
 		}
 	};
 
@@ -116,6 +129,5 @@ export default function ProjectTreeCardRightClickMenu(
 }
 
 ProjectTreeCardRightClickMenu.defaultProps = {
-	handleRemoveItem: undefined,
-	handleRenameItem: undefined
+	handleRemoveItem: undefined
 };
