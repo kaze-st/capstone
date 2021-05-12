@@ -145,15 +145,22 @@ export default function FolderTreeProvider(
 		if (itemName === newName) {
 			return;
 		}
+		let renamedName = newName;
+		let counter = 1;
+		while (parent.has(renamedName)) {
+			renamedName = `${newName} (${counter})`;
+			counter += 1;
+		}
+
 		if (parent.has(itemName)) {
 			const temp = item.clone() as Y.Map<unknown>;
-			temp.set('name', newName);
-			let newPath = parent.get('path') + newName;
+			temp.set('name', renamedName);
+			let newPath = parent.get('path') + renamedName;
 			if (item.get('isFolder') === true) {
 				newPath += '/';
 			}
 			temp.set('path', newPath);
-			parent.set(newName, temp);
+			parent.set(renamedName, temp);
 			parent.delete(itemName);
 		}
 	};

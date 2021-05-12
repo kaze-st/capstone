@@ -67,7 +67,7 @@ export default function File(props: ITreeFileProps): JSX.Element {
 		}
 	};
 
-	const isInputFocused = isFocus ? 'focused' : '';
+	const isInputFocused = isFocus ? 'focused-input-item' : '';
 
 	const isInputHidden = id !== currRenamingFile.id ? 'hidden' : '';
 

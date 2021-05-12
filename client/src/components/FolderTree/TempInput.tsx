@@ -83,7 +83,7 @@ export default function TempInput(props: ITempInputProps): JSX.Element {
 		}
 	};
 
-	const isInputFocused = isFocus ? 'focused' : '';
+	const isInputFocused = isFocus ? 'focused-input-item' : '';
 
 	const isHidden =
 		currDisplayedTempInput.parentFolderId !== parentFolderId ? 'hidden' : '';
