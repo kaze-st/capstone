@@ -5,7 +5,13 @@ import * as Y from 'yjs';
 
 import Editor, { OnMount } from '@monaco-editor/react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useReducer,
+	useRef,
+	useState
+} from 'react';
 
 import FolderTree from '../FolderTree/Tree';
 import { Footer } from '../LandingPage/LandingPage';
@@ -87,9 +93,22 @@ export default function CurrentProject(
 		return <></>;
 	}
 
+	if (project === null) {
+		return <Spinner />;
+	}
+
 	// const getCurrentFile = () => {
 	// 	return currentFile;
 	// };
+	// const handleEditorChange = useCallback((_) => {
+	// 	const countOfLines = valueGetter.current().split('\n').length;
+	// 	if (countOfLines >= MIN_COUNT_OF_LINES) {
+	// 		const currentHeight = countOfLines * LINE_HEIGHT;
+	// 		if (MAX_HEIGHT > currentHeight) {
+	// 			setHeight(currentHeight);
+	// 		}
+	// 	}
+	// }, []);
 
 	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor, monaco): void => {
@@ -201,18 +220,6 @@ export default function CurrentProject(
 		<>
 			<div className="page-wrapper">
 				<header className="editor-nav">
-					{test && (
-						<div>
-							{isPlayground && (
-								<button type="button" onClick={runCode}>
-									Run Code
-								</button>
-							)}
-							<button type="button" onClick={handleDownload}>
-								Download
-							</button>
-						</div>
-					)}
 					<ul className="editor-nav-links">
 						<li>
 							<Link to="/projects/ownedProjects">
@@ -224,35 +231,73 @@ export default function CurrentProject(
 						<li className="display-name">{displayedProjectName}</li>
 					</ul>
 				</header>
+				<nav className="editor-sub-nav">
+					{test && (
+						<ul>
+							<li>
+								{isPlayground && (
+									<button
+										className="editor-button"
+										type="button"
+										onClick={runCode}
+									>
+										Run
+									</button>
+								)}
+							</li>
+							<li>
+								<button
+									className="editor-button"
+									type="button"
+									onClick={handleDownload}
+								>
+									Download
+								</button>
+							</li>
+						</ul>
+					)}
+				</nav>
 				<main>
 					<div className="flex-container outer-file-container">
-						{projectStructure && (
+						{projectStructure ? (
 							<FolderTree
 								project={projectStructure}
 								onFileClick={onFileClick}
 							/>
+						) : (
+							<Spinner />
 						)}
-						<div className={`prj-editor-container${!currentFile && ' hidden'}`}>
+						<div className={!currentFile ? ' hidden' : 'prj-editor-container'}>
 							<Editor
 								// defaultLanguage={extensions[project.extension]}
-								width="100%"
+								height="100%"
 								onMount={handleEditorDidMount}
 								theme="vs-dark"
 								loading={<Spinner />}
 							/>
 						</div>
-						<section className="result">
-							<iframe
-								title="result"
-								className="iframe"
-								ref={(iframe) => {
-									iframeRef.current = iframe;
-								}}
-							/>
-						</section>
+						<div className={currentFile ? ' hidden' : 'project-msg-container'}>
+							<div className="empty-img-container">
+								<img alt="" src="../img/emptyFiles.png" />
+								<p>Open a File!</p>
+							</div>
+						</div>
+
+						{isPlayground ? (
+							<section className="result">
+								<iframe
+									title="result"
+									className="iframe"
+									ref={(iframe) => {
+										iframeRef.current = iframe;
+									}}
+								/>
+							</section>
+						) : (
+							<></>
+						)}
 					</div>
 				</main>
-				<Footer />
 			</div>
 		</>
 	);
