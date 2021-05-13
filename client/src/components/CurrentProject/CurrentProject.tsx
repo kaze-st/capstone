@@ -9,13 +9,13 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import FolderTree from '../FolderTree/Tree';
 import { Footer } from '../LandingPage/LandingPage';
+import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 import { MonacoBinding } from 'y-monaco';
 import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import downloadProject from './DownloadProject';
-import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 
 dotenv.config();
 
@@ -215,9 +215,11 @@ export default function CurrentProject(
 					)}
 					<ul className="editor-nav-links">
 						<li>
-							<button className="white-button" type="button">
-								<Link to="/projects/ownedProjects">Go Back to Projects</Link>
-							</button>
+							<Link to="/projects/ownedProjects">
+								<button className="white-button" type="button">
+									Go Back to Projects
+								</button>
+							</Link>
 						</li>
 						<li className="display-name">{displayedProjectName}</li>
 					</ul>

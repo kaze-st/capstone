@@ -111,9 +111,11 @@ export default function CurrentDoc(
 			<nav className="editor-nav">
 				<ul className="editor-nav-links">
 					<li>
-						<button className="white-button" type="button">
-							<Link to="/files/ownedFiles">Go Back to Files</Link>
-						</button>
+						<Link to="/files/ownedFiles">
+							<button className="white-button" type="button">
+								Go Back to Files
+							</button>
+						</Link>
 						<button
 							className="white-button"
 							type="button"
