@@ -10,6 +10,7 @@ import Modal from '../Modal/Modal';
 import NavBar from '../NavBar/NavBar';
 import ProjectCard from './ProjectCard';
 import ProjectCreationView from './ProjectCreationView';
+import ProjectDeletionDialogue from './ProjectDeletionDialogue';
 import RouteParams from '../../types/RouteParams';
 import ShareFileDialogue from '../Modal/ShareView';
 import SharingMode from '../Modal/SharingMode';
@@ -32,6 +33,7 @@ export default function Folders(): JSX.Element {
 	const [isLoading, setIsLoading] = useState(false);
 	const [createFolderModal, setCreateFolderModal] = useState(false);
 	const [shareFolderModal, setSharedFolderModal] = useState(false);
+	const [deleteFolderModal, setDeleteFolderModal] = useState(false);
 	const [modalOpen, setModaOpen] = useState(false);
 	const [modalBackgroundState, setModalBackgroundState] = useState(
 		'not-dimmed'
@@ -42,6 +44,10 @@ export default function Folders(): JSX.Element {
 		setCurrentProjectToShare
 	] = useState<IProjectFolder>();
 
+	const [currentProjectToDeleteID, setCurrentProjectToDeleteID] = useState<
+		string | null
+	>(null);
+
 	const urlParams = useParams<RouteParams>();
 	const folderViewPath = urlParams.ownedOrShared;
 
@@ -50,7 +56,7 @@ export default function Folders(): JSX.Element {
 
 	const uid = userContext?.firebaseUser?.uid;
 
-	const handleCreateFileModalOpen = () => {
+	const handleCreateFolderModalOpen = () => {
 		setCreateFolderModal(true);
 		setModaOpen(true);
 		setModalBackgroundState('dimmed');
@@ -70,6 +76,18 @@ export default function Folders(): JSX.Element {
 
 	const handleShareFolderModalClose = () => {
 		setSharedFolderModal(false);
+		setModaOpen(false);
+		setModalBackgroundState('not-dimmed');
+	};
+
+	const handleDeleteFolderModalOpen = () => {
+		setDeleteFolderModal(true);
+		setModaOpen(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleDeleteFolderModalClose = () => {
+		setDeleteFolderModal(false);
 		setModaOpen(false);
 		setModalBackgroundState('not-dimmed');
 	};
@@ -134,7 +152,9 @@ export default function Folders(): JSX.Element {
 					project={folder}
 					lastEditedOn={folder.lastEditedOn}
 					handleShareModalOpen={handleShareFolderModalOpen}
+					handleDeleteModalOpen={handleDeleteFolderModalOpen}
 					setCurrentProjectToShare={setCurrentProjectToShare}
+					setCurrentProjectToDeleteID={setCurrentProjectToDeleteID}
 				/>
 			);
 		});
@@ -209,7 +229,7 @@ export default function Folders(): JSX.Element {
 									<button
 										className="white-button"
 										type="submit"
-										onClick={handleCreateFileModalOpen}
+										onClick={handleCreateFolderModalOpen}
 									>
 										+ NEW PROJECT
 									</button>
@@ -252,6 +272,18 @@ export default function Folders(): JSX.Element {
 							projectFolder={currentProjectToShare}
 							refreshPage={getAllFolders}
 							handleModalClose={handleShareFolderModalClose}
+						/>
+					</Modal>
+				) : (
+					<></>
+				)}
+				{deleteFolderModal ? (
+					<Modal show={deleteFolderModal}>
+						<ProjectDeletionDialogue
+							uid={uid}
+							pid={currentProjectToDeleteID}
+							refreshPage={getAllFolders}
+							handleModalClose={handleDeleteFolderModalClose}
 						/>
 					</Modal>
 				) : (

@@ -7,23 +7,29 @@ import { Link } from 'react-router-dom';
 import ProjectFolderCardRightClickMenu from '../RightClickMenu/FolderRightClickMenu';
 import React from 'react';
 
-interface IFileCardProp {
+interface IProjectCardProp {
 	name: string;
 	lastEditedOn: string;
 	project: IProjectFolder;
 	handleShareModalOpen: () => void;
+	handleDeleteModalOpen: () => void;
 	setCurrentProjectToShare: React.Dispatch<
 		React.SetStateAction<IProjectFolder | undefined>
 	>;
+	setCurrentProjectToDeleteID: React.Dispatch<
+		React.SetStateAction<string | null>
+	>;
 }
 
-export default function ProjectCard(props: IFileCardProp): JSX.Element {
+export default function ProjectCard(props: IProjectCardProp): JSX.Element {
 	const {
 		name,
 		lastEditedOn,
 		project,
 		handleShareModalOpen,
-		setCurrentProjectToShare
+		handleDeleteModalOpen,
+		setCurrentProjectToShare,
+		setCurrentProjectToDeleteID
 	} = props;
 	// eslint-disable-next-line
 	const pid = project._id;
@@ -47,7 +53,9 @@ export default function ProjectCard(props: IFileCardProp): JSX.Element {
 				projectFolder={project}
 				id={pid}
 				handleShareModalOpen={handleShareModalOpen}
+				handleDeleteModalOpen={handleDeleteModalOpen}
 				setCurrentProjectToShare={setCurrentProjectToShare}
+				setCurrentProjectToDeleteID={setCurrentProjectToDeleteID}
 			/>
 		</div>
 	);
