@@ -107,30 +107,32 @@ export default function CurrentDoc(
 
 	const displayedFileName = `${file.name}.${file.extension}`;
 	return (
-		<>
-			<nav className="editor-nav">
+		<div className="page-wrapper">
+			<header className="editor-nav">
 				<ul className="editor-nav-links">
 					<li>
-						<button className="white-button" type="button">
-							<Link to="/files/ownedFiles">Go Back to Files</Link>
-						</button>
-						<button
-							className="white-button"
-							type="button"
-							onClick={handleDownload}
-						>
-							Download
-						</button>
+						<Link to="/files/ownedFiles">
+							<button className="white-button" type="button">
+								Go Back to Files
+							</button>
+						</Link>
 					</li>
 					<li className="display-name">{displayedFileName}</li>
 				</ul>
+			</header>
+			<nav className="editor-sub-nav">
+				<ul>
+					<button type="button" onClick={handleDownload}>
+						Download
+					</button>
+				</ul>
 			</nav>
 			<Editor
-				height="calc(100vh - 23px - 80px)"
+				height="100%"
 				defaultLanguage={extensions[file.extension]}
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
 			/>
-		</>
+		</div>
 	);
 }
