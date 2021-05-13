@@ -195,7 +195,7 @@ export default function CurrentProject(
 
 	const isPlayground =
 		projectStructure !== null &&
-		(projectStructure?.get('isPlayground') as boolean);
+		(projectStructure.get('isPlayground') as boolean);
 
 	return (
 		<>
@@ -228,6 +228,7 @@ export default function CurrentProject(
 							<FolderTree
 								project={projectStructure}
 								onFileClick={onFileClick}
+								isPlayground={isPlayground}
 							/>
 						)}
 						<div className={`prj-editor-container${!currentFile && ' hidden'}`}>

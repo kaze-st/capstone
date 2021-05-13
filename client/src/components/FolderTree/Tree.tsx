@@ -30,6 +30,7 @@ const LightScrollbar = styled.div`
 interface ITreeProps {
 	project: Y.Map<unknown>;
 	onFileClick: (file: Y.Map<unknown>) => void;
+	isPlayground: boolean;
 }
 
 function removeItemFromTree(
@@ -168,8 +169,7 @@ function createTree(
 }
 
 export default function FolderTree(props: ITreeProps): JSX.Element {
-	const { project, onFileClick } = props;
-	const isPlayground = project.get('isPlayground') as boolean;
+	const { project, onFileClick, isPlayground } = props;
 
 	const [isBlur, setIsBlur] = useState(false);
 
