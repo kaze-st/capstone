@@ -34,7 +34,7 @@ export default function ProjectDeletionDialogue(
 			handleModalClose(event);
 			refreshPage();
 		} catch {
-			setError('Failed to delete folder');
+			setError('Failed to delete project');
 		}
 	};
 
