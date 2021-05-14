@@ -187,15 +187,15 @@ export default function FolderTree(props: ITreeProps): JSX.Element {
 	const blurNavClassName = isBlur ? 'blurred' : '';
 	return (
 		<nav className={`prj-tree-nav ${blurNavClassName}`}>
-			<ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
-				<div className="tree">
-					<FolderTreeProvider>
-						<StrollableContainer draggable bar={LightScrollbar}>
+			<StrollableContainer draggable bar={LightScrollbar}>
+				<ContextMenuTrigger id="folder-tree-root" holdToDisplay={-1}>
+					<div className="tree">
+						<FolderTreeProvider>
 							<StyledTree>{tree}</StyledTree>
-						</StrollableContainer>
-					</FolderTreeProvider>
-				</div>
-			</ContextMenuTrigger>
+						</FolderTreeProvider>
+					</div>
+				</ContextMenuTrigger>
+			</StrollableContainer>
 		</nav>
 	);
 }

@@ -32,7 +32,7 @@ const StyledFolderRoot = styled.div`
 
 const Collapsible = styled.div`
 	/* set the height depending on isOpen prop */
-	height: ${(p) => (p.isOpen ? 'auto' : '0')};
+	display: ${(p) => (p.isOpen ? 'block' : 'none')};
 	/* hide the excess content */
 	overflow: hidden;
 `;
