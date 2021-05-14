@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 
 import FolderModel from '@models/FolderModel';
 import UserModel from '@models/UserModel';
-import consola from 'consola';
 import { startSession } from 'mongoose';
 import { validationResult } from 'express-validator';
 

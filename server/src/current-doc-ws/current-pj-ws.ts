@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 
 import FolderModel from '@models/FolderModel';
 import WebSocket from 'ws';
-import consola from 'consola';
 import http from 'http';
 
 export default (server: http.Server): void => {
