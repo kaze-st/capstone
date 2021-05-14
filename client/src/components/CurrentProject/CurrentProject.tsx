@@ -254,13 +254,6 @@ export default function CurrentProject(
 		<>
 			<div className="page-wrapper">
 				<header className="editor-nav">
-					{test && (
-						<div>
-							<button type="button" onClick={handleDownload}>
-								Download
-							</button>
-						</div>
-					)}
 					<ul className="editor-nav-links">
 						<li>
 							<Link to="/projects/ownedProjects">
@@ -312,7 +305,7 @@ export default function CurrentProject(
 						<div className={!currentFile ? ' hidden' : 'prj-editor-container'}>
 							<Editor
 								// defaultLanguage={extensions[project.extension]}
-								height="100%"
+								width="100%"
 								onMount={handleEditorDidMount}
 								theme="vs-dark"
 								loading={<Spinner />}

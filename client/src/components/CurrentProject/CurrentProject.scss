@@ -7,6 +7,10 @@
 		display: inline-block;
 	}
 
+	button {
+		margin-left: 1.5rem;
+	}
+
 	.display-name {
 		float: none;
 		position: absolute;
@@ -39,7 +43,7 @@
 	bottom: 0;
 	height: 100%;
 	width: 30rem;
-	background-color: #1e1e1e;
+	background-color: white;
 }
 
 .iframe {
