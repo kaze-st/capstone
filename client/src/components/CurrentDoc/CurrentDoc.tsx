@@ -33,7 +33,7 @@ export default function CurrentDoc(
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { fid } = match.params;
-
+	console.log('url', url, wsurl);
 	useEffect(() => {
 		axios
 			.get(`${url}/api/v1/file/get-file`, { params: { fid } })
