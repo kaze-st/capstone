@@ -69,7 +69,8 @@ export default class FolderController {
 			lastEditedOn: currTime,
 			owner: ownerUID,
 			sharedTo: new Array<string>(),
-			state: buffer
+			state: buffer,
+			isPlayground: reqBody.hasStarterFiles
 		});
 
 		owner.ownedFolders.push(newFolder._id);

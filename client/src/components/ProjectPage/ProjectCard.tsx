@@ -34,13 +34,17 @@ export default function ProjectCard(props: IProjectCardProp): JSX.Element {
 	// eslint-disable-next-line
 	const pid = project._id;
 	const date = new Date(lastEditedOn);
+
+	const imgSrc = project.isPlayground
+		? '../img/suisei.jpg'
+		: '../img/folder.png';
 	return (
 		<div>
 			<ContextMenuTrigger id={pid}>
 				<Link to={`/project/${pid}`}>
 					<div className="file-card recent-file">
 						<div className="file-card-img-container">
-							<img src="../img/folder.png" alt="folder" />
+							<img src={imgSrc} alt="folder" />
 						</div>
 						<div className="file-card-name">
 							<p>{name}</p>
