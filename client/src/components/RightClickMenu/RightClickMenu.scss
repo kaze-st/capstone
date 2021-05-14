@@ -34,3 +34,12 @@
 .root-right-click-menu {
 	height: 7rem;
 }
+
+.tree-right-click {
+	border-radius: 0;
+	color: white;
+	background-color: #3f4756;
+	.menu-item:hover {
+		background-color: #21252b;
+	}
+}

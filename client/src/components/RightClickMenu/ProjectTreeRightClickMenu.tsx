@@ -1,6 +1,8 @@
 import './RightClickMenu.scss';
-import React, { useState } from 'react';
+
 import { ContextMenu, MenuItem } from 'react-contextmenu';
+import React, { useState } from 'react';
+
 import { useFolderTree } from '../FolderTree/FolderTreeContext';
 
 interface IProjectTreeRightClickMenuProps {
@@ -118,7 +120,10 @@ export default function ProjectTreeCardRightClickMenu(
 
 	return (
 		<div>
-			<ContextMenu id={id} className={`right-click-menu ${classNameIsFolder}`}>
+			<ContextMenu
+				id={id}
+				className={`tree-right-click right-click-menu ${classNameIsFolder}`}
+			>
 				{addFileMenuItem}
 				{addFolderMenuItem}
 				{renameItemMenuItem}
