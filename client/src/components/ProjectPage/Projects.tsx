@@ -10,6 +10,7 @@ import Modal from '../Modal/Modal';
 import NavBar from '../NavBar/NavBar';
 import ProjectCard from './ProjectCard';
 import ProjectCreationView from './ProjectCreationView';
+import ProjectDeletionDialogue from './ProjectDeletionDialogue';
 import RouteParams from '../../types/RouteParams';
 import ShareFileDialogue from '../Modal/ShareView';
 import SharingMode from '../Modal/SharingMode';
@@ -20,6 +21,10 @@ import { useAuth } from '../../contexts/AuthContext';
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 
 export default function Folders(): JSX.Element {
+	const [allFolders, setAllFolders] = useState({
+		ownedFolders: Array<IProjectFolder>(),
+		sharedFolders: Array<IProjectFolder>()
+	});
 	const [displayFolders, setDisplayFolders] = useState<Array<IProjectFolder>>(
 		[]
 	);
@@ -28,6 +33,7 @@ export default function Folders(): JSX.Element {
 	const [isLoading, setIsLoading] = useState(false);
 	const [createFolderModal, setCreateFolderModal] = useState(false);
 	const [shareFolderModal, setSharedFolderModal] = useState(false);
+	const [deleteFolderModal, setDeleteFolderModal] = useState(false);
 	const [modalOpen, setModaOpen] = useState(false);
 	const [modalBackgroundState, setModalBackgroundState] = useState(
 		'not-dimmed'
@@ -38,6 +44,10 @@ export default function Folders(): JSX.Element {
 		setCurrentProjectToShare
 	] = useState<IProjectFolder>();
 
+	const [currentProjectToDeleteID, setCurrentProjectToDeleteID] = useState<
+		string | null
+	>(null);
+
 	const urlParams = useParams<RouteParams>();
 	const folderViewPath = urlParams.ownedOrShared;
 
@@ -46,7 +56,7 @@ export default function Folders(): JSX.Element {
 
 	const uid = userContext?.firebaseUser?.uid;
 
-	const handleCreateFileModalOpen = () => {
+	const handleCreateFolderModalOpen = () => {
 		setCreateFolderModal(true);
 		setModaOpen(true);
 		setModalBackgroundState('dimmed');
@@ -70,12 +80,28 @@ export default function Folders(): JSX.Element {
 		setModalBackgroundState('not-dimmed');
 	};
 
+	const handleDeleteFolderModalOpen = () => {
+		setDeleteFolderModal(true);
+		setModaOpen(true);
+		setModalBackgroundState('dimmed');
+	};
+
+	const handleDeleteFolderModalClose = () => {
+		setDeleteFolderModal(false);
+		setModaOpen(false);
+		setModalBackgroundState('not-dimmed');
+	};
+
 	const getAllFolders = async () => {
 		try {
 			setIsLoading(true);
 			setError('');
 			const result = await axios.get(`${url}/api/v1/user/folders?uid=${uid}`);
 			const resData = result.data;
+			setAllFolders({
+				ownedFolders: resData.ownedFolders,
+				sharedFolders: resData.sharedFolders
+			});
 			if (folderViewPath === FilePath.OwnedProjects) {
 				setDisplayFolders(resData.ownedFolders);
 			} else if (folderViewPath === FilePath.SharedProjects) {
@@ -94,6 +120,10 @@ export default function Folders(): JSX.Element {
 				setError('');
 				const result = await axios.get(`${url}/api/v1/user/folders?uid=${uid}`);
 				const resData = result.data;
+				setAllFolders({
+					ownedFolders: resData.ownedFolders,
+					sharedFolders: resData.sharedFolders
+				});
 				if (folderViewPath === FilePath.OwnedProjects) {
 					setDisplayFolders(resData.ownedFolders);
 				} else if (folderViewPath === FilePath.SharedProjects) {
@@ -122,7 +152,9 @@ export default function Folders(): JSX.Element {
 					project={folder}
 					lastEditedOn={folder.lastEditedOn}
 					handleShareModalOpen={handleShareFolderModalOpen}
+					handleDeleteModalOpen={handleDeleteFolderModalOpen}
 					setCurrentProjectToShare={setCurrentProjectToShare}
+					setCurrentProjectToDeleteID={setCurrentProjectToDeleteID}
 				/>
 			);
 		});
@@ -130,6 +162,28 @@ export default function Folders(): JSX.Element {
 	const handleLogOut = async () => {
 		if (logout) {
 			await logout();
+		}
+	};
+
+	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+		event.preventDefault();
+		if (event.target.value === '') {
+			if (folderViewPath === FilePath.OwnedProjects) {
+				setDisplayFolders(allFolders.ownedFolders);
+			} else {
+				setDisplayFolders(allFolders.sharedFolders);
+			}
+		} else {
+			let foldersToBeFiltered;
+			if (folderViewPath === FilePath.OwnedProjects) {
+				foldersToBeFiltered = allFolders.ownedFolders;
+			} else {
+				foldersToBeFiltered = allFolders.sharedFolders;
+			}
+			const ownedFolderVal = foldersToBeFiltered.filter((file) => {
+				return file.name.includes(event.target.value);
+			});
+			setDisplayFolders(ownedFolderVal);
 		}
 	};
 
@@ -150,7 +204,11 @@ export default function Folders(): JSX.Element {
 					</Link>
 				</div>
 				<form>
-					<input type="text" placeholder="Project Name" onChange={() => {}} />
+					<input
+						type="text"
+						placeholder="Project Name"
+						onChange={handleSearch}
+					/>
 				</form>
 
 				<button className="white-button" type="button" onClick={handleLogOut}>
@@ -166,12 +224,12 @@ export default function Folders(): JSX.Element {
 						<Spinner />
 					) : (
 						<div className="inner-file-container">
-							{folderViewPath !== 'sharedProjects' ? (
+							{folderViewPath !== FilePath.SharedProjects ? (
 								<div className="createFile-and-filter-container">
 									<button
 										className="white-button"
 										type="submit"
-										onClick={handleCreateFileModalOpen}
+										onClick={handleCreateFolderModalOpen}
 									>
 										+ NEW PROJECT
 									</button>
@@ -214,6 +272,18 @@ export default function Folders(): JSX.Element {
 							projectFolder={currentProjectToShare}
 							refreshPage={getAllFolders}
 							handleModalClose={handleShareFolderModalClose}
+						/>
+					</Modal>
+				) : (
+					<></>
+				)}
+				{deleteFolderModal ? (
+					<Modal show={deleteFolderModal}>
+						<ProjectDeletionDialogue
+							uid={uid}
+							pid={currentProjectToDeleteID}
+							refreshPage={getAllFolders}
+							handleModalClose={handleDeleteFolderModalClose}
 						/>
 					</Modal>
 				) : (

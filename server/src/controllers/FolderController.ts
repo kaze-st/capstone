@@ -262,4 +262,64 @@ export default class FolderController {
 
 		res.status(200).jsonp(folder);
 	}
+
+	static async deleteFolder(req: Request, res: Response): Promise<void> {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			res.status(422).jsonp(errors.array());
+			return;
+		}
+
+		const reqBody = req.body;
+		const ownerUID: string = reqBody.owner;
+		const owner = await UserModel.findOne({ uid: ownerUID });
+		if (owner === null) {
+			res.status(400).jsonp({ message: 'Owner not found' });
+			return;
+		}
+
+		const pid = String(req.query.pid);
+		const folderToDelete = await FolderModel.findById(pid);
+		if (folderToDelete === null) {
+			res.status(400).jsonp({ message: 'Folder not found' });
+			return;
+		}
+
+		if (folderToDelete.owner !== owner.uid) {
+			res
+				.status(401)
+				.jsonp({ message: 'User not authorized to delete folder' });
+			return;
+		}
+
+		const session = await startSession();
+		try {
+			session.startTransaction();
+			const sharedTo = folderToDelete.sharedTo;
+			for (const sharedUserId of sharedTo) {
+				const sharedUser = await UserModel.findOne({ uid: sharedUserId });
+				if (sharedUser === null) {
+					continue;
+				}
+				sharedUser.sharedFolders.filter((folder) => {
+					return !folder.equals(folderToDelete._id);
+				});
+				await sharedUser.save();
+			}
+			await FolderModel.findOneAndDelete({ _id: pid });
+			session.commitTransaction();
+		} catch (err) {
+			session.abortTransaction();
+			let message = err?.message;
+			if (message === null || message === undefined) {
+				message = 'Error saving folders';
+			}
+			res.status(422).jsonp({ message: message });
+			return;
+		}
+
+		res.status(200).jsonp({
+			message: 'Folder deleted successfully'
+		});
+	}
 }
