@@ -23,7 +23,6 @@ export default function CurrentDoc(
 	props: RouteComponentProps<MatchParams>
 ): JSX.Element {
 	const { match } = props;
-	const [content, setContent] = useState('');
 
 	// eslint-disable-next-line
 	const editorRef = useRef<any>(null);
@@ -73,15 +72,10 @@ export default function CurrentDoc(
 			new Set([editor]),
 			provider.current.awareness
 		);
-
-		ytext.observe((e) => {
-			if (e.target instanceof Y.Text) {
-				setContent(ytext.toJSON());
-			}
-		});
 	};
 
 	const handleDownload = () => {
+		const content = editorRef.current.getValue();
 		const downloadFile = new Blob([content], { type: 'text/plain' });
 		const downloadURL = URL.createObjectURL(downloadFile);
 		const element = document.createElement('a');
@@ -107,30 +101,32 @@ export default function CurrentDoc(
 
 	const displayedFileName = `${file.name}.${file.extension}`;
 	return (
-		<>
-			<nav className="editor-nav">
+		<div className="page-wrapper">
+			<header className="editor-nav">
 				<ul className="editor-nav-links">
 					<li>
-						<button className="white-button" type="button">
-							<Link to="/files/ownedFiles">Go Back to Files</Link>
-						</button>
-						<button
-							className="white-button"
-							type="button"
-							onClick={handleDownload}
-						>
-							Download
-						</button>
+						<Link to="/files/ownedFiles">
+							<button className="white-button" type="button">
+								Go Back to Files
+							</button>
+						</Link>
 					</li>
 					<li className="display-name">{displayedFileName}</li>
 				</ul>
+			</header>
+			<nav className="editor-sub-nav">
+				<ul>
+					<button type="button" onClick={handleDownload}>
+						Download
+					</button>
+				</ul>
 			</nav>
 			<Editor
-				height="calc(100vh - 23px - 80px)"
+				height="100%"
 				defaultLanguage={extensions[file.extension]}
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
 			/>
-		</>
+		</div>
 	);
 }
