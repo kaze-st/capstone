@@ -2,6 +2,7 @@ import './CurrentProject.scss';
 import '../../Spinner.scss';
 
 import * as Y from 'yjs';
+import * as _ from 'lodash';
 
 import Editor, { OnMount } from '@monaco-editor/react';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -9,16 +10,34 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import FolderTree from '../FolderTree/Tree';
 import { Footer } from '../LandingPage/LandingPage';
+import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 import { MonacoBinding } from 'y-monaco';
 import Spinner from '../../Spinner';
 import { WebsocketProvider } from 'y-websocket';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import downloadProject from './DownloadProject';
-import IProjectFolder from '../ProjectPage/interfaces/IProjectFolder';
 
 dotenv.config();
 
+const getLanguageForExtension = (extension: string | null): string | null => {
+	if (extension === null) {
+		return extension;
+	}
+
+	const languages = {
+		js: 'javascript',
+		ts: 'typescript',
+		html: 'html',
+		py: 'python',
+		md: 'md',
+		css: 'css',
+		java: 'java',
+		txt: 'plain/txt'
+	};
+
+	return languages[extension];
+};
 interface MatchParams {
 	pid: string;
 }
@@ -135,9 +154,19 @@ export default function CurrentProject(
 			monacoBinding.current.destroy();
 		}
 		const editor = editorRef.current;
+		const fileName = file.get('name') as string;
+		let fileExtension: string | null = null;
+		const splitFileName = fileName.split('.');
+		if (splitFileName.length > 1) {
+			fileExtension = splitFileName[splitFileName.length - 1];
+		}
 		const path = `urn:${file.get('path')}`;
 		if (monacoRef.current.editor.getModel(path) === null)
-			monacoRef.current.editor.createModel(ytext.toString(), undefined, path);
+			monacoRef.current.editor.createModel(
+				ytext.toString(),
+				getLanguageForExtension(fileExtension),
+				path
+			);
 
 		editor.setModel(monacoRef.current.editor.getModel(path));
 
@@ -150,12 +179,25 @@ export default function CurrentProject(
 		);
 	};
 
-	const runCode = () => {
-		if (test === null) {
+	const handleDownload = () => {
+		downloadProject(projectStructure, displayedProjectName);
+	};
+
+	const isPlayground =
+		projectStructure !== null &&
+		(projectStructure?.get('isPlayground') as boolean);
+
+	const runCode = _.debounce(() => {
+		if (!isPlayground) {
 			return;
 		}
-		const structure = test.getMap('structure');
-		const root = structure.get('/');
+
+		if (projectStructure === null) {
+			return;
+		}
+
+		const structure = projectStructure;
+		const root = structure.get('/') as Y.Map<any>;
 		const html = root.get('index.html').get('content').toString();
 		const css = root.get('style.css').get('content').toString();
 		const js = root.get('script.js').get('content').toString();
@@ -187,15 +229,7 @@ export default function CurrentProject(
 		document.open();
 		document.write(documentContents);
 		document.close();
-	};
-
-	const handleDownload = () => {
-		downloadProject(projectStructure, displayedProjectName);
-	};
-
-	const isPlayground =
-		projectStructure !== null &&
-		(projectStructure?.get('isPlayground') as boolean);
+	}, 500);
 
 	return (
 		<>
@@ -203,11 +237,6 @@ export default function CurrentProject(
 				<header className="editor-nav">
 					{test && (
 						<div>
-							{isPlayground && (
-								<button type="button" onClick={runCode}>
-									Run Code
-								</button>
-							)}
 							<button type="button" onClick={handleDownload}>
 								Download
 							</button>
@@ -237,6 +266,8 @@ export default function CurrentProject(
 								onMount={handleEditorDidMount}
 								theme="vs-dark"
 								loading={<Spinner />}
+								onChange={runCode}
+								defaultLanguage="javascript"
 							/>
 						</div>
 						<section className="result">
