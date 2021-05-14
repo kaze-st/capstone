@@ -297,6 +297,7 @@ export default function CurrentProject(
 							<FolderTree
 								project={projectStructure}
 								onFileClick={onFileClick}
+								isPlayground={isPlayground}
 							/>
 						) : (
 							<Spinner />

@@ -23,7 +23,6 @@ export default function CurrentDoc(
 	props: RouteComponentProps<MatchParams>
 ): JSX.Element {
 	const { match } = props;
-	const [content, setContent] = useState('');
 
 	// eslint-disable-next-line
 	const editorRef = useRef<any>(null);
@@ -73,15 +72,10 @@ export default function CurrentDoc(
 			new Set([editor]),
 			provider.current.awareness
 		);
-
-		ytext.observe((e) => {
-			if (e.target instanceof Y.Text) {
-				setContent(ytext.toJSON());
-			}
-		});
 	};
 
 	const handleDownload = () => {
+		const content = editorRef.current.getValue();
 		const downloadFile = new Blob([content], { type: 'text/plain' });
 		const downloadURL = URL.createObjectURL(downloadFile);
 		const element = document.createElement('a');
