@@ -98,11 +98,6 @@ export default function CurrentProject(
 					model.dispose();
 				});
 			}
-
-			// if (structureRef.current !== null && onUpdateFileFunc.current !== null) {
-			// 	console.log('Func disposed');
-			// 	// structureRef.current.unobserve(onUpdateFileFunc.current);
-			// }
 		};
 	}, []);
 
@@ -115,19 +110,6 @@ export default function CurrentProject(
 	if (project === null) {
 		return <Spinner />;
 	}
-
-	// const getCurrentFile = () => {
-	// 	return currentFile;
-	// };
-	// const handleEditorChange = useCallback((_) => {
-	// 	const countOfLines = valueGetter.current().split('\n').length;
-	// 	if (countOfLines >= MIN_COUNT_OF_LINES) {
-	// 		const currentHeight = countOfLines * LINE_HEIGHT;
-	// 		if (MAX_HEIGHT > currentHeight) {
-	// 			setHeight(currentHeight);
-	// 		}
-	// 	}
-	// }, []);
 
 	// eslint-disable-next-line
 	const handleEditorDidMount: OnMount = (editor, monaco): void => {

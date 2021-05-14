@@ -14,7 +14,6 @@ export default (server: http.Server): void => {
 
 	utils.setPersistence({
 		bindState: async (documentName: string, doc: Y.Doc) => {
-			consola.log('Connected');
 			const debouncedSaveFolder = _.debounce(async (update) => {
 				Y.applyUpdate(doc, update);
 				const encodedState = Y.encodeStateAsUpdate(doc);
@@ -33,17 +32,14 @@ export default (server: http.Server): void => {
 			});
 
 			const folder = await FolderModel.findById(documentName);
-			consola.log('folder', folder);
 			const state = folder?.state;
 			if (!state) {
 				return;
 			}
 			const ecodedState: Uint8Array = new Uint8Array(state);
-			consola.log('Applied');
 			return Y.applyUpdate(doc, ecodedState);
 		},
 		writeState: async (string: string, doc: Y.Doc) => {
-			consola.log('Closed');
 			const encodedState = Y.encodeStateAsUpdate(doc);
 			const folder = await FolderModel.findById(string);
 

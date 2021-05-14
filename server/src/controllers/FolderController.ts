@@ -60,7 +60,6 @@ export default class FolderController {
 		}
 
 		const newState = Y.encodeStateAsUpdate(doc);
-		consola.log('new', newState);
 		const buffer = Buffer.from(newState);
 		const currTime = new Date();
 		const newFolder = new FolderModel({
