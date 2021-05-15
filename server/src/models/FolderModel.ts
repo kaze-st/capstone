@@ -9,6 +9,7 @@ export interface IFolder extends Document {
 	owner: string;
 	sharedTo: Array<string>;
 	state: Buffer;
+	isPlayground: boolean;
 }
 
 class FolderModel extends BaseModel<IFolder> {
@@ -24,7 +25,8 @@ class FolderModel extends BaseModel<IFolder> {
 				lastEditedOn: { type: Date, required: true },
 				owner: { type: String, required: true },
 				sharedTo: { type: [String], required: true },
-				state: { type: Buffer, required: true }
+				state: { type: Buffer, required: true },
+				isPlayground: { type: Boolean, require: true }
 			},
 			{ collection: 'folders' }
 		);

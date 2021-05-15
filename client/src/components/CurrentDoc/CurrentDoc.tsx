@@ -33,7 +33,7 @@ export default function CurrentDoc(
 	const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 	const wsurl = process.env.REACT_APP_CURR_FILE_WS_BASE_URL;
 	const { fid } = match.params;
-
+	console.log('url', url, wsurl, process.env);
 	useEffect(() => {
 		axios
 			.get(`${url}/api/v1/file/get-file`, { params: { fid } })
@@ -60,8 +60,11 @@ export default function CurrentDoc(
 		editorRef.current = editor;
 		const ydoc = new Y.Doc();
 		const ytext = ydoc.getText('content');
-		provider.current = new WebsocketProvider(wsurl, match.params.fid, ydoc);
-
+		provider.current = new WebsocketProvider(
+			wsurl,
+			`${match.params.fid}:file`,
+			ydoc
+		);
 		// eslint-disable-next-line
 		const monacoBinding = new MonacoBinding(
 			ytext,
@@ -69,6 +72,17 @@ export default function CurrentDoc(
 			new Set([editor]),
 			provider.current.awareness
 		);
+	};
+
+	const handleDownload = () => {
+		const content = editorRef.current.getValue();
+		const downloadFile = new Blob([content], { type: 'text/plain' });
+		const downloadURL = URL.createObjectURL(downloadFile);
+		const element = document.createElement('a');
+		element.href = downloadURL;
+		element.download = `${file?.name}.${file?.extension}`;
+		document.body.appendChild(element);
+		element.click();
 	};
 
 	if (file === null) {
@@ -87,23 +101,32 @@ export default function CurrentDoc(
 
 	const displayedFileName = `${file.name}.${file.extension}`;
 	return (
-		<>
-			<nav className="editor-nav">
+		<div className="page-wrapper">
+			<header className="editor-nav">
 				<ul className="editor-nav-links">
 					<li>
-						<button className="white-button" type="button">
-							<Link to="/files/ownedFiles">Go Back to Files</Link>
-						</button>
+						<Link to="/files/ownedFiles">
+							<button className="white-button" type="button">
+								Go Back to Files
+							</button>
+						</Link>
 					</li>
 					<li className="display-name">{displayedFileName}</li>
 				</ul>
+			</header>
+			<nav className="editor-sub-nav">
+				<ul>
+					<button type="button" onClick={handleDownload}>
+						Download
+					</button>
+				</ul>
 			</nav>
 			<Editor
-				height="calc(100vh - 23px - 80px)"
+				height="100%"
 				defaultLanguage={extensions[file.extension]}
 				onMount={handleEditorDidMount}
 				theme="vs-dark"
 			/>
-		</>
+		</div>
 	);
 }

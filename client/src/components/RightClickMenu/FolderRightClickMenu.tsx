@@ -12,8 +12,12 @@ interface IFolderCardRightClickMenuProps {
 	id: string;
 	projectFolder: IProjectFolder;
 	handleShareModalOpen: () => void;
+	handleDeleteModalOpen: () => void;
 	setCurrentProjectToShare: React.Dispatch<
 		React.SetStateAction<IProjectFolder | undefined>
+	>;
+	setCurrentProjectToDeleteID: React.Dispatch<
+		React.SetStateAction<string | null>
 	>;
 }
 
@@ -24,10 +28,12 @@ export default function ProjectFolderCardRightClickMenu(
 		id,
 		projectFolder,
 		handleShareModalOpen,
-		setCurrentProjectToShare
+		handleDeleteModalOpen,
+		setCurrentProjectToShare,
+		setCurrentProjectToDeleteID
 	} = props;
 	// eslint-disable-next-line
-	const fid = projectFolder._id;
+	const pid = projectFolder._id;
 	const urlParams = useParams<RouteParams>();
 	const projectViewPath = urlParams.ownedOrShared;
 
@@ -36,15 +42,28 @@ export default function ProjectFolderCardRightClickMenu(
 		setCurrentProjectToShare(projectFolder);
 	};
 
+	const handleDelete = () => {
+		handleDeleteModalOpen();
+		// eslint-disable-next-line no-underscore-dangle
+		setCurrentProjectToDeleteID(projectFolder._id);
+	};
+
 	return (
 		<div>
 			<ContextMenu id={id} className="right-click-menu">
-				<Link to={`/projects/${fid}`}>
+				<Link to={`/project/${pid}`}>
 					<MenuItem className="menu-item">Open Project</MenuItem>
 				</Link>
 				{projectViewPath === FilePath.OwnedProjects ? (
 					<MenuItem onClick={handleShare} className="menu-item">
 						Share Project
+					</MenuItem>
+				) : (
+					<></>
+				)}
+				{projectViewPath === FilePath.OwnedProjects ? (
+					<MenuItem onClick={handleDelete} className="menu-item">
+						Delete Project
 					</MenuItem>
 				) : (
 					<></>

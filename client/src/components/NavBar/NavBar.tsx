@@ -31,7 +31,7 @@ export default function NavBar(props: { fileViewPath: string }): JSX.Element {
 							fileViewPath === FilePath.OwnedProjects ? 'active-nav' : ''
 						}
 					>
-						<img alt="" src="../img/ownedFiles.png" aria-hidden="true" />
+						<img alt="" src="../img/ownedFolders.png" aria-hidden="true" />
 						<div>My Projects</div>
 					</li>
 				</Link>
@@ -41,7 +41,7 @@ export default function NavBar(props: { fileViewPath: string }): JSX.Element {
 							fileViewPath === FilePath.SharedProjects ? 'active-nav' : ''
 						}
 					>
-						<img alt="" src="../img/sharedFiles.png" aria-hidden="true" />
+						<img alt="" src="../img/sharedFolders.png" aria-hidden="true" />
 						<div>Shared Projects</div>
 					</li>
 				</Link>

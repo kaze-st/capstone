@@ -46,7 +46,7 @@ export default (app: Router): void => {
 				.not()
 				.isEmpty()
 				.isString()
-				.withMessage('fid must be a non empty string')
+				.withMessage('pid must be a non empty string')
 		],
 		FolderController.createFolder
 	);
@@ -69,7 +69,7 @@ export default (app: Router): void => {
 				.not()
 				.isEmpty()
 				.isString()
-				.withMessage('fid must be a non empty string')
+				.withMessage('pid must be a non empty string')
 		],
 		FolderController.shareFolderToMultipleUsers
 	);
@@ -82,9 +82,27 @@ export default (app: Router): void => {
 				.not()
 				.isEmpty()
 				.isString()
-				.withMessage('fid must be a non empty string')
+				.withMessage('pid must be a non empty string')
 		],
 		FolderController.getFolder
+	);
+
+	router.delete(
+		'/delete-folder',
+		[
+			body('owner')
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('owner must be a non empty string'),
+			query('pid')
+				.exists()
+				.not()
+				.isEmpty()
+				.isString()
+				.withMessage('pid must be a non empty string')
+		],
+		FolderController.deleteFolder
 	);
 	app.use('/folder', router);
 };

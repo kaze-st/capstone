@@ -5,4 +5,5 @@ export default interface IProjectFolder {
 	lastEditedOn: string;
 	owner: string;
 	sharedTo: Array<string>;
+	isPlayground: boolean;
 }

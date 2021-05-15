@@ -52,8 +52,6 @@ export default function ShareFileDialog(props: IShareDialog): JSX.Element {
 		handleModalClose
 	} = props;
 
-	console.log(props);
-
 	const [error, setError] = useState('');
 	const [email, setEmail] = useState('');
 	const [pendingCollaborators, setPendingCollaborators] = useState<

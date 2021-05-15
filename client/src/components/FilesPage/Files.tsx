@@ -1,5 +1,6 @@
 import './Files.scss';
 import '../../Spinner.scss';
+import 'react-ui-tree/dist/react-ui-tree.css';
 
 import FileCard, { RecentFileCard } from './FileCard';
 import { Link, Redirect, useParams } from 'react-router-dom';
@@ -9,13 +10,13 @@ import FileCreationView from './FileCreationView';
 import FilePath from '../../types/FilePath';
 import IFile from './interfaces/IFile';
 import Modal from '../Modal/Modal';
+import NavBar from '../NavBar/NavBar';
 import RouteParams from '../../types/RouteParams';
 import ShareFileView from '../Modal/ShareView';
+import SharingMode from '../Modal/SharingMode';
 import Spinner from '../../Spinner';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import NavBar from '../NavBar/NavBar';
-import SharingMode from '../Modal/SharingMode';
 
 const url = process.env.REACT_APP_CODE_COLLAB_API_BASE_URL;
 

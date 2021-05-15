@@ -36,7 +36,6 @@ export default (server: http.Server): void => {
 				return;
 			}
 			const ecodedState: Uint8Array = new Uint8Array(state);
-
 			return Y.applyUpdate(doc, ecodedState);
 		},
 		writeState: async (string: string, doc: Y.Doc) => {
