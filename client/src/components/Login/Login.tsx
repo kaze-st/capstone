@@ -116,12 +116,8 @@ export function Login(): JSX.Element {
 			<button className="blue-button" type="submit" disabled={isLoading}>
 				Log In
 			</button>
-			<div>
-				<span>
-					Need an account?
-					<Link to="/register">Sign Up!</Link>
-				</span>
-			</div>
+			<span>Need an account?</span>
+			<Link to="/register">Sign Up!</Link>
 		</form>
 	);
 }
