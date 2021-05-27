@@ -28,17 +28,27 @@ export default function Introduction(props: {
 					</Link>
 				</div>
 				<div className="row2">
-					<img alt="" src="./img/landingComputerImg.jpg" aria-hidden="true" />
+					<img
+						className="landing-section-img"
+						alt=""
+						src="./img/landingComputerImg.jpg"
+						aria-hidden="true"
+					/>
 				</div>
 			</section>
 			<section className="flex-container landing-section">
 				<div className="row1">
-					<img alt="" src="./img/landingImg1.png" aria-hidden="true" />
+					<img
+						className="landing-section-img"
+						alt=""
+						src="./img/landingImg1.png"
+						aria-hidden="true"
+					/>
 				</div>
 				<div className="row2">
 					<h1>Collaborate &#38; Share with your Teammates Across the Web</h1>
 					<p>
-						CodeCollab is an online code editor that uses cloud storage to store
+						SSCode is an online code editor that uses cloud storage to store
 						your programming scripts online and allow you to share it with
 						others so that you can work together on the same script. Its secure
 						connection allows you to work with others with low latency and you
@@ -62,12 +72,22 @@ export default function Introduction(props: {
 					</ul>
 				</div>
 				<div className="row2">
-					<img alt="" src="./img/landingImg2.png" aria-hidden="true" />
+					<img
+						className="landing-section-img"
+						alt=""
+						src="./img/landingImg2.png"
+						aria-hidden="true"
+					/>
 				</div>
 			</section>
 			<section className="flex-container landing-section">
 				<div className="row1">
-					<img alt="" src="./img/team.png" aria-hidden="true" />
+					<img
+						className="landing-section-img"
+						alt=""
+						src="./img/team.png"
+						aria-hidden="true"
+					/>
 				</div>
 				<div className="row2">
 					<h1>Meet the Team</h1>
